@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capitolo 3: Operazioni&espressioni</title>
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --secondary-blue: #1e3a8a;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --border-color: #cbd5e1;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f1f5f9;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Header dell'Hub */
+        .hub-header {
+            background: var(--secondary-blue);
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .hub-title {
+            font-size: 1rem;
+            margin: 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Pulsante Home (Indice Generale) */
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-home:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* Barra Navigazione Lezioni (Scorrevole su Mobile) */
+        .nav-modules {
+            display: flex;
+            overflow-x: auto;
+            background: #ffffff;
+            border-bottom: 2px solid var(--border-color);
+            padding: 10px;
+            gap: 8px;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .btn-lesson {
+            padding: 8px 14px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-light);
+            color: var(--text-dark);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .btn-lesson:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-lesson.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        /* Evidenziatore speciale per il Gioco */
+        .btn-lesson.battery {
+            background: #fdf4ff;
+            border-color: #d8b4fe;
+            color: #7c3aed;
+        }
+
+        .btn-lesson.battery.active {
+            background: #7c3aed;
+            color: white;
+            border-color: #7c3aed;
+        }
+
+        /* Visualizzatore Iframe Lezione */
+        .viewer-container {
+            flex-grow: 1;
+            width: 100%;
+            background: white;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hub-header">
+        <div class="hub-title">
+            <a href="index_generale.html" class="btn-home" title="Torna all'Indice Generale">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+            </a>
+            <span>Capitolo 3: Operazioni&espressioni</span>
+        </div>
+    </div>
+
+    <!-- Barra di navigazione delle microlezioni del Capitolo 3 allineata alla lista ufficiale -->
+    <div class="nav-modules" id="menuLezioni">
+        <button class="btn-lesson active" onclick="caricaLezione('u3_3a.html', this)">3.A: Addizione&sottrazione</button>
+        <button class="btn-lesson" onclick="caricaLezione('u3_3b.html', this)">3.B: Moltiplicazione</button>
+        <button class="btn-lesson" onclick="caricaLezione('u3_3c.html', this)">3.C: Divisione</button>
+        <button class="btn-lesson" onclick="caricaLezione('u3_3d.html', this)">3.D: Espressioni senza parentesi</button>
+        <button class="btn-lesson" onclick="caricaLezione('u3_3e.html', this)">3.E: Espressioni con parentesi</button>
+        <button class="btn-lesson" onclick="caricaLezione('u3_3f.html', this)">3.F: Proprietà delle operazioni</button>
+        <!-- Pulsante dedicato al Gioco -->
+        <button class="btn-lesson battery" onclick="caricaLezione('u3_operiamo.html', this)">🎮 Operiamo!</button>
+    </div>
+
+    <div class="viewer-container">
+        <!-- All'avvio carica la prima lezione della lista -->
+        <iframe id="frameLezione" src="u3_3a.html"></iframe>
+    </div>
+
+<script>
+    // Funzione per il caricamento dinamico della lezione dentro l'iframe
+    function caricaLezione(fileHtml, elementoPulsante) {
+        document.getElementById('frameLezione').src = fileHtml;
+        
+        // Gestione grafica del pulsante attivo
+        const pulsanti = document.querySelectorAll('.btn-lesson');
+        pulsanti.forEach(btn => btn.classList.remove('active'));
+
+        if (!elementoPulsante) {
+            elementoPulsante = Array.from(pulsanti).find(btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(fileHtml));
+        }
+
+        if (elementoPulsante) {
+            elementoPulsante.classList.add('active');
+        }
+    }
+
+    // Ricevitore messaggi locali nel caso una microlezione voglia cambiare pagina da sola
+    window.addEventListener('message', function(event) {
+        if (event.data && event.data.file) {
+            caricaLezione(event.data.file);
+        }
+    });
+</script>
+
+</body>
+</html>

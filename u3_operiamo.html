@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operiamo!</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        .game-container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-top: 6px solid #2563eb;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        h1 {
+            color: #1e3a8a;
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            background: #eff6ff;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            border: 1px solid #bfdbfe;
+        }
+        .timer {
+            color: #b91c1c;
+        }
+        .score {
+            color: #15803d;
+        }
+        .expression-box {
+            font-size: 2.3rem;
+            font-weight: bold;
+            margin: 20px 0 30px 0;
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            padding: 20px 10px;
+            border-radius: 12px;
+            text-align: center;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            color: #1e293b;
+        }
+        .hole {
+            display: inline-block;
+            min-width: 45px;
+            border-bottom: 5px solid #2563eb;
+            color: #2563eb;
+            text-align: center;
+        }
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+        .btn {
+            background: #f1f5f9;
+            color: #1e293b;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            padding: 18px 0;
+            cursor: pointer;
+            transition: background 0.1s, transform 0.1s;
+            user-select: none;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        .btn:hover {
+            background: #e2e8f0;
+        }
+        .btn-op {
+            background: #eff6ff;
+            color: #2563eb;
+            border-color: #bfdbfe;
+        }
+        .btn-op:hover {
+            background: #dbeafe;
+        }
+        .btn-action {
+            background: #15803d;
+            color: #ffffff;
+            border-color: #15803d;
+        }
+        .btn-action:hover {
+            background: #16a34a;
+        }
+        .btn-del {
+            background: #b91c1c;
+            color: #ffffff;
+            border-color: #b91c1c;
+        }
+        .btn-del:hover {
+            background: #dc2626;
+        }
+        .screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .screen p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #475569;
+            margin-bottom: 15px;
+        }
+        .btn-start {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            font-size: 1.3rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 15px;
+        }
+        .btn-start:active {
+            transform: scale(0.95);
+        }
+        .btn-start:hover {
+            background: #1d4ed8;
+        }
+        .errors-container {
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .error-item {
+            font-size: 1rem;
+            padding: 5px 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .error-item:last-child {
+            border-bottom: none;
+        }
+        .wrong-ans {
+            color: #b91c1c;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .correct-ans-label {
+            color: #475569;
+            font-size: 0.85rem;
+            margin-right: 4px;
+        }
+        .correct-ans {
+            color: #15803d;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Operiamo!</h1>
+
+        <!-- Schermata Iniziale -->
+        <div id="start-screen" class="screen">
+            <p>Hai <strong>90 secondi</strong> per risolvere più operazioni possibile trovando l'elemento mancante.</p>
+            <button class="btn-start" onclick="startGame()">VIA!</button>
+        </div>
+
+        <!-- Schermata di Gioco -->
+        <div id="game-screen" style="display: none;" class="screen">
+            <div class="stats" style="width: 100%;">
+                <div>Tempo: <span id="timer" class="timer">90</span>s</div>
+                <div>Punti: <span id="score" class="score">0</span></div>
+            </div>
+
+            <div class="expression-box" id="expression-display">
+                <!-- Operazione dinamica -->
+            </div>
+
+            <div class="keypad" id="onscreen-keypad">
+                <button class="btn" onclick="inputChar('7')">7</button>
+                <button class="btn" onclick="inputChar('8')">8</button>
+                <button class="btn" onclick="inputChar('9')">9</button>
+                <button class="btn btn-op" onclick="inputChar('+')">+</button>
+
+                <button class="btn" onclick="inputChar('4')">4</button>
+                <button class="btn" onclick="inputChar('5')">5</button>
+                <button class="btn" onclick="inputChar('6')">6</button>
+                <button class="btn btn-op" onclick="inputChar('-')">-</button>
+
+                <button class="btn" onclick="inputChar('1')">1</button>
+                <button class="btn" onclick="inputChar('2')">2</button>
+                <button class="btn" onclick="inputChar('3')">3</button>
+                <button class="btn btn-op" onclick="inputChar('×')">×</button>
+
+                <button class="btn btn-del" onclick="clearInput()">C</button>
+                <button class="btn" onclick="inputChar('0')">0</button>
+                <button class="btn btn-action" onclick="submitAnswer()">↵</button>
+                <button class="btn btn-op" onclick="inputChar(':')">:</button>
+            </div>
+        </div>
+
+        <!-- Schermata Finale -->
+        <div id="end-screen" class="screen" style="display: none;">
+            <h2 style="color: #b91c1c; font-size: 1.5rem; margin-bottom: 3px;">Tempo Scaduto!</h2>
+            <p style="margin-bottom: 5px;">Punteggio: <strong id="final-score" style="font-size: 1.4rem; color: #15803d;">0</strong></p>
+            
+            <div id="errors-section" style="width: 100%; display: none;">
+                <p style="font-size: 0.9rem; color: #475569; margin-bottom: 3px; text-align: left;">Rivedi gli errori commessi:</p>
+                <div class="errors-container" id="errors-list">
+                    <!-- Lista errori dinamica -->
+                </div>
+            </div>
+
+            <button class="btn-start" onclick="startGame()">Gioca Ancora</button>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let timeLeft = 90;
+        let timerInterval = null;
+        let currentProblem = {};
+        let playerInput = "";
+        let audioCtx = null;
+        let isTouchDevice = false;
+        let mistakes = [];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+            if (isTouchDevice) {
+                document.getElementById('onscreen-keypad').style.display = 'grid';
+            } else {
+                document.getElementById('onscreen-keypad').style.display = 'none';
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (document.getElementById('game-screen').style.display === 'none') return;
+
+            if (e.key >= '0' && e.key <= '9') {
+                inputChar(e.key);
+            } else if (e.key === '+' || e.key === '-') {
+                inputChar(e.key);
+            } else if (e.key === '*' || e.key === 'x' || e.key === 'X') {
+                inputChar('×');
+            } else if (e.key === '/' || e.key === ':') {
+                inputChar(':');
+            } else if (e.key === 'Enter') {
+                submitAnswer();
+            } else if (e.key === 'Backspace' || e.key === 'Delete' || e.key === 'c' || e.key === 'C') {
+                clearInput();
+            }
+        });
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSuccessSound() {
+            initAudio();
+            if (!audioCtx) return;
+            let now = audioCtx.currentTime;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, now);
+            osc.frequency.setValueAtTime(659.25, now + 0.1);
+            osc.frequency.setValueAtTime(783.99, now + 0.2);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.4);
+        }
+
+        function playTriumphantSound() {
+            initAudio();
+            if (!audioCtx) return;
+            let now = audioCtx.currentTime;
+            const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
+            const times = [0, 0.12, 0.24, 0.36, 0.48, 0.60, 0.75];
+            const durations = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.6];
+
+            notes.forEach((freq, index) => {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, now + times[index]);
+                gain.gain.setValueAtTime(0.15, now + times[index]);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + times[index] + durations[index]);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now + times[index]);
+                osc.stop(now + times[index] + durations[index]);
+            });
+        }
+
+        function playErrorSound() {
+            initAudio();
+            if (!audioCtx) return;
+            let now = audioCtx.currentTime;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.setValueAtTime(100, now + 0.15);
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.3);
+        }
+
+        function startGame() {
+            score = 0;
+            timeLeft = 90;
+            mistakes = [];
+            document.getElementById('score').innerText = score;
+            document.getElementById('timer').innerText = timeLeft;
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('end-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'flex';
+
+            nextProblem();
+
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('end-screen').style.display = 'flex';
+            document.getElementById('final-score').innerText = score;
+            
+            playTriumphantSound();
+
+            let errorsSection = document.getElementById('errors-section');
+            let errorsList = document.getElementById('errors-list');
+            errorsList.innerHTML = '';
+
+            if (mistakes.length > 0) {
+                errorsSection.style.display = 'block';
+                mistakes.forEach(item => {
+                    let div = document.createElement('div');
+                    div.className = 'error-item';
+                    div.innerHTML = `<span>${item.text}</span> <span><span class="wrong-ans">${item.userAns}</span> <span class="correct-ans-label">risultato corretto:</span><span class="correct-ans">${item.correctAns}</span></span>`;
+                    errorsList.appendChild(div);
+                });
+            } else {
+                errorsSection.style.display = 'none';
+            }
+        }
+
+        function nextProblem() {
+            playerInput = "";
+            const ops = ['+', '-', '×', ':'];
+            const op = ops[Math.floor(Math.random() * ops.length)];
+            let a, b, res;
+
+            if (op === '+') {
+                res = Math.floor(Math.random() * 41);
+                a = Math.floor(Math.random() * (res + 1));
+                b = res - a;
+            } else if (op === '-') {
+                let max = 40;
+                let sum = Math.floor(Math.random() * (max + 1));
+                let x = Math.floor(Math.random() * (sum + 1));
+                let y = sum - x;
+                a = sum;
+                b = x;
+                res = y;
+            } else if (op === '×') {
+                a = Math.floor(Math.random() * 11);
+                b = Math.floor(Math.random() * 11);
+                res = a * b;
+            } else if (op === ':') {
+                b = Math.floor(Math.random() * 10) + 1;
+                let multiplier = Math.floor(Math.random() * 11);
+                a = b * multiplier;
+                res = multiplier;
+            }
+
+            const holeType = Math.floor(Math.random() * 4);
+            currentProblem = { a, op, b, res, holeType };
+            renderProblem();
+        }
+
+        function renderProblem() {
+            let partA = currentProblem.a;
+            let partOp = currentProblem.op;
+            let partB = currentProblem.b;
+            let partRes = currentProblem.res;
+
+            let displayVal = playerInput !== "" ? playerInput : "?";
+            
+            if (currentProblem.holeType === 0) partA = `<span class="hole">${displayVal}</span>`;
+            if (currentProblem.holeType === 1) partOp = `<span class="hole">${displayVal}</span>`;
+            if (currentProblem.holeType === 2) partB = `<span class="hole">${displayVal}</span>`;
+            if (currentProblem.holeType === 3) partRes = `<span class="hole">${displayVal}</span>`;
+
+            document.getElementById('expression-display').innerHTML = `${partA} ${partOp} ${partB} = ${partRes}`;
+        }
+
+        function inputChar(char) {
+            if (currentProblem.holeType === 1) {
+                if (['+', '-', '×', ':'].includes(char)) {
+                    playerInput = char;
+                    renderProblem();
+                }
+            } else {
+                if (!isNaN(char)) {
+                    if (playerInput.length < 3) {
+                        playerInput += char;
+                        renderProblem();
+                    }
+                }
+            }
+        }
+
+        function clearInput() {
+            playerInput = "";
+            renderProblem();
+        }
+
+        function submitAnswer() {
+            if (playerInput === "") return;
+
+            let isCorrect = false;
+            let userVal = parseInt(playerInput);
+            let a = currentProblem.a;
+            let b = currentProblem.b;
+            let res = currentProblem.res;
+            let op = currentProblem.op;
+            let h = currentProblem.holeType;
+            let correctAns = "";
+
+            if (h === 0) {
+                correctAns = a;
+                if (op === '+' && userVal + b === res) isCorrect = true;
+                if (op === '-' && userVal - b === res) isCorrect = true;
+                if (op === '×' && userVal * b === res) isCorrect = true;
+                if (op === ':' && b !== 0 && userVal / b === res) isCorrect = true;
+            } else if (h === 2) {
+                correctAns = b;
+                if (op === '+' && a + userVal === res) isCorrect = true;
+                if (op === '-' && a - userVal === res) isCorrect = true;
+                if (op === '×' && a * userVal === res) isCorrect = true;
+                if (op === ':' && userVal !== 0 && a / userVal === res) isCorrect = true;
+            } else if (h === 3) {
+                correctAns = res;
+                if (op === '+' && a + b === userVal) isCorrect = true;
+                if (op === '-' && a - b === userVal) isCorrect = true;
+                if (op === '×' && a * b === userVal) isCorrect = true;
+                if (op === ':' && b !== 0 && a / b === userVal) isCorrect = true;
+            } else if (h === 1) {
+                let validOps = [];
+                if (a + b === res) validOps.push('+');
+                if (a - b === res) validOps.push('-');
+                if (a * b === res) validOps.push('×');
+                if (b !== 0 && a / b === res) validOps.push(':');
+
+                correctAns = validOps[0];
+                if (validOps.includes(playerInput)) {
+                    isCorrect = true;
+                }
+            }
+
+            if (isCorrect) {
+                score++;
+                document.getElementById('score').innerText = score;
+                playSuccessSound();
+                nextProblem();
+            } else {
+                playErrorSound();
+                let displayA = (h === 0) ? '?' : a;
+                let displayOp = (h === 1) ? '?' : op;
+                let displayB = (h === 2) ? '?' : b;
+                let displayRes = (h === 3) ? '?' : res;
+                let exprText = `${displayA} ${displayOp} ${displayB} = ${displayRes}`;
+
+                mistakes.push({
+                    text: exprText,
+                    userAns: playerInput,
+                    correctAns: correctAns
+                });
+
+                nextProblem();
+            }
+        }
+    </script>
+
+</body>
+</html>

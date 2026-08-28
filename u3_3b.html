@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lezione 3.B: Moltiplicazione</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #eff6ff;
+            --accent: #2563eb;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --border-color: #cbd5e1;
+            --success: #15803d;
+            --success-bg: #f0fdf4;
+            --danger: #b91c1c;
+            --danger-bg: #fef2f2;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8fafc;
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 12px;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-top: 6px solid var(--accent);
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-top: 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        h2 {
+            color: #1d4ed8;
+            font-size: 1.2rem;
+            margin-top: 28px;
+            margin-bottom: 14px;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+        }
+
+        p, li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .nota-quaderno {
+            background: #fffbeb;
+            border: 1px solid #fef08a;
+            border-left: 5px solid #d97706;
+            padding: 18px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .box-formula {
+            text-align: center;
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 14px;
+            border-radius: 8px;
+            margin: 14px 0;
+            font-size: 1.1rem;
+        }
+
+        .tabella-operazione {
+            margin: 15px auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-collapse: collapse;
+            line-height: 1.3;
+        }
+
+        .tabella-operazione td {
+            width: 24px;
+            text-align: center;
+            padding: 2px 1px;
+        }
+
+        .tabella-operazione td.op-segno {
+            width: 26px;
+            color: #64748b;
+        }
+
+        .riga-riporto td {
+            font-size: 0.85rem;
+            color: #dc2626;
+            height: 20px;
+            vertical-align: bottom;
+            font-weight: 800;
+        }
+
+        .cifra-unita {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .quiz-card {
+            background: var(--primary-light);
+            border: 1px solid #bfdbfe;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.06);
+        }
+
+        .quiz-titolo {
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .quiz-opzioni {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .btn-opzione {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .btn-opzione:hover, .btn-opzione:focus {
+            border-color: var(--accent);
+            background: #f1f5f9;
+            outline: none;
+        }
+
+        .badge-lettera {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }
+
+        .feedback-quiz {
+            font-weight: 600;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .tastierino-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 14px;
+            background: white;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .campi-input-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .input-tastierino {
+            width: 80px;
+            padding: 8px;
+            font-size: 1rem;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .input-tastierino.attivo {
+            border-color: var(--accent);
+            background: #eff6ff;
+        }
+
+        .input-cella-cifra {
+            width: 22px;
+            height: 26px;
+            padding: 0;
+            font-size: 1.15rem;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            background: white;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .input-cella-cifra.attivo {
+            border-color: var(--accent);
+            background: #eff6ff;
+        }
+
+        .numpad-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            max-width: 320px;
+            margin-top: 8px;
+        }
+
+        .btn-num {
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .btn-num:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-invia {
+            grid-column: span 3;
+            padding: 10px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-canc {
+            grid-column: span 2;
+            padding: 10px;
+            background: #cbd5e1;
+            color: var(--text-main);
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .box-quaderno-es {
+            background: #ffffff;
+            border: 1px dashed var(--border-color);
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .titolo-quaderno-es {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .card-allenamento {
+            margin-top: 36px;
+            padding: 22px;
+            border: 2px solid #7c3aed;
+            border-radius: 14px;
+            background: #f5f3ff;
+        }
+
+        .titolo-allenamento {
+            margin-top: 0;
+            color: #5b21b6;
+            font-size: 1.1rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .barra-varianti {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            background: #ddd6fe;
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .btn-v {
+            flex: 1;
+            min-width: 75px;
+            padding: 8px 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: none;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #4c1d95;
+            transition: all 0.2s;
+        }
+
+        .btn-v.attiva {
+            background: #7c3aed;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .blocco-esercizi {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #c4b5fd;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            box-sizing: border-box;
+        }
+
+        .griglia-e-riga {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            width: 100%;
+            white-space: nowrap;
+        }
+
+        .btn-docente {
+            width: 100%;
+            margin-top: 16px;
+            padding: 10px;
+            background: #475569;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .chiave-docente {
+            display: none;
+            margin-top: 12px;
+            padding: 14px;
+            background: #f1f5f9;
+            border-left: 4px solid #475569;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.88rem;
+            white-space: pre-wrap;
+        }
+
+        .overlay-tavola {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .finestra-tavola {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            border-top: 6px solid #f59e0b;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .chiudi-tavola {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #64748b;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .chiudi-tavola:hover {
+            color: #ef4444;
+        }
+
+        .griglia-pitagorica {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            gap: 2px;
+            background: #e2e8f0;
+            padding: 5px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .cella-p {
+            padding: 5px 2px;
+            background: white;
+            font-weight: bold;
+        }
+
+        .cella-p.testata {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .cella-p.incrocio {
+            background: #fffbe6;
+            color: #d97706;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>3.B: Moltiplicazione</h1>
+
+    <section id="parte1">
+        <h2>Parte 1: Concetto, terminologia e casi particolari</h2>
+        
+        <p>La moltiplicazione deriva dall’addizione: potresti trovarti a fare una serie di addizioni concatenate in cui un numero è sommato più volte a se stesso:</p>
+
+        <div class="box-formula">
+            <span style="font-weight:bold; font-size:1.3rem;">5 + 5 + 5 + 5 + 5 + 5 = 30</span>
+            <p style="margin: 8px 0 6px 0; font-size: 0.92rem; color: var(--text-main);">
+                Questa scrittura può essere semplificata usando proprio la moltiplicazione:
+            </p>
+            <span style="font-weight:bold; font-size:1.3rem; color: var(--accent);">5 × 6 = 30</span>
+            <p style="margin: 6px 0 0 0; font-size: 0.88rem; color: var(--text-muted);">
+                Infatti il <b>5</b> è stato sommato a se stesso esattamente <b>6</b> volte.<br>
+                <b>5</b> e <b>6</b> sono i <b>fattori</b> &nbsp;|&nbsp; <b>30</b> è il <b>prodotto</b>
+            </p>
+        </div>
+
+        <div class="nota-quaderno" style="border-left-color: #2563eb; background: #eff6ff;">
+            <strong style="color: #1e3a8a; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">Casi particolari e fattibilità nei numeri naturali:</strong>
+            <p style="margin: 6px 0 0 0; color: #1e3a8a;">
+                • <b>6 × 1 = 6</b> &nbsp;e&nbsp; <b>1 × 8 = 8</b> &nbsp;→&nbsp; Il numero <b>1</b> è l'<b>elemento neutro</b>: moltiplicare per 1 lascia il valore invariato.<br>
+                • <b>9 × 0 = 0</b> &nbsp;e&nbsp; <b>0 × 5 = 0</b> &nbsp;→&nbsp; Il numero <b>0</b> è l'<b>elemento assorbente</b>: qualsiasi numero moltiplicato per zero dà sempre zero.<br>
+                • <b>La moltiplicazione è sempre possibile:</b> Nell'insieme dei numeri naturali (<b>ℕ</b>) puoi sempre moltiplicare due numeri qualsiasi (es. <b>15 × 4 = 60</b>).
+            </p>
+        </div>
+
+        <div style="text-align: center; margin: 15px 0;">
+            <button onclick="document.getElementById('tavolaPitagorica').style.display='flex'" style="padding: 10px 18px; background: #d97706; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(217,119,6,0.25);">
+                🧮 Apri Tavola Pitagorica di Supporto
+            </button>
+        </div>
+
+        <div id="tavolaPitagorica" class="overlay-tavola" onclick="if(event.target===this) this.style.display='none'">
+            <div class="finestra-tavola">
+                <button class="chiudi-tavola" onclick="document.getElementById('tavolaPitagorica').style.display='none'">&times;</button>
+                <h3 style="margin-top: 0; color: #b45309; border-bottom: 2px solid #fef08a; padding-bottom: 5px; text-align: center;">Tavola Pitagorica</h3>
+                <div class="griglia-pitagorica">
+                    <div class="cella-p testata">×</div>
+                    <div class="cella-p testata">1</div><div class="cella-p testata">2</div><div class="cella-p testata">3</div><div class="cella-p testata">4</div><div class="cella-p testata">5</div>
+                    <div class="cella-p testata">6</div><div class="cella-p testata">7</div><div class="cella-p testata">8</div><div class="cella-p testata">9</div><div class="cella-p testata">10</div>
+                    <div class="cella-p testata">1</div><div class="cella-p incrocio">1</div><div class="cella-p">2</div><div class="cella-p">3</div><div class="cella-p">4</div><div class="cella-p">5</div><div class="cella-p">6</div><div class="cella-p">7</div><div class="cella-p">8</div><div class="cella-p">9</div><div class="cella-p">10</div>
+                    <div class="cella-p testata">2</div><div class="cella-p">2</div><div class="cella-p incrocio">4</div><div class="cella-p">6</div><div class="cella-p">8</div><div class="cella-p">10</div><div class="cella-p">12</div><div class="cella-p">14</div><div class="cella-p">16</div><div class="cella-p">18</div><div class="cella-p">20</div>
+                    <div class="cella-p testata">3</div><div class="cella-p">3</div><div class="cella-p">6</div><div class="cella-p incrocio">9</div><div class="cella-p">12</div><div class="cella-p">15</div><div class="cella-p">18</div><div class="cella-p">21</div><div class="cella-p">24</div><div class="cella-p">27</div><div class="cella-p">30</div>
+                    <div class="cella-p testata">4</div><div class="cella-p">4</div><div class="cella-p">8</div><div class="cella-p">12</div><div class="cella-p incrocio">16</div><div class="cella-p">20</div><div class="cella-p">24</div><div class="cella-p">28</div><div class="cella-p">32</div><div class="cella-p">36</div><div class="cella-p">40</div>
+                    <div class="cella-p testata">5</div><div class="cella-p">5</div><div class="cella-p">10</div><div class="cella-p">15</div><div class="cella-p">20</div><div class="cella-p incrocio">25</div><div class="cella-p">30</div><div class="cella-p">35</div><div class="cella-p">40</div><div class="cella-p">45</div><div class="cella-p">50</div>
+                    <div class="cella-p testata">6</div><div class="cella-p">6</div><div class="cella-p">12</div><div class="cella-p">18</div><div class="cella-p">24</div><div class="cella-p">30</div><div class="cella-p incrocio">36</div><div class="cella-p">42</div><div class="cella-p">48</div><div class="cella-p">54</div><div class="cella-p">60</div>
+                    <div class="cella-p testata">7</div><div class="cella-p">7</div><div class="cella-p">14</div><div class="cella-p">21</div><div class="cella-p">28</div><div class="cella-p">35</div><div class="cella-p">42</div><div class="cella-p incrocio">49</div><div class="cella-p">56</div><div class="cella-p">63</div><div class="cella-p">70</div>
+                    <div class="cella-p testata">8</div><div class="cella-p">8</div><div class="cella-p">16</div><div class="cella-p">24</div><div class="cella-p">32</div><div class="cella-p">40</div><div class="cella-p">48</div><div class="cella-p">56</div><div class="cella-p incrocio">64</div><div class="cella-p">72</div><div class="cella-p">80</div>
+                    <div class="cella-p testata">9</div><div class="cella-p">9</div><div class="cella-p">18</div><div class="cella-p">27</div><div class="cella-p">36</div><div class="cella-p">45</div><div class="cella-p">54</div><div class="cella-p">63</div><div class="cella-p">72</div><div class="cella-p incrocio">81</div><div class="cella-p">90</div>
+                    <div class="cella-p testata">10</div><div class="cella-p">10</div><div class="cella-p">20</div><div class="cella-p">30</div><div class="cella-p">40</div><div class="cella-p">50</div><div class="cella-p">60</div><div class="cella-p">70</div><div class="cella-p">80</div><div class="cella-p">90</div><div class="cella-p incrocio">100</div>
+                </div>
+                <p style="font-size: 0.8rem; color: #64748b; margin-top: 10px; margin-bottom: 0; text-align: center;">Incrocia la riga con la colonna per leggere il prodotto.</p>
+            </div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 1">
+            <p class="quiz-titolo">Quiz 1: Come si chiamano i termini che si moltiplicano tra loro?</p>
+            <div class="quiz-opzioni" role="radiogroup" aria-label="Opzioni Quiz 1">
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, false, 'Attenzione: gli addendi sono i termini dell\'addizione.')">
+                    <span class="badge-lettera">A</span> Addendi
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, true, 'Esatto! I termini che si moltiplicano si chiamano fattori.')">
+                    <span class="badge-lettera">B</span> Fattori
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, false, 'No: il prodotto è il risultato finale, non i termini che si moltiplicano.')">
+                    <span class="badge-lettera">C</span> Prodotti
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, false, 'No: quoziente e dividendo appartengono alla divisione.')">
+                    <span class="badge-lettera">D</span> Quozienti
+                </button>
+            </div>
+            <div id="fb-quiz1" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 2">
+            <p class="quiz-titolo">Quiz 2: Completa i numeri mancanti</p>
+            <p style="margin-bottom: 8px;">Inserisci i due valori per completare le moltiplicazioni particolari:</p>
+            <div class="tastierino-box">
+                <div class="campi-input-box">
+                    <label>28 × <input type="text" id="q2-box1" class="input-tastierino attivo" readonly onclick="selezionaCampoQ2(1)"> = 28</label>
+                    <label style="margin-left: 15px;">45 × <input type="text" id="q2-box2" class="input-tastierino" readonly onclick="selezionaCampoQ2(2)"> = 0</label>
+                </div>
+                <div class="numpad-grid">
+                    <button class="btn-num" onclick="digitaQ2('1')">1</button>
+                    <button class="btn-num" onclick="digitaQ2('2')">2</button>
+                    <button class="btn-num" onclick="digitaQ2('3')">3</button>
+                    <button class="btn-num" onclick="digitaQ2('4')">4</button>
+                    <button class="btn-num" onclick="digitaQ2('5')">5</button>
+                    <button class="btn-num" onclick="digitaQ2('6')">6</button>
+                    <button class="btn-num" onclick="digitaQ2('7')">7</button>
+                    <button class="btn-num" onclick="digitaQ2('8')">8</button>
+                    <button class="btn-num" onclick="digitaQ2('9')">9</button>
+                    <button class="btn-num" onclick="digitaQ2('0')">0</button>
+                    <button class="btn-canc" onclick="cancellaQ2()">⌫</button>
+                    <button class="btn-invia" onclick="verificaQuiz2()">Verifica</button>
+                </div>
+            </div>
+            <div id="fb-quiz2" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="box-quaderno-es">
+            <h3 class="titolo-quaderno-es">Esercizi sul quaderno</h3>
+            <p><b>Es 1.</b> Calcola a mente sul quaderno usando le tabelline:</p>
+            <p>a) 6 × 7 &nbsp;&nbsp;&nbsp;&nbsp; b) 8 × 9 &nbsp;&nbsp;&nbsp;&nbsp; c) 12 × 5</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+            <p><b>Es 2.</b> Risolvi al volo i casi particolari con 0 e 1:</p>
+            <p>a) 34 × 1 &nbsp;&nbsp;&nbsp;&nbsp; b) 58 × 0 &nbsp;&nbsp;&nbsp;&nbsp; c) 1 × 145</p>
+        </div>
+    </section>
+
+    <section id="parte2">
+        <h2>Parte 2: L'algoritmo in colonna e le moltiplicazioni per 10, 100, 1000</h2>
+
+        <p>Per moltiplicare rapidamente un numero intero per <b>10, 100, 1000</b> basta aggiungere rispettivamente uno, due o tre zeri alla sua destra (es. <b>34 × 10 = 340</b>, <b>15 × 100 = 1500</b>).</p>
+
+        <div class="nota-quaderno">
+            <strong style="color: #854d0e; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">Algoritmo in Colonna:</strong>
+            <p style="margin: 6px 0 10px 0; color: #854d0e;">
+                Si moltiplica la cifra del secondo numero per ogni cifra del primo numero, partendo da destra dalle <span class="cifra-unita">Unità</span>. Con il secondo numero a due cifre si calcolano i due prodotti parziali inserendo lo <b>zero segnaposto</b> nella seconda riga prima di sommare.
+            </p>
+            
+            <p style="margin: 4px 0 0 0; font-weight: bold; color: #854d0e; font-size: 0.9rem;">Esempio 1: Secondo numero a una cifra (143 × 4)</p>
+            <table class="tabella-operazione" style="color: #854d0e;">
+                <tr class="riga-riporto"><td></td><td>1</td><td>1</td><td></td><td></td></tr>
+                <tr><td></td><td>1</td><td>4</td><td class="cifra-unita">3</td><td class="op-segno">×</td></tr>
+                <tr><td></td><td></td><td></td><td class="cifra-unita">4</td><td class="op-segno">=</td></tr>
+                <tr><td colspan="5" style="border-top: 2px solid #854d0e; padding: 0;"></td></tr>
+                <tr><td></td><td>5</td><td>7</td><td class="cifra-unita">2</td><td></td></tr>
+            </table>
+
+            <p style="margin: 12px 0 0 0; font-weight: bold; color: #854d0e; font-size: 0.9rem;">Esempio 2: Secondo numero a due cifre con Zero Segnaposto (125 × 12)</p>
+            <table class="tabella-operazione" style="color: #854d0e;">
+                <tr><td></td><td>1</td><td>2</td><td class="cifra-unita">5</td><td class="op-segno">×</td></tr>
+                <tr><td></td><td></td><td>1</td><td class="cifra-unita">2</td><td class="op-segno">=</td></tr>
+                <tr><td colspan="5" style="border-top: 2px solid #854d0e; padding: 0;"></td></tr>
+                <tr><td></td><td>2</td><td>5</td><td class="cifra-unita">0</td><td style="font-size: 11px; color: #64748b; text-align: left; padding-left: 6px;">(125×2)</td></tr>
+                <tr><td>1</td><td>2</td><td>5</td><td class="cifra-unita" style="color:#dc2626;">0</td><td style="font-size: 11px; color: #64748b; text-align: left; padding-left: 6px;">(125×10)</td></tr>
+                <tr><td colspan="5" style="border-top: 2px solid #854d0e; padding: 0;"></td></tr>
+                <tr><td>1</td><td>5</td><td>0</td><td class="cifra-unita">0</td><td></td></tr>
+            </table>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 3">
+            <p class="quiz-titolo">Quiz 3: Quanto vale il prodotto di 35 × 100?</p>
+            <div class="quiz-opzioni" role="radiogroup" aria-label="Opzioni Quiz 3">
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, false, 'Ritenta! Hai moltiplicato per 10 invece che per 100.')">
+                    <span class="badge-lettera">A</span> 350
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, true, 'Esatto! 35 × 100 = 3500 (si aggiungono due zeri a destra).')">
+                    <span class="badge-lettera">B</span> 3500
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, false, 'Ritenta! Hai aggiunto tre zeri come se fosse una moltiplicazione per 1000.')">
+                    <span class="badge-lettera">C</span> 35000
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, false, 'Ritenta! Lo zero non va inserito in mezzo al numero.')">
+                    <span class="badge-lettera">D</span> 3050
+                </button>
+            </div>
+            <div id="fb-quiz3" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 4">
+            <p class="quiz-titolo">Quiz 4: Completa la moltiplicazione in colonna (24 × 13)</p>
+            <p style="margin-bottom: 8px;">Inserisci una sola cifra in ciascuna casella vuota per completare l'operazione:</p>
+            
+            <div class="tastierino-box">
+                <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid var(--border-color); width: fit-content; margin: 0 auto 10px auto;">
+                    <table class="tabella-operazione" style="margin: 0;">
+                        <tr>
+                            <td></td>
+                            <td>2</td>
+                            <td>4</td>
+                            <td class="op-segno">×</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>1</td>
+                            <td>3</td>
+                            <td class="op-segno">=</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="border-top: 2px solid #334155; padding: 0;"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><input type="text" id="q4-c1" class="input-cella-cifra attivo" readonly onclick="selezionaCampoQ4(1)"></td>
+                            <td><input type="text" id="q4-c2" class="input-cella-cifra" readonly onclick="selezionaCampoQ4(2)"></td>
+                            <td colspan="2" style="font-size: 11px; color: #64748b; text-align: left; padding-left: 6px; font-family: sans-serif; font-weight: normal;">(24×3)</td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="q4-c3" class="input-cella-cifra" readonly onclick="selezionaCampoQ4(3)"></td>
+                            <td><input type="text" id="q4-c4" class="input-cella-cifra" readonly onclick="selezionaCampoQ4(4)"></td>
+                            <td style="color:#dc2626; font-weight: bold;">0</td>
+                            <td colspan="2" style="font-size: 11px; color: #64748b; text-align: left; padding-left: 6px; font-family: sans-serif; font-weight: normal;">(24×10)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="border-top: 2px solid #334155; padding: 0;"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="q4-c5" class="input-cella-cifra" readonly onclick="selezionaCampoQ4(5)"></td>
+                            <td><input type="text" id="q4-c6" class="input-cella-cifra" readonly onclick="selezionaCampoQ4(6)"></td>
+                            <td><input type="text" id="q4-c7" class="input-cella-cifra" readonly onclick="selezionaCampoQ4(7)"></td>
+                            <td colspan="2" style="font-size: 11px; color: #16a34a; text-align: left; padding-left: 6px; font-family: sans-serif; font-weight: bold;">Totale</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="numpad-grid" style="margin: 0 auto;">
+                    <button class="btn-num" onclick="digitaQ4('1')">1</button>
+                    <button class="btn-num" onclick="digitaQ4('2')">2</button>
+                    <button class="btn-num" onclick="digitaQ4('3')">3</button>
+                    <button class="btn-num" onclick="digitaQ4('4')">4</button>
+                    <button class="btn-num" onclick="digitaQ4('5')">5</button>
+                    <button class="btn-num" onclick="digitaQ4('6')">6</button>
+                    <button class="btn-num" onclick="digitaQ4('7')">7</button>
+                    <button class="btn-num" onclick="digitaQ4('8')">8</button>
+                    <button class="btn-num" onclick="digitaQ4('9')">9</button>
+                    <button class="btn-num" onclick="digitaQ4('0')">0</button>
+                    <button class="btn-canc" onclick="cancellaQ4()">⌫</button>
+                    <button class="btn-invia" onclick="verificaQuiz4()">Verifica</button>
+                </div>
+            </div>
+            <div id="fb-quiz4" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="box-quaderno-es">
+            <h3 class="titolo-quaderno-es">Esercizi sul quaderno</h3>
+            <p><b>Es 3.</b> Calcola rapidamente moltiplicando per 10, 100, 1000:</p>
+            <p>a) 42 × 10 &nbsp;&nbsp;&nbsp;&nbsp; b) 18 × 100 &nbsp;&nbsp;&nbsp;&nbsp; c) 7 × 1000</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+            <p><b>Es 4.</b> Incolonna ed esegui sul quaderno (con 1 e 2 cifre):</p>
+            <p>a) 143 × 4 &nbsp;&nbsp;&nbsp;&nbsp; b) 251 × 3 &nbsp;&nbsp;&nbsp;&nbsp; c) 125 × 12</p>
+        </div>
+    </section>
+
+    <section id="parte3">
+        <h2>Parte 3: L'algoritmo scritto con i numeri decimali</h2>
+
+        <p>Quando moltiplichiamo un numero decimale per <b>10, 100, 1000</b>, la virgola si sposta verso destra di tanti posti quanti sono gli zeri. Si presentano due casi:</p>
+        <ul>
+            <li><b>Spostamento della virgola:</b> Se ci sono abbastanza cifre decimali, la virgola salta verso destra.<br>
+                Esempio: <b>21,546 × 100 = 2154,6</b> (la virgola si sposta di due posti a destra).</li>
+            <li><b>Aggiunta di zeri:</b> Se i posti da saltare superano le cifre decimali disponibili, la virgola scompare e si aggiungono gli zeri necessari a destra.<br>
+                Esempio: <b>3,4 × 1000 = 3400</b> (un salto per superare il 4 più due zeri per completare i 3 salti).</li>
+        </ul>
+
+        <div class="nota-quaderno">
+            <strong style="color: #854d0e; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">Esempio con Decimali in Colonna: 1,62 × 2,3</strong>
+            <p style="margin: 6px 0 10px 0; color: #854d0e;">
+                A differenza di addizione e sottrazione, nella moltiplicazione <b>non si allineano le virgole</b>. Si esegue il calcolo come se i numeri fossero interi. Alla fine si contano le cifre decimali totali presenti in entrambi i fattori:<br>
+                • <b>1,62</b> ha 2 cifre decimali &nbsp;|&nbsp; <b>2,3</b> ha 1 cifra decimale &nbsp;→&nbsp; Totale: <b>3 cifre decimali</b> nel prodotto.
+            </p>
+            <table class="tabella-operazione" style="color: #854d0e;">
+                <tr><td></td><td>1</td><td>,6</td><td class="cifra-unita">2</td><td class="op-segno">×</td></tr>
+                <tr><td></td><td></td><td>2</td><td class="cifra-unita">,3</td><td class="op-segno">=</td></tr>
+                <tr><td colspan="5" style="border-top: 2px solid #854d0e; padding: 0;"></td></tr>
+                <tr><td></td><td>4</td><td>8</td><td class="cifra-unita">6</td><td style="font-size: 11px; color: #64748b; text-align: left; padding-left: 6px;">(162×3)</td></tr>
+                <tr><td>3</td><td>2</td><td>4</td><td class="cifra-unita" style="color:#dc2626;">0</td><td style="font-size: 11px; color: #64748b; text-align: left; padding-left: 6px;">(162×20)</td></tr>
+                <tr><td colspan="5" style="border-top: 2px solid #854d0e; padding: 0;"></td></tr>
+                <tr><td>3</td><td>,7</td><td>2</td><td class="cifra-unita">6</td><td></td></tr>
+            </table>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 5">
+            <p class="quiz-titolo">Quiz 5: Quante cifre decimali avrà il prodotto di 3,45 × 1,2?</p>
+            <div class="quiz-opzioni" role="radiogroup" aria-label="Opzioni Quiz 5">
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, false, 'Ritenta! Non considerare solo le cifre decimali del primo fattore.')">
+                    <span class="badge-lettera">A</span> 2 cifre decimali
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, true, 'Eccellente! 2 cifre in 3,45 + 1 cifra in 1,2 = 3 cifre decimali totali nel prodotto.')">
+                    <span class="badge-lettera">B</span> 3 cifre decimali
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, false, 'Ritenta! Le cifre decimali dei due fattori si sommano, non si moltiplicano.')">
+                    <span class="badge-lettera">C</span> 4 cifre decimali
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, false, 'Ritenta! Ricorda che le cifre decimali del prodotto non si annullano.')">
+                    <span class="badge-lettera">D</span> 1 cifra decimale
+                </button>
+            </div>
+            <div id="fb-quiz5" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 6">
+            <p class="quiz-titolo">Quiz 6: Moltiplica un decimale per 10</p>
+            <p style="margin-bottom: 8px;">Inserisci la parte intera e la parte decimale del risultato di <b>4,75 × 10</b>:</p>
+            <div class="tastierino-box">
+                <div class="campi-input-box">
+                    <label>Parte intera: <input type="text" id="q6-box1" class="input-tastierino attivo" readonly onclick="selezionaCampoQ6(1)"></label>
+                    <label style="margin-left: 15px;">Decimi: ,<input type="text" id="q6-box2" class="input-tastierino" readonly onclick="selezionaCampoQ6(2)"></label>
+                </div>
+                <div class="numpad-grid">
+                    <button class="btn-num" onclick="digitaQ6('1')">1</button>
+                    <button class="btn-num" onclick="digitaQ6('2')">2</button>
+                    <button class="btn-num" onclick="digitaQ6('3')">3</button>
+                    <button class="btn-num" onclick="digitaQ6('4')">4</button>
+                    <button class="btn-num" onclick="digitaQ6('5')">5</button>
+                    <button class="btn-num" onclick="digitaQ6('6')">6</button>
+                    <button class="btn-num" onclick="digitaQ6('7')">7</button>
+                    <button class="btn-num" onclick="digitaQ6('8')">8</button>
+                    <button class="btn-num" onclick="digitaQ6('9')">9</button>
+                    <button class="btn-num" onclick="digitaQ6('0')">0</button>
+                    <button class="btn-canc" onclick="cancellaQ6()">⌫</button>
+                    <button class="btn-invia" onclick="verificaQuiz6()">Verifica</button>
+                </div>
+            </div>
+            <div id="fb-quiz6" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="box-quaderno-es">
+            <h3 class="titolo-quaderno-es">Esercizi sul quaderno</h3>
+            <p><b>Es 5.</b> Moltiplica i decimali per 10, 100, 1000 spostando la virgola o aggiungendo zeri:</p>
+            <p>a) 3,4 × 10 &nbsp;&nbsp;&nbsp;&nbsp; b) 0,56 × 100 &nbsp;&nbsp;&nbsp;&nbsp; c) 4,2 × 1000</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+            <p><b>Es 6.</b> Incolonna ed esegui contando le cifre decimali finali:</p>
+            <p>a) 4,5 × 1,2 &nbsp;&nbsp;&nbsp;&nbsp; b) 12,4 × 0,5 &nbsp;&nbsp;&nbsp;&nbsp; c) 1,62 × 2,3</p>
+        </div>
+    </section>
+
+    <div class="card-allenamento">
+        <h3 class="titolo-allenamento">Laboratorio di Consolidamento: La Moltiplicazione</h3>
+        
+        <div class="barra-varianti" role="toolbar" aria-label="Varianti esercizi">
+            <button id="btn-v-0" class="btn-v attiva" onclick="cambiaVariante(0)">SEMEL</button>
+            <button id="btn-v-1" class="btn-v" onclick="cambiaVariante(1)">BIS</button>
+            <button id="btn-v-2" class="btn-v" onclick="cambiaVariante(2)">TER</button>
+            <button id="btn-v-3" class="btn-v" onclick="cambiaVariante(3)">QUATER</button>
+            <button id="btn-v-4" class="btn-v" style="background:#7c3aed; color:white;" onclick="cambiaVariante(4)">MIX</button>
+        </div>
+
+        <div id="badge-variante" style="background: #ffffff; border: 1px solid #c4b5fd; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85rem; color: #5b21b6; font-weight: 500;">
+            Modalità SEMEL attiva: Risolvi i 24 esercizi sul tuo quaderno.
+        </div>
+        
+        <div id="campo-batteria" class="blocco-esercizi"></div>
+
+        <button id="btn-risultati" class="btn-docente" style="display: none;" onclick="toggleVisioneDoc('sol-batteria')">Mostra/Nascondi Risultati</button>
+        <div id="sol-batteria" class="chiave-docente"></div>
+    </div>
+</div>
+
+<script>
+let statoQ2 = { attivo: 1, val1: "", val2: "" };
+
+function selezionaCampoQ2(num) {
+    statoQ2.attivo = num;
+    document.getElementById('q2-box1').classList.toggle('attivo', num === 1);
+    document.getElementById('q2-box2').classList.toggle('attivo', num === 2);
+}
+
+function digitaQ2(cifra) {
+    if (statoQ2.attivo === 1 && statoQ2.val1.length < 3) {
+        statoQ2.val1 += cifra;
+        document.getElementById('q2-box1').value = statoQ2.val1;
+    } else if (statoQ2.attivo === 2 && statoQ2.val2.length < 3) {
+        statoQ2.val2 += cifra;
+        document.getElementById('q2-box2').value = statoQ2.val2;
+    }
+}
+
+function cancellaQ2() {
+    if (statoQ2.attivo === 1) {
+        statoQ2.val1 = statoQ2.val1.slice(0, -1);
+        document.getElementById('q2-box1').value = statoQ2.val1;
+    } else {
+        statoQ2.val2 = statoQ2.val2.slice(0, -1);
+        document.getElementById('q2-box2').value = statoQ2.val2;
+    }
+}
+
+function verificaQuiz2() {
+    const v1 = parseInt(statoQ2.val1);
+    const v2 = parseInt(statoQ2.val2);
+    const fb = document.getElementById('fb-quiz2');
+
+    if (v1 === 1 && v2 === 0) {
+        gestisciFeedback(fb, true, 'Bravissimo! 28 × 1 = 28 (1 è elemento neutro) e 45 × 0 = 0 (0 è elemento assorbente).');
+    } else {
+        gestisciFeedback(fb, false, 'Controlla: quale numero moltiplicato lascia 28 invariato? E quale moltiplicato per 45 dà 0?');
+    }
+}
+
+let statoQ4 = {
+    attivo: 1,
+    valori: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "" }
+};
+
+function selezionaCampoQ4(num) {
+    statoQ4.attivo = num;
+    for (let i = 1; i <= 7; i++) {
+        let el = document.getElementById('q4-c' + i);
+        if (el) el.classList.toggle('attivo', i === num);
+    }
+}
+
+function digitaQ4(cifra) {
+    let curr = statoQ4.attivo;
+    statoQ4.valori[curr] = cifra;
+    document.getElementById('q4-c' + curr).value = cifra;
+    if (curr < 7) {
+        selezionaCampoQ4(curr + 1);
+    }
+}
+
+function cancellaQ4() {
+    let curr = statoQ4.attivo;
+    if (statoQ4.valori[curr] !== "") {
+        statoQ4.valori[curr] = "";
+        document.getElementById('q4-c' + curr).value = "";
+    } else if (curr > 1) {
+        selezionaCampoQ4(curr - 1);
+        statoQ4.valori[curr - 1] = "";
+        document.getElementById('q4-c' + (curr - 1)).value = "";
+    }
+}
+
+function verificaQuiz4() {
+    const v = statoQ4.valori;
+    const fb = document.getElementById('fb-quiz4');
+
+    const corretto = (v[1] === "7" && v[2] === "2" && v[3] === "2" && v[4] === "4" && v[5] === "3" && v[6] === "1" && v[7] === "2");
+
+    if (corretto) {
+        gestisciFeedback(fb, true, 'Perfetto! 24 × 3 = 72, 24 × 10 = 240 e 72 + 240 = 312. Incolonnamento perfetto!');
+    } else {
+        gestisciFeedback(fb, false, 'Controlla le singole cifre: 24 × 3 fa 72, poi 24 × 1 fa 24, e infine esegui la somma colonna per colonna.');
+    }
+}
+
+let statoQ6 = { attivo: 1, val1: "", val2: "" };
+
+function selezionaCampoQ6(num) {
+    statoQ6.attivo = num;
+    document.getElementById('q6-box1').classList.toggle('attivo', num === 1);
+    document.getElementById('q6-box2').classList.toggle('attivo', num === 2);
+}
+
+function digitaQ6(cifra) {
+    if (statoQ6.attivo === 1 && statoQ6.val1.length < 4) {
+        statoQ6.val1 += cifra;
+        document.getElementById('q6-box1').value = statoQ6.val1;
+    } else if (statoQ6.attivo === 2 && statoQ6.val2.length < 3) {
+        statoQ6.val2 += cifra;
+        document.getElementById('q6-box2').value = statoQ6.val2;
+    }
+}
+
+function cancellaQ6() {
+    if (statoQ6.attivo === 1) {
+        statoQ6.val1 = statoQ6.val1.slice(0, -1);
+        document.getElementById('q6-box1').value = statoQ6.val1;
+    } else {
+        statoQ6.val2 = statoQ6.val2.slice(0, -1);
+        document.getElementById('q6-box2').value = statoQ6.val2;
+    }
+}
+
+function verificaQuiz6() {
+    const v1 = parseInt(statoQ6.val1);
+    const v2 = parseInt(statoQ6.val2);
+    const fb = document.getElementById('fb-quiz6');
+
+    if (v1 === 47 && v2 === 5) {
+        gestisciFeedback(fb, true, 'Eccellente! 4,75 × 10 = 47,5 (la virgola si sposta di un posto a destra).');
+    } else {
+        gestisciFeedback(fb, false, 'Rivedi lo spostamento della virgola di un posto verso destra.');
+    }
+}
+
+function gestisciFeedback(el, corretto, msg) {
+    el.style.display = 'block';
+    el.innerHTML = (corretto ? '[ESATTO] ' : 'Ritenta! ') + msg;
+    el.style.background = corretto ? 'var(--success-bg)' : 'var(--danger-bg)';
+    el.style.color = corretto ? 'var(--success)' : 'var(--danger)';
+    el.style.border = '1px solid ' + (corretto ? '#bbf7d0' : '#fecaca');
+}
+
+function verificaQuiz1(btn, corretto, msg) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.btn-opzione').forEach(b => b.setAttribute('aria-checked', 'false'));
+    btn.setAttribute('aria-checked', 'true');
+    gestisciFeedback(document.getElementById('fb-quiz1'), corretto, msg);
+}
+
+function verificaQuiz3(btn, corretto, msg) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.btn-opzione').forEach(b => b.setAttribute('aria-checked', 'false'));
+    btn.setAttribute('aria-checked', 'true');
+    gestisciFeedback(document.getElementById('fb-quiz3'), corretto, msg);
+}
+
+function verificaQuiz5(btn, corretto, msg) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.btn-opzione').forEach(b => b.setAttribute('aria-checked', 'false'));
+    btn.setAttribute('aria-checked', 'true');
+    gestisciFeedback(document.getElementById('fb-quiz5'), corretto, msg);
+}
+
+const dbBatteria = [
+    {
+        riga_tabelline: ["6 × 3", "7 × 4", "12 × 5", "15 × 2", "25 × 4", "50 × 3"],
+        bucate_base: ["... × 3 = 15", "6 × ... = 18", "4 × 8 = ...", "14 × ... = 14", "... × 25 = 0", "12 × ... = 24"],
+        per_dieci_int: ["34 × 10", "18 × 100", "7 × 1000", "120 × 10", "45 × 100", "9 × 1000"],
+        col_1cifra: ["143 × 4", "251 × 3", "342 × 2", "125 × 5"],
+        col_2cifre: ["125 × 12", "243 × 15", "415 × 32", "612 × 25"],
+        col_3cifre: ["1342 × 24", "2134 × 11", "305 × 24", "408 × 15"],
+        prob_int1: "Giacomo compra 4 quaderni da 2€ l'uno ed un astuccio da 8€. Quanto spende in totale?",
+        prob_int2: "Una confezione contiene 12 pacchetti di figurine. Se ogni pacchetto ha 5 figurine, quante figurine ci sono in 3 confezioni intere?",
+
+        dec_per_dieci: ["3,4 × 10", "0,56 × 100", "1,25 × 10", "0,04 × 1000", "14,8 × 100", "0,7 × 10"],
+        dec_bucate_pot: ["0,45 × ... = 45", "... × 10 = 34", "1,2 × ... = 120", "... × 100 = 85", "0,08 × ... = 80", "5,6 × ... = 56"],
+        dec_riga_semplici: ["4,5 × 2", "1,5 × 3", "0,25 × 4", "12,5 × 2", "2,1 × 4", "0,5 × 8"],
+        col_int_dec: ["142 × 1,5", "235 × 0,4", "312 × 2,3", "125 × 3,2"],
+        col_dec_dec: ["1,62 × 2,3", "4,5 × 1,2", "12,4 × 0,5", "3,15 × 2,4"],
+        col_dec_zeri: ["0,45 × 1,5", "2,05 × 3,4", "10,5 × 0,12", "4,08 × 0,25"],
+        prob_dec1: "Un chilo di mele costa 2,40€. Se Giacomo ne compra 3 chili e mezzo (3,5 kg), quanto spende?",
+        prob_dec2: "Un metro di stoffa costa 14,50€. Un sarto compra 4 metri di stoffa e 2 cerniere da 3€ l'una. Qual è la spesa complessiva?",
+
+        misto_conteggio_dec: ["12,45 × 3,2", "0,15 × 0,4", "145 × 0,003", "1,25 × 100", "0,005 × 20", "3,14 × 2"],
+        misto_riga: ["25 × 4", "0,75 × 4", "15 × 0 × 42", "18 × 1", "0,1 × 45", "50 × 0,2"],
+        misto_bucate: ["... × 0,5 = 10", "2,5 × ... = 5", "... × 4 = 1", "0,2 × ... = 20", "15 × ... = 0", "... × 100 = 4,5"],
+        col_avanzata1: ["245 × 36", "318 × 45", "524 × 28", "165 × 74"],
+        col_avanzata2: ["34,5 × 1,8", "12,48 × 3,5", "4,125 × 1,6", "0,75 × 4,8"],
+        col_avanzata3: ["105,2 × 4,3", "20,4 × 1,05", "3,14 × 25", "45,6 × 0,75"],
+        prob_avanz1: "Un barista acquista 12 bottiglie di succo a 1,80€ l'una e 15 confezioni di biscotti a 2,40€ l'una. Quanto spende in totale?",
+        prob_avanz2: "Per recintare un orto rettangolare lungo 18,5 metri e largo 12,5 metri si acquista una rete metallica che costa 4€ al metro. Qual è il costo totale della recinzione?"
+    },
+    {
+        riga_tabelline: ["5 × 4", "8 × 3", "11 × 6", "14 × 3", "20 × 5", "40 × 4"],
+        bucate_base: ["... × 4 = 16", "7 × ... = 21", "5 × 7 = ...", "19 × ... = 19", "... × 40 = 0", "13 × ... = 26"],
+        per_dieci_int: ["25 × 10", "14 × 100", "8 × 1000", "210 × 10", "36 × 100", "6 × 1000"],
+        col_1cifra: ["132 × 4", "241 × 3", "432 × 2", "115 × 5"],
+        col_2cifre: ["115 × 13", "234 × 12", "512 × 34", "514 × 25"],
+        col_3cifre: ["1243 × 22", "3124 × 12", "406 × 23", "507 × 14"],
+        prob_int1: "Martina compra 5 penne da 3€ l'una ed un diario da 9€. Quanto spende in totale?",
+        prob_int2: "In una biblioteca ci sono 4 scaffali con 8 ripiani ciascuno. Se ogni ripiano contiene 15 libri, quanti libri ci sono in totale?",
+
+        dec_per_dieci: ["4,5 × 10", "0,78 × 100", "2,15 × 10", "0,06 × 1000", "12,6 × 100", "0,9 × 10"],
+        dec_bucate_pot: ["0,35 × ... = 35", "... × 10 = 48", "1,5 × ... = 150", "... × 100 = 92", "0,04 × ... = 40", "7,2 × ... = 72"],
+        dec_riga_semplici: ["3,5 × 2", "2,5 × 3", "0,75 × 4", "14,5 × 2", "3,1 × 3", "0,5 × 6"],
+        col_int_dec: ["135 × 1,4", "245 × 0,6", "415 × 2,1", "115 × 4,2"],
+        col_dec_dec: ["1,52 × 2,4", "3,5 × 1,4", "14,2 × 0,5", "2,15 × 3,2"],
+        col_dec_zeri: ["0,35 × 1,5", "3,04 × 2,5", "11,5 × 0,14", "5,06 × 0,35"],
+        prob_dec1: "Un chilo di pere costa 2,60€. Se Martina ne compra 2 chili e mezzo (2,5 kg), quanto spende?",
+        prob_dec2: "Un rotolo di cavo costa 2,20€ al metro. Un elettricista compra 25 metri di cavo e 4 prese da 5€ l'una. Totale spesa?",
+
+        misto_conteggio_dec: ["14,25 × 2,4", "0,25 × 0,6", "235 × 0,002", "2,45 × 100", "0,004 × 50", "6,28 × 3"],
+        misto_riga: ["20 × 5", "0,50 × 6", "24 × 0 × 18", "35 × 1", "0,1 × 72", "40 × 0,5"],
+        misto_bucate: ["... × 0,5 = 14", "1,5 × ... = 6", "... × 5 = 1", "0,4 × ... = 40", "28 × ... = 0", "... × 100 = 7,8"],
+        col_avanzata1: ["235 × 24", "412 × 35", "614 × 18", "175 × 42"],
+        col_avanzata2: ["28,4 × 2,5", "14,35 × 2,4", "3,250 × 1,8", "0,85 × 3,6"],
+        col_avanzata3: ["112,4 × 3,2", "30,5 × 1,04", "2,50 × 36", "38,4 × 0,65"],
+        prob_avanz1: "Un pasticciere compra 15 kg di farina a 1,20€/kg e 8 confezioni di burro a 3,50€ l'una. Quanto spende?",
+        prob_avanz2: "Un campo da calcetto rettangolare misura 24,5 metri per 15,5 metri. Quanto costa stendere una linea perimetrale a 3€ al metro?"
+    },
+    {
+        riga_tabelline: ["6 × 4", "9 × 3", "13 × 5", "16 × 2", "30 × 4", "60 × 3"],
+        bucate_base: ["... × 5 = 20", "8 × ... = 24", "6 × 7 = ...", "27 × ... = 27", "... × 55 = 0", "14 × ... = 28"],
+        per_dieci_int: ["48 × 10", "16 × 100", "5 × 1000", "340 × 10", "52 × 100", "4 × 1000"],
+        col_1cifra: ["123 × 4", "231 × 3", "522 × 2", "135 × 5"],
+        col_2cifre: ["135 × 11", "214 × 15", "612 × 31", "415 × 22"],
+        col_3cifre: ["1432 × 21", "4123 × 14", "504 × 25", "609 × 12"],
+        prob_int1: "Federico compra 3 diari da 6€ l'uno e 4 evidenziatori da 2€ l'uno. Totale?",
+        prob_int2: "In un vivaio ci sono 6 serre. Ogni serra ha 14 bancali e su ogni bancale ci sono 8 piantine. Quante piantine in tutto?",
+
+        dec_per_dieci: ["5,6 × 10", "0,92 × 100", "3,45 × 10", "0,08 × 1000", "15,4 × 100", "0,4 × 10"],
+        dec_bucate_pot: ["0,25 × ... = 25", "... × 10 = 56", "1,8 × ... = 180", "... × 100 = 64", "0,05 × ... = 50", "8,4 × ... = 84"],
+        dec_riga_semplici: ["2,5 × 4", "1,2 × 5", "0,50 × 6", "16,5 × 2", "4,2 × 2", "0,25 × 8"],
+        col_int_dec: ["152 × 1,6", "315 × 0,5", "524 × 1,8", "135 × 2,4"],
+        col_dec_dec: ["1,42 × 2,5", "2,5 × 1,6", "16,4 × 0,5", "4,15 × 2,2"],
+        col_dec_zeri: ["0,25 × 1,5", "4,05 × 2,2", "12,5 × 0,16", "6,04 × 0,45"],
+        prob_dec1: "Un chilo di arance costa 1,80€. Se Federico ne compra 4 chili e mezzo (4,5 kg), quanto spende?",
+        prob_dec2: "Un metro di corda nautica costa 3,60€. Un velista compra 15 metri di corda e 2 moschettoni da 8€ l'uno. Totale?",
+
+        misto_conteggio_dec: ["16,35 × 1,8", "0,45 × 0,8", "312 × 0,004", "3,75 × 100", "0,008 × 25", "4,12 × 5"],
+        misto_riga: ["50 × 4", "0,25 × 8", "48 × 0 × 9", "72 × 1", "0,1 × 86", "60 × 0,5"],
+        misto_bucate: ["... × 0,5 = 18", "3,5 × ... = 7", "... × 8 = 2", "0,5 × ... = 50", "42 × ... = 0", "... × 100 = 6,2"],
+        col_avanzata1: ["314 × 26", "523 × 18", "432 × 34", "185 × 52"],
+        col_avanzata2: ["32,6 × 1,5", "18,45 × 3,2", "2,350 × 2,4", "0,95 × 4,2"],
+        col_avanzata3: ["124,5 × 2,4", "40,6 × 1,08", "4,25 × 28", "52,4 × 0,85"],
+        prob_avanz1: "Un fiorista vende 14 mazzi di tulipani a 6,50€ l'uno e 8 piante da vaso a 12,50€ l'una. Incasso totale?",
+        prob_avanz2: "Un giardino rettangolare misura 32,5 metri per 18,5 metri. Si vuole posare un cordolo di pietra attorno al costo di 6€ al metro lineare. Spesa?"
+    },
+    {
+        riga_tabelline: ["7 × 3", "8 × 4", "14 × 5", "17 × 2", "15 × 4", "70 × 3"],
+        bucate_base: ["... × 3 = 21", "9 × ... = 27", "4 × 9 = ...", "38 × ... = 38", "... × 70 = 0", "15 × ... = 30"],
+        per_dieci_int: ["56 × 10", "24 × 100", "3 × 1000", "410 × 10", "65 × 100", "8 × 1000"],
+        col_1cifra: ["113 × 4", "221 × 3", "612 × 2", "145 × 5"],
+        col_2cifre: ["145 × 12", "254 × 11", "315 × 35", "312 × 24"],
+        col_3cifre: ["1134 × 23", "5124 × 13", "608 × 22", "704 × 16"],
+        prob_int1: "Alessia compra 6 matite da 1,50€ l'una e un blocco note da 4€. Quanto spende?",
+        prob_int2: "Un teatro ha 8 file in platea con 22 poltrone ciascuna e 4 palchi con 6 posti ciascuno. Quanti spettatori in totale?",
+
+        dec_per_dieci: ["6,7 × 10", "0,84 × 100", "4,15 × 10", "0,09 × 1000", "18,2 × 100", "0,6 × 10"],
+        dec_bucate_pot: ["0,15 × ... = 15", "... × 10 = 62", "2,4 × ... = 240", "... × 100 = 75", "0,09 × ... = 90", "9,5 × ... = 95"],
+        dec_riga_semplici: ["1,5 × 6", "4,5 × 2", "0,20 × 5", "18,5 × 2", "5,1 × 3", "0,25 × 12"],
+        col_int_dec: ["164 × 1,5", "425 × 0,4", "612 × 1,4", "145 × 3,4"],
+        col_dec_dec: ["1,32 × 2,6", "1,5 × 1,8", "18,2 × 0,5", "5,15 × 2,4"],
+        col_dec_zeri: ["0,15 × 1,5", "5,04 × 1,8", "14,5 × 0,18", "7,05 × 0,25"],
+        prob_dec1: "Un chilo di kiwi costa 3,20€. Se Alessia ne compra 3 chili e mezzo (3,5 kg), quanto spende?",
+        prob_dec2: "Un artigiano compra 18 metri di nastro a 1,40€ al metro e 5 bottoni speciali a 2,20€ l'uno. Totale?",
+
+        misto_conteggio_dec: ["18,45 × 2,2", "0,35 × 0,4", "415 × 0,002", "4,85 × 100", "0,006 × 50", "5,25 × 4"],
+        misto_riga: ["25 × 8", "0,50 × 12", "64 × 0 × 11", "95 × 1", "0,1 × 94", "80 × 0,25"],
+        misto_bucate: ["... × 0,5 = 25", "4,5 × ... = 9", "... × 10 = 2", "0,8 × ... = 80", "64 × ... = 0", "... × 100 = 9,4"],
+        col_avanzata1: ["425 × 24", "614 × 15", "325 × 42", "215 × 64"],
+        col_avanzata2: ["45,2 × 1,8", "24,15 × 2,6", "1,450 × 3,6", "0,65 × 5,4"],
+        col_avanzata3: ["142,6 × 3,5", "50,8 × 1,05", "5,50 × 24", "64,8 × 0,45"],
+        prob_avanz1: "Un negozio vende 18 magliette a 14,50€ l'una e 6 paia di pantaloncini a 18,20€ l'uno. Qual è l'incasso totale?",
+        prob_avanz2: "Un parco giochi rettangolare lungo 45,5 metri e largo 20,5 metri viene circondato da una staccionata che costa 8€ al metro lineare. Calcola il costo totale."
+    }
+];
+
+function generaBatteriaCompleta(dati) {
+    let html = "";
+    let sDoc = "";
+    let lett = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+    let calcola = (str) => {
+        try { 
+            return eval(str.replace(/×/g, '*').replace(/,/g, '.')); 
+        } catch(e) { 
+            return "..."; 
+        }
+    };
+
+    let formatta = (val, dec = 3) => {
+        if (typeof val !== "number" || isNaN(val)) return "...";
+        return Number(val.toFixed(dec)).toString().replace('.', ',');
+    };
+
+    html += `<h4 style="color:#5b21b6; margin-top:0; border-bottom:1px solid #ddd6fe; padding-bottom:4px;">Sezione A: Moltiplicazione tra Numeri Interi</h4>`;
+
+    html += `<b>Es 7. Calcola in riga le seguenti moltiplicazioni:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.riga_tabelline[i]);
+        html += `<div>${lett[i]}) ${dati.riga_tabelline[i]}</div>`;
+        sDoc += `Es 7.${lett[i]}) ${dati.riga_tabelline[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 8. Trova il fattore mancante (casi base, 0 e 1):</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let t = dati.bucate_base[i];
+        let p = t.replace(/×/g, '*').replace(/,/g, '.').split('=');
+        let r = p[0].startsWith('...') ? parseFloat(p[1]) / parseFloat(p[0].replace('... * ', '')) : (p[0].includes('* ...') ? parseFloat(p[1]) / parseFloat(p[0].replace(' * ...', '')) : eval(p[0]));
+        if (t.includes("= 0") && t.includes("... ×")) r = 0;
+        html += `<div>${lett[i]}) ${t}</div>`;
+        sDoc += `Es 8.${lett[i]}) ${t.replace('...', r)}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 9. Calcola rapidamente moltiplicando per 10, 100, 1000:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.per_dieci_int[i]);
+        html += `<div>${lett[i]}) ${dati.per_dieci_int[i]}</div>`;
+        sDoc += `Es 9.${lett[i]}) ${dati.per_dieci_int[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 10. Incolonna ed esegui (secondo numero a 1 cifra):</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_1cifra[i]);
+        html += `<div>${lett[i]}) ${dati.col_1cifra[i]}</div>`;
+        sDoc += `Es 10.${lett[i]}) ${dati.col_1cifra[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 11. Incolonna ed esegui (secondo numero a 2 cifre):</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_2cifre[i]);
+        html += `<div>${lett[i]}) ${dati.col_2cifre[i]}</div>`;
+        sDoc += `Es 11.${lett[i]}) ${dati.col_2cifre[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 12. Moltiplicazioni a più cifre o con zero intermedio:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_3cifre[i]);
+        html += `<div>${lett[i]}) ${dati.col_3cifre[i]}</div>`;
+        sDoc += `Es 12.${lett[i]}) ${dati.col_3cifre[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    let rIntProb1 = (dati.prob_int1.includes("Giacomo")) ? (4 * 2) + 8 : ((dati.prob_int1.includes("Martina")) ? (5 * 3) + 9 : ((dati.prob_int1.includes("Federico")) ? (3 * 6) + (4 * 2) : (6 * 1.5) + 4));
+    html += `<div style="margin-bottom:12px;"><b>Es 13. Problema:</b> ${dati.prob_int1}</div>`;
+    sDoc += `Es 13) Risultato = ${rIntProb1}€\n`;
+
+    let rIntProb2 = (dati.prob_int2.includes("figurine")) ? 12 * 5 * 3 : ((dati.prob_int2.includes("libri")) ? 4 * 8 * 15 : ((dati.prob_int2.includes("piantine")) ? 6 * 14 * 8 : (8 * 22) + (4 * 6)));
+    let unitaP2 = dati.prob_int2.includes("spettatori") ? " spettatori" : (dati.prob_int2.includes("libri") ? " libri" : (dati.prob_int2.includes("piantine") ? " piantine" : " figurine"));
+    html += `<div style="margin-bottom:18px;"><b>Es 14. Problema:</b> ${dati.prob_int2}</div>`;
+    sDoc += `Es 14) Risultato = ${rIntProb2}${unitaP2}\n`;
+
+    html += `<h4 style="color:#5b21b6; margin-top:20px; border-bottom:1px solid #ddd6fe; padding-bottom:4px;">Sezione B: Decimali con Potenze di 10 e Incolonnamento</h4>`;
+
+    html += `<b>Es 15. Moltiplica i numeri decimali per 10, 100, 1000:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.dec_per_dieci[i]);
+        let rf = formatta(r, 2);
+        html += `<div>${lett[i]}) ${dati.dec_per_dieci[i]}</div>`;
+        sDoc += `Es 15.${lett[i]}) ${dati.dec_per_dieci[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 16. Trova il numero o la potenza di 10 mancante:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let t = dati.dec_bucate_pot[i];
+        let p = t.replace(/×/g, '*').replace(/,/g, '.').split('=');
+        let r = p[0].startsWith('...') ? parseFloat(p[1]) / parseFloat(p[0].replace('... * ', '')) : parseFloat(p[1]) / parseFloat(p[0].replace(' * ...', ''));
+        let rf = formatta(r, 3);
+        html += `<div>${lett[i]}) ${t}</div>`;
+        sDoc += `Es 16.${lett[i]}) ${t.replace('...', rf)}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 17. Calcola in riga con decimali semplici:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.dec_riga_semplici[i]);
+        let rf = formatta(r, 2);
+        html += `<div>${lett[i]}) ${dati.dec_riga_semplici[i]}</div>`;
+        sDoc += `Es 17.${lett[i]}) ${dati.dec_riga_semplici[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 18. Incolonna sul quaderno (intero × decimale):</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_int_dec[i]);
+        let rf = formatta(r, 2);
+        html += `<div>${lett[i]}) ${dati.col_int_dec[i]}</div>`;
+        sDoc += `Es 18.${lett[i]}) ${dati.col_int_dec[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 19. Incolonna sul quaderno (decimale × decimale):</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_dec_dec[i]);
+        let rf = formatta(r, 3);
+        html += `<div>${lett[i]}) ${dati.col_dec_dec[i]}</div>`;
+        sDoc += `Es 19.${lett[i]}) ${dati.col_dec_dec[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 20. Incolonna con zeri intermedi o iniziali:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_dec_zeri[i]);
+        let rf = formatta(r, 4);
+        html += `<div>${lett[i]}) ${dati.col_dec_zeri[i]}</div>`;
+        sDoc += `Es 20.${lett[i]}) ${dati.col_dec_zeri[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    let rDecProb1 = (dati.prob_dec1.includes("mele")) ? 2.40 * 3.5 : ((dati.prob_dec1.includes("pere")) ? 2.60 * 2.5 : ((dati.prob_dec1.includes("arance")) ? 1.80 * 4.5 : 3.20 * 3.5));
+    let rDecProb1F = formatta(rDecProb1, 2);
+    html += `<div style="margin-bottom:12px;"><b>Es 21. Problema:</b> ${dati.prob_dec1}</div>`;
+    sDoc += `Es 21) Risultato = ${rDecProb1F}€\n`;
+
+    let rDecProb2 = (dati.prob_dec2.includes("stoffa")) ? (14.50 * 4) + (2 * 3) : ((dati.prob_dec2.includes("cavo")) ? (2.20 * 25) + (4 * 5) : ((dati.prob_dec2.includes("corda")) ? (3.60 * 15) + (2 * 8) : (18 * 1.40) + (5 * 2.20)));
+    let rDecProb2F = formatta(rDecProb2, 2);
+    html += `<div style="margin-bottom:18px;"><b>Es 22. Problema:</b> ${dati.prob_dec2}</div>`;
+    sDoc += `Es 22) Risultato = ${rDecProb2F}€\n`;
+
+    html += `<h4 style="color:#5b21b6; margin-top:20px; border-bottom:1px solid #ddd6fe; padding-bottom:4px;">Sezione C: Consolidamento Avanzato e Problemi Reali</h4>`;
+
+    html += `<b>Es 23. Calcola il prodotto finale (attenzione ai decimali):</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.misto_conteggio_dec[i]);
+        let rf = formatta(r, 4);
+        html += `<div>${lett[i]}) ${dati.misto_conteggio_dec[i]}</div>`;
+        sDoc += `Es 23.${lett[i]}) ${dati.misto_conteggio_dec[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 24. Calcoli rapidi misti:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.misto_riga[i]);
+        let rf = formatta(r, 2);
+        html += `<div>${lett[i]}) ${dati.misto_riga[i]}</div>`;
+        sDoc += `Es 24.${lett[i]}) ${dati.misto_riga[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 25. Trova il fattore mancante nelle uguaglianze:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let t = dati.misto_bucate[i];
+        let p = t.replace(/×/g, '*').replace(/,/g, '.').split('=');
+        let r = p[0].startsWith('...') ? parseFloat(p[1]) / parseFloat(p[0].replace('... * ', '')) : parseFloat(p[1]) / parseFloat(p[0].replace(' * ...', ''));
+        if (t.includes("= 0")) r = 0;
+        let rf = formatta(r, 3);
+        html += `<div>${lett[i]}) ${t}</div>`;
+        sDoc += `Es 25.${lett[i]}) ${t.replace('...', rf)}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 26. Incolonnamento avanzato tra numeri interi:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_avanzata1[i]);
+        html += `<div>${lett[i]}) ${dati.col_avanzata1[i]}</div>`;
+        sDoc += `Es 26.${lett[i]}) ${dati.col_avanzata1[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 27. Incolonnamento avanzato con decimali:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_avanzata2[i]);
+        let rf = formatta(r, 3);
+        html += `<div>${lett[i]}) ${dati.col_avanzata2[i]}</div>`;
+        sDoc += `Es 27.${lett[i]}) ${dati.col_avanzata2[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 28. Incolonnamento misto complesso:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_avanzata3[i]);
+        let rf = formatta(r, 3);
+        html += `<div>${lett[i]}) ${dati.col_avanzata3[i]}</div>`;
+        sDoc += `Es 28.${lett[i]}) ${dati.col_avanzata3[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    let rAvProb1 = (dati.prob_avanz1.includes("barista")) ? (12 * 1.80) + (15 * 2.40) : ((dati.prob_avanz1.includes("pasticciere")) ? (15 * 1.20) + (8 * 3.50) : ((dati.prob_avanz1.includes("fiorista")) ? (14 * 6.50) + (8 * 12.50) : (18 * 14.50) + (6 * 18.20)));
+    let rAvProb1F = formatta(rAvProb1, 2);
+    html += `<div style="margin-bottom:12px;"><b>Es 29. Problema reale a due passaggi:</b> ${dati.prob_avanz1}</div>`;
+    sDoc += `Es 29) Risultato = ${rAvProb1F}€\n`;
+
+    let rAvProb2 = (dati.prob_avanz2.includes("orto")) ? (2 * (18.5 + 12.5)) * 4 : ((dati.prob_avanz2.includes("calcetto")) ? (2 * (24.5 + 15.5)) * 3 : ((dati.prob_avanz2.includes("giardino")) ? (2 * (32.5 + 18.5)) * 6 : (2 * (45.5 + 20.5)) * 8));
+    let rAvProb2F = formatta(rAvProb2, 2);
+    html += `<div style="margin-bottom:8px;"><b>Es 30. Problema di geometria e spesa:</b> ${dati.prob_avanz2}</div>`;
+    sDoc += `Es 30) Risultato = ${rAvProb2F}€\n`;
+
+    return { html, sDoc };
+}
+
+function cambiaVariante(indice) {
+    for(let i=0; i<=4; i++) document.getElementById("btn-v-" + i).classList.remove("attiva");
+    document.getElementById("btn-v-" + indice).classList.add("attiva");
+    
+    let dati = (indice === 4) ? dbBatteria[Math.floor(Math.random()*4)] : dbBatteria[indice];
+    let nomi = ["SEMEL", "BIS", "TER", "QUATER", "MIX"];
+    
+    if (indice === 4) {
+        document.getElementById("badge-variante").innerHTML = `<b>Modalità MIX attiva!</b> Esercizi rimescolati casualmente tra le varianti.`;
+    } else {
+        document.getElementById("badge-variante").innerHTML = `Modalità ${nomi[indice]} attiva: Risolvi i 24 esercizi sul tuo quaderno.`;
+    }
+    
+    let res = generaBatteriaCompleta(dati);
+    document.getElementById("campo-batteria").innerHTML = res.html;
+    document.getElementById("sol-batteria").innerText = res.sDoc;
+    document.getElementById("sol-batteria").style.display = "none";
+
+    let btnRisultati = document.getElementById("btn-risultati");
+    if (indice === 1 || indice === 3) {
+        btnRisultati.style.display = "block";
+    } else {
+        btnRisultati.style.display = "none";
+    }
+}
+
+function toggleVisioneDoc(id) {
+    let el = document.getElementById(id);
+    el.style.display = (el.style.display === "block") ? "none" : "block";
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    cambiaVariante(0);
+});
+</script>
+</body>
+</html>

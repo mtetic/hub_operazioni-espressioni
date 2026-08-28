@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lezione 3.A: Addizione&sottrazione</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #eff6ff;
+            --accent: #2563eb;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --border-color: #cbd5e1;
+            --success: #15803d;
+            --success-bg: #f0fdf4;
+            --danger: #b91c1c;
+            --danger-bg: #fef2f2;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8fafc;
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 12px;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-top: 6px solid var(--accent);
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-top: 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        h2 {
+            color: #1d4ed8;
+            font-size: 1.2rem;
+            margin-top: 28px;
+            margin-bottom: 14px;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+        }
+
+        p, li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .nota-quaderno {
+            background: #fffbeb;
+            border: 1px solid #fef08a;
+            border-left: 5px solid #d97706;
+            padding: 18px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .box-formula {
+            text-align: center;
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 14px 0;
+            font-size: 1.1rem;
+        }
+
+        .tabella-operazione {
+            margin: 15px auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-collapse: collapse;
+            line-height: 1.3;
+        }
+
+        .tabella-operazione td {
+            width: 22px;
+            text-align: center;
+            padding: 2px 1px;
+        }
+
+        .tabella-operazione td.op-segno {
+            width: 26px;
+            color: #64748b;
+        }
+
+        .riga-riporto td {
+            font-size: 0.85rem;
+            color: #dc2626;
+            height: 20px;
+            vertical-align: bottom;
+            font-weight: 800;
+        }
+
+        .cifra-unita {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .quiz-card {
+            background: var(--primary-light);
+            border: 1px solid #bfdbfe;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.06);
+        }
+
+        .quiz-titolo {
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .quiz-opzioni {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .btn-opzione {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .btn-opzione:hover, .btn-opzione:focus {
+            border-color: var(--accent);
+            background: #f1f5f9;
+            outline: none;
+        }
+
+        .badge-lettera {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }
+
+        .feedback-quiz {
+            font-weight: 600;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .tastierino-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 14px;
+            background: white;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .campi-input-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .input-tastierino {
+            width: 80px;
+            padding: 8px;
+            font-size: 1rem;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .input-tastierino.attivo {
+            border-color: var(--accent);
+            background: #eff6ff;
+        }
+
+        .numpad-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            max-width: 320px;
+            margin-top: 8px;
+        }
+
+        .btn-num {
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .btn-num:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-invia {
+            grid-column: span 3;
+            padding: 10px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-canc {
+            grid-column: span 2;
+            padding: 10px;
+            background: #cbd5e1;
+            color: var(--text-main);
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .box-quaderno-es {
+            background: #ffffff;
+            border: 1px dashed var(--border-color);
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .titolo-quaderno-es {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .card-allenamento {
+            margin-top: 36px;
+            padding: 22px;
+            border: 2px solid #7c3aed;
+            border-radius: 14px;
+            background: #f5f3ff;
+        }
+
+        .titolo-allenamento {
+            margin-top: 0;
+            color: #5b21b6;
+            font-size: 1.1rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .barra-varianti {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            background: #ddd6fe;
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .btn-v {
+            flex: 1;
+            min-width: 75px;
+            padding: 8px 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: none;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #4c1d95;
+            transition: all 0.2s;
+        }
+
+        .btn-v.attiva {
+            background: #7c3aed;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .blocco-esercizi {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #c4b5fd;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            box-sizing: border-box;
+        }
+
+        .griglia-e-riga {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            width: 100%;
+            white-space: nowrap;
+        }
+
+        .btn-docente {
+            width: 100%;
+            margin-top: 16px;
+            padding: 10px;
+            background: #475569;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .chiave-docente {
+            display: none;
+            margin-top: 12px;
+            padding: 14px;
+            background: #f1f5f9;
+            border-left: 4px solid #475569;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.88rem;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>3.A: Addizione&sottrazione</h1>
+
+    <section id="parte1">
+        <h2>Parte 1: L'addizione tra numeri interi</h2>
+        
+        <p>L'addizione è l'operazione che unisce due o più quantità. I numeri che si sommano si chiamano <b>addendi</b>, mentre il risultato finale si chiama <b>somma</b> o <b>totale</b>.</p>
+
+        <div class="box-formula">
+            <span style="font-weight:bold; font-size:1.3rem;">5 + 3 = 8</span>
+            <p style="margin: 6px 0 0 0; font-size: 0.9rem; color: var(--text-muted);">
+                <b>5</b> e <b>3</b> sono gli <b>addendi</b> &nbsp;|&nbsp; <b>8</b> è la <b>somma</b>
+            </p>
+        </div>
+
+        <div class="nota-quaderno" style="border-left-color: #2563eb; background: #eff6ff;">
+            <strong style="color: #1e3a8a; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">Casi particolari e fattibilità nei numeri naturali:</strong>
+            <p style="margin: 6px 0 0 0; color: #1e3a8a;">
+                • <b>7 + 0 = 7</b> &nbsp;e&nbsp; <b>0 + 9 = 9</b> &nbsp;→&nbsp; Lo <b>0</b> è l'elemento neutro: sommarlo a qualsiasi numero lascia il valore invariato.<br>
+                • <b>L'addizione è sempre possibile:</b> Nell'insieme dei numeri naturali (<b>ℕ</b>) puoi sempre sommare due numeri qualsiasi (es. <b>12 + 35 = 47</b>).
+            </p>
+        </div>
+
+        <div class="nota-quaderno">
+            <strong style="color: #854d0e; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">Algoritmo in Colonna:</strong>
+            <p style="margin: 6px 0 10px 0; color: #854d0e;">
+                Come calcoliamo le somme quando non è possibile fare il calcolo a mente? Si incolonnano i numeri facendo combaciare le cifre delle <span class="cifra-unita">Unità</span>.
+            </p>
+            
+            <p style="margin: 4px 0 0 0; font-weight: bold; color: #854d0e; font-size: 0.9rem;">Esempio 1: Senza riporto (143 + 25)</p>
+            <table class="tabella-operazione" style="color: #854d0e;">
+                <tr><td></td><td>1</td><td>4</td><td class="cifra-unita">3</td><td class="op-segno">+</td></tr>
+                <tr><td></td><td></td><td>2</td><td class="cifra-unita">5</td><td class="op-segno">=</td></tr>
+                <tr><td colspan="5" style="border-top: 2px solid #854d0e; padding: 0;"></td></tr>
+                <tr><td></td><td>1</td><td>6</td><td class="cifra-unita">8</td><td></td></tr>
+            </table>
+
+            <p style="margin: 12px 0 0 0; font-weight: bold; color: #854d0e; font-size: 0.9rem;">Esempio 2: Con riporto (1675 + 248)</p>
+            <table class="tabella-operazione" style="color: #854d0e;">
+                <tr class="riga-riporto"><td></td><td>1</td><td>1</td><td></td><td></td></tr>
+                <tr><td>1</td><td>6</td><td>7</td><td class="cifra-unita">5</td><td class="op-segno">+</td></tr>
+                <tr><td></td><td>2</td><td>4</td><td class="cifra-unita">8</td><td class="op-segno">=</td></tr>
+                <tr><td colspan="5" style="border-top: 2px solid #854d0e; padding: 0;"></td></tr>
+                <tr><td>1</td><td>9</td><td>2</td><td class="cifra-unita">3</td><td></td></tr>
+            </table>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 1">
+            <p class="quiz-titolo">Quiz 1: Come si chiama il risultato di un'addizione?</p>
+            <div class="quiz-opzioni" role="radiogroup" aria-label="Opzioni Quiz 1">
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, false, 'Attenzione: l\'addendo è ciascuno dei numeri che vengono sommati, non il risultato.')">
+                    <span class="badge-lettera">A</span> Addendo
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, true, 'Esatto! Il risultato dell\'addizione si chiama somma o totale.')">
+                    <span class="badge-lettera">B</span> Somma
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, false, 'No: la differenza appartiene alla sottrazione.')">
+                    <span class="badge-lettera">C</span> Differenza
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, false, 'No: il quoziente appartiene alla divisione.')">
+                    <span class="badge-lettera">D</span> Quoziente
+                </button>
+            </div>
+            <div id="fb-quiz1" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 2">
+            <p class="quiz-titolo">Quiz 2: Completa i numeri mancanti</p>
+            <p style="margin-bottom: 8px;">Inserisci i due valori per completare le uguaglianze:</p>
+            <div class="tastierino-box">
+                <div class="campi-input-box">
+                    <label>45 + <input type="text" id="q2-box1" class="input-tastierino attivo" readonly onclick="selezionaCampo('q2', 1)"> = 100</label>
+                    <label style="margin-left: 15px;">80 + <input type="text" id="q2-box2" class="input-tastierino" readonly onclick="selezionaCampo('q2', 2)"> = 80</label>
+                </div>
+                <div class="numpad-grid">
+                    <button class="btn-num" onclick="digita('q2', '1')">1</button>
+                    <button class="btn-num" onclick="digita('q2', '2')">2</button>
+                    <button class="btn-num" onclick="digita('q2', '3')">3</button>
+                    <button class="btn-num" onclick="digita('q2', '4')">4</button>
+                    <button class="btn-num" onclick="digita('q2', '5')">5</button>
+                    <button class="btn-num" onclick="digita('q2', '6')">6</button>
+                    <button class="btn-num" onclick="digita('q2', '7')">7</button>
+                    <button class="btn-num" onclick="digita('q2', '8')">8</button>
+                    <button class="btn-num" onclick="digita('q2', '9')">9</button>
+                    <button class="btn-num" onclick="digita('q2', '0')">0</button>
+                    <button class="btn-canc" onclick="cancella('q2')">⌫</button>
+                    <button class="btn-invia" onclick="verificaQuiz2()">Verifica</button>
+                </div>
+            </div>
+            <div id="fb-quiz2" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="box-quaderno-es">
+            <h3 class="titolo-quaderno-es">Esercizi sul quaderno</h3>
+            <p><b>Es 1.</b> Calcola a mente sul quaderno completando alla decina:</p>
+            <p>a) 12 + 18 &nbsp;&nbsp;&nbsp;&nbsp; b) 45 + 55 &nbsp;&nbsp;&nbsp;&nbsp; c) 130 + 70</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+            <p><b>Es 2.</b> Incolonna ed esegui sul quaderno (la prima operazione è senza riporto):</p>
+            <p>a) 143 + 25 &nbsp;&nbsp;&nbsp;&nbsp; b) 245 + 68 &nbsp;&nbsp;&nbsp;&nbsp; c) 1567 + 345</p>
+        </div>
+    </section>
+
+    <section id="parte2">
+        <h2>Parte 2: La sottrazione e la tecnica del prestito</h2>
+
+        <p>La sottrazione è l'operazione inversa dell'addizione. Il primo numero si chiama <b>minuendo</b>, il secondo <b>sottraendo</b> e il risultato finale è il <b>resto</b> o <b>differenza</b>.</p>
+
+        <div class="box-formula">
+            <span style="font-weight:bold; font-size:1.3rem;">8 - 3 = 5</span>
+            <p style="margin: 6px 0 0 0; font-size: 0.9rem; color: var(--text-muted);">
+                <b>8</b> è il <b>minuendo</b> &nbsp;|&nbsp; <b>3</b> è il <b>sottraendo</b> &nbsp;|&nbsp; <b>5</b> è la <b>differenza</b>
+            </p>
+        </div>
+
+        <div class="nota-quaderno" style="border-left-color: #2563eb; background: #eff6ff;">
+            <strong style="color: #1e3a8a; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">Casi particolari e condizione nei numeri naturali:</strong>
+            <p style="margin: 6px 0 0 0; color: #1e3a8a;">
+                • <b>8 - 0 = 8</b> &nbsp;→&nbsp; Togliere zero lascia il numero invariato.<br>
+                • <b>8 - 8 = 0</b> &nbsp;→&nbsp; Togliere a un numero se stesso dà sempre zero.<br>
+                • <b>Quando è possibile sottrarre?</b> Nell'insieme dei numeri naturali (<b>ℕ</b>), la sottrazione si può fare solo se il minuendo è maggiore o uguale al sottraendo (es. <b>9 - 4 = 5</b> si può fare, mentre <b>4 - 9</b> <i>non è possibile in ℕ</i>).
+            </p>
+        </div>
+
+        <div class="nota-quaderno">
+            <strong style="color: #854d0e; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">Algoritmo della Sottrazione in Colonna:</strong>
+            <p style="margin: 6px 0 10px 0; color: #854d0e;">
+                Come calcoliamo la sottrazione a mano? Si allineano le cifre sulle <span class="cifra-unita">Unità</span>. Se la cifra sopra è minore di quella sotto, si chiede un prestito al numero in alto a sinistra.
+            </p>
+            
+            <p style="margin: 4px 0 0 0; font-weight: bold; color: #854d0e; font-size: 0.9rem;">Esempio 1: Senza prestito (85 - 32)</p>
+            <table class="tabella-operazione" style="color: #854d0e;">
+                <tr><td>8</td><td class="cifra-unita">5</td><td class="op-segno">-</td></tr>
+                <tr><td>3</td><td class="cifra-unita">2</td><td class="op-segno">=</td></tr>
+                <tr><td colspan="3" style="border-top: 2px solid #854d0e; padding: 0;"></td></tr>
+                <tr><td>5</td><td class="cifra-unita">3</td><td></td></tr>
+            </table>
+
+            <p style="margin: 12px 0 0 0; font-weight: bold; color: #854d0e; font-size: 0.9rem;">Esempio 2: Con prestito (71 - 45)</p>
+            <table class="tabella-operazione" style="color: #854d0e;">
+                <tr class="riga-riporto"><td>6</td><td>11</td><td></td></tr>
+                <tr><td>7</td><td class="cifra-unita">1</td><td class="op-segno">-</td></tr>
+                <tr><td>4</td><td class="cifra-unita">5</td><td class="op-segno">=</td></tr>
+                <tr><td colspan="3" style="border-top: 2px solid #854d0e; padding: 0;"></td></tr>
+                <tr><td>2</td><td class="cifra-unita">6</td><td></td></tr>
+            </table>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 3">
+            <p class="quiz-titolo">Quiz 3: Calcola sul quaderno 63 - 27</p>
+            <div class="quiz-opzioni" role="radiogroup" aria-label="Opzioni Quiz 3">
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, false, 'Ritenta! Attenzione all\'ordine dell\'operazione.')">
+                    <span class="badge-lettera">A</span> 44
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, false, 'Ritenta! Controlla il prestito sulle decine.')">
+                    <span class="badge-lettera">B</span> 46
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, true, 'Bravissimo! 13 - 7 = 6 e 5 - 2 = 3. Risultato: 36.')">
+                    <span class="badge-lettera">C</span> 36
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, false, 'Ritenta! Errore di calcolo.')">
+                    <span class="badge-lettera">D</span> 34
+                </button>
+            </div>
+            <div id="fb-quiz3" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 4">
+            <p class="quiz-titolo">Quiz 4: Completa la sottrazione con prestito</p>
+            <p style="margin-bottom: 8px;">Inserisci le cifre mancanti per completare <b>84 - 29 = 55</b>:</p>
+            <div class="tastierino-box">
+                <div class="campi-input-box">
+                    <label>Unità aumentate (10 + 4): <input type="text" id="q4-box1" class="input-tastierino attivo" onclick="selezionaCampo('q4', 1)"></label>
+                    <label style="margin-left: 15px;">Decine rimaste all'8: <input type="text" id="q4-box2" class="input-tastierino" onclick="selezionaCampo('q4', 2)"></label>
+                </div>
+                <div class="numpad-grid">
+                    <button class="btn-num" onclick="digita('q4', '1')">1</button>
+                    <button class="btn-num" onclick="digita('q4', '2')">2</button>
+                    <button class="btn-num" onclick="digita('q4', '3')">3</button>
+                    <button class="btn-num" onclick="digita('q4', '4')">4</button>
+                    <button class="btn-num" onclick="digita('q4', '5')">5</button>
+                    <button class="btn-num" onclick="digita('q4', '6')">6</button>
+                    <button class="btn-num" onclick="digita('q4', '7')">7</button>
+                    <button class="btn-num" onclick="digita('q4', '8')">8</button>
+                    <button class="btn-num" onclick="digita('q4', '9')">9</button>
+                    <button class="btn-num" onclick="digita('q4', '0')">0</button>
+                    <button class="btn-canc" onclick="cancella('q4')">⌫</button>
+                    <button class="btn-invia" onclick="verificaQuiz4()">Verifica</button>
+                </div>
+            </div>
+            <div id="fb-quiz4" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="box-quaderno-es">
+            <h3 class="titolo-quaderno-es">Esercizi sul quaderno</h3>
+            <p><b>Es 3.</b> Esegui sul quaderno (la prima è senza prestito, le altre con prestito):</p>
+            <p>a) 85 - 32 &nbsp;&nbsp;&nbsp;&nbsp; b) 71 - 45 &nbsp;&nbsp;&nbsp;&nbsp; c) 235 - 79</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+            <p><b>Es 4.</b> Esegui le seguenti sottrazioni con prestito a cascata attraverso gli zeri:</p>
+            <p>a) 100 - 25 &nbsp;&nbsp;&nbsp;&nbsp; b) 500 - 145 &nbsp;&nbsp;&nbsp;&nbsp; c) 3000 - 450</p>
+        </div>
+    </section>
+
+    <section id="parte3">
+        <h2>Parte 3: L'algoritmo scritto con i numeri decimali</h2>
+
+        <p>Nel calcolo in colonna con i numeri decimali, la <b>virgola</b> costituisce l'asse di allineamento verticale obbligatorio. Quando i numeri presentano un numero diverso di cifre decimali, si inseriscono gli <b>zeri segnaposto</b> a destra per pareggiare le colonne.</p>
+
+        <div class="nota-quaderno">
+            <strong style="color: #854d0e; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">Esempio con Zero Segnaposto: 45 - 3,2</strong>
+            <p style="margin: 6px 0 10px 0; color: #854d0e;">
+                Scriviamo il minuendo come <b>45,0</b>. Lo zero sui decimi riceve il prestito dal numero in alto a sinistra.
+            </p>
+            <table class="tabella-operazione" style="color: #854d0e;">
+                <tr class="riga-riporto"><td></td><td>4</td><td>10</td><td></td></tr>
+                <tr><td>4</td><td class="cifra-unita">5</td><td>,0</td><td class="op-segno">-</td></tr>
+                <tr><td></td><td class="cifra-unita">3</td><td>,2</td><td class="op-segno">=</td></tr>
+                <tr><td colspan="4" style="border-top: 2px solid #854d0e; padding: 0;"></td></tr>
+                <tr><td>4</td><td class="cifra-unita">1</td><td>,8</td><td></td></tr>
+            </table>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 5">
+            <p class="quiz-titolo">Quiz 5: Calcola sul quaderno 8,4 - 2,15</p>
+            <div class="quiz-opzioni" role="radiogroup" aria-label="Opzioni Quiz 5">
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, false, 'Ritenta! Ricorda di usare lo zero segnaposto.')">
+                    <span class="badge-lettera">A</span> 6,35
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, true, 'Eccellente! Scrivendo 8,40 ed eseguendo il prestito sui centesimi si ottiene 6,25.')">
+                    <span class="badge-lettera">B</span> 6,25
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, false, 'Ritenta! Errore di incolonnamento dei decimali.')">
+                    <span class="badge-lettera">C</span> 6,15
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, false, 'Ritenta! Controlla i prestiti.')">
+                    <span class="badge-lettera">D</span> 5,25
+                </button>
+            </div>
+            <div id="fb-quiz5" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 6">
+            <p class="quiz-titolo">Quiz 6: Calcola la somma con i decimali</p>
+            <p style="margin-bottom: 8px;">Inserisci la parte intera e la parte decimale del risultato di <b>14 + 3,5</b>:</p>
+            <div class="tastierino-box">
+                <div class="campi-input-box">
+                    <label>Parte intera: <input type="text" id="q6-box1" class="input-tastierino attivo" onclick="selezionaCampo('q6', 1)"></label>
+                    <label style="margin-left: 15px;">Decimi: ,<input type="text" id="q6-box2" class="input-tastierino" onclick="selezionaCampo('q6', 2)"></label>
+                </div>
+                <div class="numpad-grid">
+                    <button class="btn-num" onclick="digita('q6', '1')">1</button>
+                    <button class="btn-num" onclick="digita('q6', '2')">2</button>
+                    <button class="btn-num" onclick="digita('q6', '3')">3</button>
+                    <button class="btn-num" onclick="digita('q6', '4')">4</button>
+                    <button class="btn-num" onclick="digita('q6', '5')">5</button>
+                    <button class="btn-num" onclick="digita('q6', '6')">6</button>
+                    <button class="btn-num" onclick="digita('q6', '7')">7</button>
+                    <button class="btn-num" onclick="digita('q6', '8')">8</button>
+                    <button class="btn-num" onclick="digita('q6', '9')">9</button>
+                    <button class="btn-num" onclick="digita('q6', '0')">0</button>
+                    <button class="btn-canc" onclick="cancella('q6')">⌫</button>
+                    <button class="btn-invia" onclick="verificaQuiz6()">Verifica</button>
+                </div>
+            </div>
+            <div id="fb-quiz6" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="box-quaderno-es">
+            <h3 class="titolo-quaderno-es">Esercizi sul quaderno</h3>
+            <p><b>Es 5.</b> Incolonna con cura allineando le virgole ed esegui:</p>
+            <p>a) 12,5 + 3,8 &nbsp;&nbsp;&nbsp;&nbsp; b) 7,2 + 54 &nbsp;&nbsp;&nbsp;&nbsp; c) 1,6 + 1,23</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+            <p><b>Es 6.</b> Inserisci gli zeri segnaposto necessari ed esegui le sottrazioni:</p>
+            <p>a) 45 - 3,2 &nbsp;&nbsp;&nbsp;&nbsp; b) 32,8 - 4 &nbsp;&nbsp;&nbsp;&nbsp; c) 10,5 - 4,25</p>
+        </div>
+    </section>
+
+    <div class="card-allenamento">
+        <h3 class="titolo-allenamento">Laboratorio di Consolidamento: Addizione e Sottrazione</h3>
+        
+        <div class="barra-varianti" role="toolbar" aria-label="Varianti esercizi">
+            <button id="btn-v-0" class="btn-v attiva" onclick="cambiaVariante(0)">SEMEL</button>
+            <button id="btn-v-1" class="btn-v" onclick="cambiaVariante(1)">BIS</button>
+            <button id="btn-v-2" class="btn-v" onclick="cambiaVariante(2)">TER</button>
+            <button id="btn-v-3" class="btn-v" onclick="cambiaVariante(3)">QUATER</button>
+            <button id="btn-v-4" class="btn-v" style="background:#7c3aed; color:white;" onclick="cambiaVariante(4)">MIX</button>
+        </div>
+
+        <div id="badge-variante" style="background: #ffffff; border: 1px solid #c4b5fd; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85rem; color: #5b21b6; font-weight: 500;">
+            Modalità SEMEL attiva: Risolvi i 24 esercizi sul tuo quaderno.
+        </div>
+        
+        <div id="campo-batteria" class="blocco-esercizi"></div>
+
+        <button id="btn-risultati" class="btn-docente" style="display: none;" onclick="toggleVisioneDoc('sol-batteria')">Mostra/Nascondi Risultati</button>
+        <div id="sol-batteria" class="chiave-docente"></div>
+    </div>
+</div>
+
+<script>
+let statoCampi = {
+    q2: { attivo: 1, val1: "", val2: "" },
+    q4: { attivo: 1, val1: "", val2: "" },
+    q6: { attivo: 1, val1: "", val2: "" }
+};
+
+function selezionaCampo(quiz, num) {
+    statoCampi[quiz].attivo = num;
+    document.getElementById(quiz + '-box1').classList.toggle('attivo', num === 1);
+    document.getElementById(quiz + '-box2').classList.toggle('attivo', num === 2);
+}
+
+function digita(quiz, cifra) {
+    let q = statoCampi[quiz];
+    if (q.attivo === 1 && q.val1.length < 4) {
+        q.val1 += cifra;
+        document.getElementById(quiz + '-box1').value = q.val1;
+    } else if (q.attivo === 2 && q.val2.length < 4) {
+        q.val2 += cifra;
+        document.getElementById(quiz + '-box2').value = q.val2;
+    }
+}
+
+function cancella(quiz) {
+    let q = statoCampi[quiz];
+    if (q.attivo === 1) {
+        q.val1 = q.val1.slice(0, -1);
+        document.getElementById(quiz + '-box1').value = q.val1;
+    } else {
+        q.val2 = q.val2.slice(0, -1);
+        document.getElementById(quiz + '-box2').value = q.val2;
+    }
+}
+
+function gestisciFeedback(el, corretto, msg) {
+    el.style.display = 'block';
+    el.innerHTML = (corretto ? '[ESATTO] ' : 'Ritenta! ') + msg;
+    el.style.background = corretto ? 'var(--success-bg)' : 'var(--danger-bg)';
+    el.style.color = corretto ? 'var(--success)' : 'var(--danger)';
+    el.style.border = '1px solid ' + (corretto ? '#bbf7d0' : '#fecaca');
+}
+
+function verificaQuiz1(btn, corretto, msg) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.btn-opzione').forEach(b => b.setAttribute('aria-checked', 'false'));
+    btn.setAttribute('aria-checked', 'true');
+    gestisciFeedback(document.getElementById('fb-quiz1'), corretto, msg);
+}
+
+function verificaQuiz2() {
+    const v1 = parseInt(statoCampi.q2.val1);
+    const v2 = parseInt(statoCampi.q2.val2);
+    const fb = document.getElementById('fb-quiz2');
+
+    if (v1 === 55 && v2 === 0) {
+        gestisciFeedback(fb, true, 'Bravissimo! 45 + 55 = 100 e 80 + 0 = 80.');
+    } else {
+        gestisciFeedback(fb, false, 'Controlla bene i calcoli.');
+    }
+}
+
+function verificaQuiz3(btn, corretto, msg) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.btn-opzione').forEach(b => b.setAttribute('aria-checked', 'false'));
+    btn.setAttribute('aria-checked', 'true');
+    gestisciFeedback(document.getElementById('fb-quiz3'), corretto, msg);
+}
+
+function verificaQuiz4() {
+    const v1 = parseInt(statoCampi.q4.val1);
+    const v2 = parseInt(statoCampi.q4.val2);
+    const fb = document.getElementById('fb-quiz4');
+
+    if (v1 === 14 && v2 === 7) {
+        gestisciFeedback(fb, true, 'Perfetto! L\'unità riceve il prestito e diventa 14, mentre l\'8 si riduce a 7.');
+    } else {
+        gestisciFeedback(fb, false, 'Rivedi il valore dell\'unità aumentata e della decina scalata.');
+    }
+}
+
+function verificaQuiz5(btn, corretto, msg) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.btn-opzione').forEach(b => b.setAttribute('aria-checked', 'false'));
+    btn.setAttribute('aria-checked', 'true');
+    gestisciFeedback(document.getElementById('fb-quiz5'), corretto, msg);
+}
+
+function verificaQuiz6() {
+    const v1 = parseInt(statoCampi.q6.val1);
+    const v2 = parseInt(statoCampi.q6.val2);
+    const fb = document.getElementById('fb-quiz6');
+
+    if (v1 === 17 && v2 === 5) {
+        gestisciFeedback(fb, true, 'Eccellente! 14 + 3,5 = 17,5.');
+    } else {
+        gestisciFeedback(fb, false, 'Rivedi la somma tra la parte intera e quella decimale.');
+    }
+}
+
+const dbBatteria = [
+    {
+        add_riga: ["15 + 4", "32 + 7", "143 + 25", "12 + 18", "45 + 55", "130 + 70"],
+        add_bucate1: ["... + 4 = 9", "12 + ... = 15", "24 + 6 = ..."],
+        add_bucate2: ["40 + ... = 100", "... + 15 = 50", "85 + ... = 90"],
+        add_col1: ["16 + 8", "45 + 17", "245 + 68"],
+        add_col2: ["389 + 42", "1567 + 345", "4092 + 98"],
+        add_col3: ["2431 + 876", "5103 + 99", "6201 + 199"],
+        add_prob1: "Mario compra una penna da 2€, un astuccio da 5€ ed un diario da 14€. Quanto spende?",
+        add_prob2: "Luigi compra un quaderno da 3€, una colla da 4€ ed uno zaino da 25€. Quanto spende?",
+
+        sot_riga: ["15 - 4", "18 - 6", "45 - 0", "50 - 15", "18 - 18", "100 - 35"],
+        sot_bucate1: ["12 - ... = 7", "... - 4 = 8", "15 - 6 = ...", "35 - ... = 35", "... - 0 = 42", "50 - ... = 0"],
+        sot_bucate2: ["50 - ... = 35", "... - 10 = 40", "100 - ... = 75", "18 - ... = 0", "... - 25 = 0", "90 - ... = 90"],
+        sot_col1: ["85 - 32", "71 - 45", "92 - 38", "64 - 20"],
+        sot_col2: ["235 - 79", "542 - 67", "651 - 84", "430 - 125"],
+        sot_col3: ["1675 - 248", "3000 - 450", "5000 - 620", "4205 - 318"],
+        sot_prob1: "Il nonno di Luigi ha 72 anni, mentre Luigi ne ha 11. Qual è la loro differenza di età?",
+        sot_prob2: "Camilla va a fare la spesa con 50€. Spende 15€ in macelleria e 12€ dal fruttivendolo. Quanto le resta?",
+
+        dec_somma_riga: ["14 + 3,5", "7,2 + 54", "1,6 + 1,23"],
+        dec_sot_riga: ["45 - 3,2", "32,8 - 4", "15,6 - 3,8"],
+        dec_somma_col1: ["12,5 + 3,8", "0,45 + 1,2", "100 + 4,75"],
+        dec_somma_col2: ["13,4 + 4,5", "6,3 + 55,2", "1,5 + 1,24"],
+        dec_sot_col1: ["8,4 - 2,15", "10,5 - 4,25", "100 - 45,7"],
+        dec_sot_col2: ["7,4 - 1,15", "14,7 - 4,9", "11,6 - 5,35"],
+        dec_prob1: "Elettra spende 49,40€ per il cibo, 12,80€ per la casa e 23,45€ per i fiori. Qual è la spesa totale?",
+        dec_prob2: "Daniele parte con 100€ e spende 45,20€ per il sacco a pelo e 24,30€ per il fornello. Quanto denaro gli rimane?"
+    },
+    {
+        add_riga: ["13 + 6", "41 + 8", "152 + 34", "25 + 25", "60 + 40", "220 + 80"],
+        add_bucate1: ["... + 2 = 8", "14 + ... = 19", "31 + 5 = ..."],
+        add_bucate2: ["70 + ... = 100", "... + 25 = 60", "95 + ... = 110"],
+        add_col1: ["15 + 7", "44 + 18", "234 + 78"],
+        add_col2: ["476 + 54", "2431 + 876", "5103 + 99"],
+        add_col3: ["3210 + 987", "4500 + 555", "7305 + 295"],
+        add_prob1: "Luigi compra un quaderno da 4€, un compasso da 6€ ed uno zaino da 28€. Quanto spende?",
+        add_prob2: "Filippo compra due cacciaviti da 5€, una pinza da 7€ ed un trapano da 50€. Totale?",
+
+        sot_riga: ["14 - 3", "19 - 5", "60 - 0", "60 - 25", "25 - 25", "100 - 45"],
+        sot_bucate1: ["11 - ... = 6", "... - 5 = 7", "16 - 4 = ...", "42 - ... = 42", "... - 0 = 55", "70 - ... = 0"],
+        sot_bucate2: ["70 - ... = 45", "... - 20 = 30", "100 - ... = 65", "25 - ... = 0", "... - 30 = 0", "80 - ... = 80"],
+        sot_col1: ["84 - 31", "72 - 46", "95 - 47", "58 - 30"],
+        sot_col2: ["234 - 78", "651 - 84", "742 - 95", "520 - 115"],
+        sot_col3: ["2431 - 876", "4000 - 550", "6000 - 880", "5104 - 209"],
+        sot_prob1: "La mamma ha 45 anni e Sofia ne ha 12. Quanti anni di differenza ci sono?",
+        sot_prob2: "Simone ha 50€. Compra un fumetto da 11€ e un libro da 14€. Quanti soldi gli rimangono?",
+
+        dec_somma_riga: ["13 + 4,5", "6,3 + 55", "1,5 + 1,24"],
+        dec_sot_riga: ["44 - 2,2", "33,8 - 5", "14,7 - 4,9"],
+        dec_somma_col1: ["11,4 + 2,9", "0,56 + 3,4", "200 + 5,25"],
+        dec_somma_col2: ["12,2 + 5,5", "8,2 + 53,1", "1,7 + 1,22"],
+        dec_sot_col1: ["7,4 - 1,15", "11,6 - 5,35", "200 - 84,2"],
+        dec_sot_col2: ["9,4 - 3,15", "16,5 - 5,7", "12,4 - 6,15"],
+        dec_prob1: "Beatrice spende 35,60€ per i fiori, 18,30€ per il terriccio e 22,45€ per i vasi. Spesa totale?",
+        dec_prob2: "Simone parte con 80€ e spende 25,40€ per un libro e 18,30€ per una maglietta. Quanto gli resta?"
+    },
+    {
+        add_riga: ["12 + 7", "53 + 5", "161 + 27", "45 + 15", "80 + 20", "310 + 90"],
+        add_bucate1: ["... + 3 = 9", "11 + ... = 17", "42 + 4 = ..."],
+        add_bucate2: ["50 + ... = 100", "... + 35 = 70", "88 + ... = 120"],
+        add_col1: ["14 + 9", "43 + 19", "223 + 89"],
+        add_col2: ["567 + 63", "3210 + 987", "6201 + 199"],
+        add_col3: ["1567 + 345", "4092 + 98", "4500 + 555"],
+        add_prob1: "Filippo compra due cacciaviti da 4€, una pinza da 6€ ed un trapano da 55€. Spesa complessiva?",
+        add_prob2: "Diego compra paste da 15€, una torta da 22€ ed uno spumante da 12€. Totale?",
+
+        sot_riga: ["16 - 5", "17 - 4", "80 - 0", "70 - 35", "35 - 35", "100 - 15"],
+        sot_bucate1: ["13 - ... = 8", "... - 3 = 9", "18 - 5 = ...", "58 - ... = 58", "... - 0 = 63", "80 - ... = 0"],
+        sot_bucate2: ["80 - ... = 55", "... - 30 = 20", "100 - ... = 85", "35 - ... = 0", "... - 40 = 0", "75 - ... = 75"],
+        sot_col1: ["86 - 33", "70 - 44", "91 - 56", "76 - 40"],
+        sot_col2: ["236 - 80", "742 - 95", "851 - 76", "610 - 245"],
+        sot_col3: ["3210 - 987", "5000 - 620", "7000 - 950", "6302 - 415"],
+        sot_prob1: "Il papà ha 48 anni e Matteo ne ha 14. Quanti anni di differenza hanno?",
+        sot_prob2: "Paola ha 50€. Compra una maglia da 18€ e calze da 5€. Quanto riceve di resto?",
+
+        dec_somma_riga: ["12 + 5,5", "8,2 + 53", "1,7 + 1,22"],
+        dec_sot_riga: ["46 - 4,2", "31,8 - 3", "16,5 - 5,7"],
+        dec_somma_col1: ["10,6 + 4,7", "0,78 + 2,3", "300 + 6,15"],
+        dec_somma_col2: ["11,5 + 6,5", "9,2 + 52,4", "1,8 + 1,21"],
+        dec_sot_col1: ["9,4 - 3,15", "12,4 - 6,15", "300 - 12,5"],
+        dec_sot_col2: ["6,4 - 0,15", "13,2 - 6,4", "14,2 - 7,45"],
+        dec_prob1: "Daniele spende 45,20€ per il sacco a pelo, 24,30€ per il fornello e 15,15€ per la torcia. Totale?",
+        dec_prob2: "Marco ha 90€ ed acquista scarpe da 54,80€ e calzettoni da 8,50€. Qual è il suo resto?"
+    },
+    {
+        add_riga: ["11 + 8", "62 + 6", "135 + 53", "75 + 25", "90 + 10", "440 + 60"],
+        add_bucate1: ["... + 5 = 8", "15 + ... = 18", "53 + 3 = ..."],
+        add_bucate2: ["30 + ... = 100", "... + 45 = 80", "75 + ... = 150"],
+        add_col1: ["13 + 9", "46 + 16", "254 + 58"],
+        add_col2: ["682 + 38", "4500 + 555", "7305 + 295"],
+        add_col3: ["2431 + 876", "5103 + 99", "3210 + 987"],
+        add_prob1: "Diego compra paste da 15€, una torta da 22€ ed uno spumante da 12€. Quanto spende?",
+        add_prob2: "Mario spende 12€ per la pizza, 4€ per la bibita e 5€ per il dolce. Totale?",
+
+        sot_riga: ["13 - 2", "16 - 3", "90 - 0", "80 - 45", "45 - 45", "100 - 55"],
+        sot_bucate1: ["10 - ... = 5", "... - 6 = 6", "14 - 3 = ...", "64 - ... = 64", "... - 0 = 71", "90 - ... = 0"],
+        sot_bucate2: ["90 - ... = 65", "... - 40 = 10", "100 - ... = 45", "45 - ... = 0", "... - 50 = 0", "65 - ... = 65"],
+        sot_col1: ["83 - 30", "73 - 47", "94 - 48", "85 - 50"],
+        sot_col2: ["233 - 77", "851 - 76", "651 - 84", "720 - 315"],
+        sot_col3: ["4500 - 555", "6000 - 880", "8000 - 920", "7403 - 528"],
+        sot_prob1: "Lo zio ha 50 anni e Clara ne ha 15. Quanti anni di differenza hanno?",
+        sot_prob2: "Edoardo ha 50€. Paga una pizza da 20€ ed un dolce da 6€. Quanto gli resta?",
+
+        dec_somma_riga: ["11 + 6,5", "9,2 + 52", "1,8 + 1,21"],
+        dec_sot_riga: ["43 - 1,2", "34,8 - 6", "13,2 - 6,4"],
+        dec_somma_col1: ["14,2 + 5,9", "0,32 + 4,7", "400 + 8,45"],
+        dec_somma_col2: ["13,1 + 4,5", "7,2 + 54,3", "1,6 + 1,23"],
+        dec_sot_col1: ["6,4 - 0,15", "14,2 - 7,45", "400 - 32,8"],
+        dec_sot_col2: ["8,4 - 2,15", "10,5 - 4,25", "100 - 45,7"],
+        dec_prob1: "Edoardo spende 52,40€ per la benzina, 11,20€ per i tergicristalli e 14,35€ per il lavaggio. Totale?",
+        dec_prob2: "Elena va a fare acquisti con 70€ e spende 32,50€ in libreria e 14,20€ in cartoleria. Quanto resta?"
+    }
+];
+
+function generaBatteriaCompleta(dati) {
+    let html = "";
+    let sDoc = "";
+    let lett = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+    let calcola = (str) => {
+        try { return eval(str.replace(/,/g, '.')); } catch(e) { return "..."; }
+    };
+
+    let formatta = (val, dec = 2) => Number(val.toFixed(dec)).toString().replace('.', ',');
+
+    html += `<h4 style="color:#5b21b6; margin-top:0; border-bottom:1px solid #ddd6fe; padding-bottom:4px;">Sezione A: Addizione tra Numeri Interi</h4>`;
+
+    html += `<b>Es 7. Calcola in riga le seguenti somme:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.add_riga[i]);
+        html += `<div>${lett[i]}) ${dati.add_riga[i]}</div>`;
+        sDoc += `Es 7.${lett[i]}) ${dati.add_riga[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 8. Trova il termine mancante:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<3; i++) {
+        let t = dati.add_bucate1[i];
+        let p = t.replace(/,/g, '.').split('=');
+        let r = p[0].startsWith('...') ? parseFloat(p[1]) - parseFloat(p[0].replace('... + ', '')) : (p[0].includes('+ ...') ? parseFloat(p[1]) - parseFloat(p[0].replace(' + ...', '')) : eval(p[0]));
+        html += `<div>${lett[i]}) ${t}</div>`;
+        sDoc += `Es 8.${lett[i]}) ${t.replace('...', r)}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 9. Completa le uguaglianze:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<3; i++) {
+        let t = dati.add_bucate2[i];
+        let p = t.replace(/,/g, '.').split('=');
+        let r = p[0].startsWith('...') ? parseFloat(p[1]) - parseFloat(p[0].replace('... + ', '')) : (p[0].includes('+ ...') ? parseFloat(p[1]) - parseFloat(p[0].replace(' + ...', '')) : eval(p[0]));
+        html += `<div>${lett[i]}) ${t}</div>`;
+        sDoc += `Es 9.${lett[i]}) ${t.replace('...', r)}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 10. Incolonna ed esegui sul quaderno:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<3; i++) {
+        let r = calcola(dati.add_col1[i]);
+        html += `<div>${lett[i]}) ${dati.add_col1[i]}</div>`;
+        sDoc += `Es 10.${lett[i]}) ${dati.add_col1[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 11. Incolonna con più cifre:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<3; i++) {
+        let r = calcola(dati.add_col2[i]);
+        html += `<div>${lett[i]}) ${dati.add_col2[i]}</div>`;
+        sDoc += `Es 11.${lett[i]}) ${dati.add_col2[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 12. Somme grandi in colonna:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<3; i++) {
+        let r = calcola(dati.add_col3[i]);
+        html += `<div>${lett[i]}) ${dati.add_col3[i]}</div>`;
+        sDoc += `Es 12.${lett[i]}) ${dati.add_col3[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    let rAddProb1 = (dati.add_prob1.includes("28€") || dati.add_prob1.includes("4€")) ? 4+6+28 : ((dati.add_prob1.includes("55€") || dati.add_prob1.includes("Filippo")) ? (4*2)+6+55 : (dati.add_prob1.includes("Diego") ? 15+22+12 : 2+5+14));
+    html += `<div style="margin-bottom:12px;"><b>Es 13. Problema:</b> ${dati.prob_int1 || dati.add_prob1}</div>`;
+    sDoc += `Es 13) Risultato = ${rAddProb1}€\n`;
+
+    let rAddProb2 = (dati.add_prob2.includes("Filippo")) ? 5+7+50 : (dati.add_prob2.includes("Diego") ? 15+22+12 : (dati.add_prob2.includes("Mario") ? 12+4+5 : 3+4+25));
+    html += `<div style="margin-bottom:18px;"><b>Es 14. Problema:</b> ${dati.prob_int2 || dati.add_prob2}</div>`;
+    sDoc += `Es 14) Risultato = ${rAddProb2}€\n`;
+
+    html += `<h4 style="color:#5b21b6; margin-top:20px; border-bottom:1px solid #ddd6fe; padding-bottom:4px;">Sezione B: Sottrazione tra Numeri Interi</h4>`;
+
+    html += `<b>Es 15. Calcola in riga le seguenti sottrazioni:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.sot_riga[i]);
+        html += `<div>${lett[i]}) ${dati.sot_riga[i]}</div>`;
+        sDoc += `Es 15.${lett[i]}) ${dati.sot_riga[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 16. Trova il numero mancante:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let t = dati.sot_bucate1[i];
+        let p = t.replace(/,/g, '.').split('=');
+        let r = p[0].startsWith('...') ? parseFloat(p[1]) + parseFloat(p[0].replace('... - ', '')) : (p[0].includes('- ...') ? parseFloat(p[0].replace(' - ...', '')) - parseFloat(p[1]) : eval(p[0]));
+        html += `<div>${lett[i]}) ${t}</div>`;
+        sDoc += `Es 16.${lett[i]}) ${t.replace('...', r)}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 17. Completa le sottrazioni bucate:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let t = dati.sot_bucate2[i];
+        let p = t.replace(/,/g, '.').split('=');
+        let r = p[0].startsWith('...') ? parseFloat(p[1]) + parseFloat(p[0].replace('... - ', '')) : (p[0].includes('- ...') ? parseFloat(p[0].replace(' - ...', '')) - parseFloat(p[1]) : eval(p[0]));
+        html += `<div>${lett[i]}) ${t}</div>`;
+        sDoc += `Es 17.${lett[i]}) ${t.replace('...', r)}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 18. Incolonna sul quaderno:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.sot_col1[i]);
+        html += `<div>${lett[i]}) ${dati.sot_col1[i]}</div>`;
+        sDoc += `Es 18.${lett[i]}) ${dati.sot_col1[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 19. Sottrazioni con prestito a 3 cifre:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.sot_col2[i]);
+        html += `<div>${lett[i]}) ${dati.sot_col2[i]}</div>`;
+        sDoc += `Es 19.${lett[i]}) ${dati.sot_col2[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 20. Sottrazioni con prestito a cascata:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.sot_col3[i]);
+        html += `<div>${lett[i]}) ${dati.sot_col3[i]}</div>`;
+        sDoc += `Es 20.${lett[i]}) ${dati.sot_col3[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    let rSotProb1 = (dati.sot_prob1.includes("72")) ? 72 - 11 : ((dati.sot_prob1.includes("45")) ? 45 - 12 : ((dati.sot_prob1.includes("48")) ? 48 - 14 : 50 - 15));
+    html += `<div style="margin-bottom:12px;"><b>Es 21. Problema:</b> ${dati.sot_prob1}</div>`;
+    sDoc += `Es 21) Risultato = ${rSotProb1} anni\n`;
+
+    let rSotProb2 = (dati.sot_prob2.includes("Camilla")) ? 50 - 15 - 12 : ((dati.sot_prob2.includes("Simone")) ? 50 - 11 - 14 : ((dati.sot_prob2.includes("Paola")) ? 50 - 18 - 5 : 50 - 20 - 6));
+    html += `<div style="margin-bottom:18px;"><b>Es 22. Problema:</b> ${dati.sot_prob2}</div>`;
+    sDoc += `Es 22) Risultato = ${rSotProb2}€\n`;
+
+    html += `<h4 style="color:#5b21b6; margin-top:20px; border-bottom:1px solid #ddd6fe; padding-bottom:4px;">Sezione C: Calcolo con i Numeri Decimali</h4>`;
+
+    html += `<b>Es 23. Addizioni decimali in riga:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<3; i++) {
+        let r = calcola(dati.dec_somma_riga[i]);
+        let rf = formatta(r);
+        html += `<div>${lett[i]}) ${dati.dec_somma_riga[i]}</div>`;
+        sDoc += `Es 23.${lett[i]}) ${dati.dec_somma_riga[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 24. Sottrazioni decimali in riga:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<3; i++) {
+        let r = calcola(dati.dec_sot_riga[i]);
+        let rf = formatta(r);
+        html += `<div>${lett[i]}) ${dati.dec_sot_riga[i]}</div>`;
+        sDoc += `Es 24.${lett[i]}) ${dati.dec_sot_riga[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 25. Somme decimali in colonna:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<3; i++) {
+        let r = calcola(dati.dec_somma_col1[i]);
+        let rf = formatta(r);
+        html += `<div>${lett[i]}) ${dati.dec_somma_col1[i]}</div>`;
+        sDoc += `Es 25.${lett[i]}) ${dati.dec_somma_col1[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 26. Incolonnamento somme con decimi e centesimi:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<3; i++) {
+        let r = calcola(dati.dec_somma_col2[i]);
+        let rf = formatta(r);
+        html += `<div>${lett[i]}) ${dati.dec_somma_col2[i]}</div>`;
+        sDoc += `Es 26.${lett[i]}) ${dati.dec_somma_col2[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 27. Sottrazioni decimali con zero segnaposto:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<3; i++) {
+        let r = calcola(dati.dec_sot_col1[i]);
+        let rf = formatta(r);
+        html += `<div>${lett[i]}) ${dati.dec_sot_col1[i]}</div>`;
+        sDoc += `Es 27.${lett[i]}) ${dati.dec_sot_col1[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 28. Sottrazioni decimali complesse:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<3; i++) {
+        let r = calcola(dati.dec_sot_col2[i]);
+        let rf = formatta(r);
+        html += `<div>${lett[i]}) ${dati.dec_sot_col2[i]}</div>`;
+        sDoc += `Es 28.${lett[i]}) ${dati.dec_sot_col2[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    let rDecProb1 = (dati.dec_prob1.includes("Elettra")) ? 49.40 + 12.80 + 23.45 : ((dati.dec_prob1.includes("Beatrice")) ? 35.60 + 18.30 + 22.45 : ((dati.dec_prob1.includes("Daniele")) ? 45.20 + 24.30 + 15.15 : 52.40 + 11.20 + 14.35));
+    let rDecProb1F = formatta(rDecProb1);
+    html += `<div style="margin-bottom:12px;"><b>Es 29. Problema con i decimali:</b> ${dati.dec_prob1}</div>`;
+    sDoc += `Es 29) Risultato = ${rDecProb1F}€\n`;
+
+    let rDecProb2 = (dati.dec_prob2.includes("Daniele")) ? 100 - 45.20 - 24.30 : ((dati.dec_prob2.includes("Simone")) ? 80 - 25.40 - 18.30 : ((dati.dec_prob2.includes("Marco")) ? 90 - 54.80 - 8.50 : 70 - 32.50 - 14.20));
+    let rDecProb2F = formatta(rDecProb2);
+    html += `<div style="margin-bottom:8px;"><b>Es 30. Problema con resto decimale:</b> ${dati.dec_prob2}</div>`;
+    sDoc += `Es 30) Risultato = ${rDecProb2F}€\n`;
+
+    return { html, sDoc };
+}
+
+function cambiaVariante(indice) {
+    for(let i=0; i<=4; i++) document.getElementById("btn-v-" + i).classList.remove("attiva");
+    document.getElementById("btn-v-" + indice).classList.add("attiva");
+    
+    let dati = (indice === 4) ? dbBatteria[Math.floor(Math.random()*4)] : dbBatteria[indice];
+    let nomi = ["SEMEL", "BIS", "TER", "QUATER", "MIX"];
+    
+    if (indice === 4) {
+        document.getElementById("badge-variante").innerHTML = `<b>Modalità MIX attiva!</b> Esercizi rimescolati casualmente tra le varianti.`;
+    } else {
+        document.getElementById("badge-variante").innerHTML = `Modalità ${nomi[indice]} attiva: Risolvi i 24 esercizi sul tuo quaderno.`;
+    }
+    
+    let res = generaBatteriaCompleta(dati);
+    document.getElementById("campo-batteria").innerHTML = res.html;
+    document.getElementById("sol-batteria").innerText = res.sDoc;
+    document.getElementById("sol-batteria").style.display = "none";
+
+    let btnRisultati = document.getElementById("btn-risultati");
+    if (indice === 1 || indice === 3) {
+        btnRisultati.style.display = "block";
+    } else {
+        btnRisultati.style.display = "none";
+    }
+}
+
+function toggleVisioneDoc(id) {
+    let el = document.getElementById(id);
+    el.style.display = (el.style.display === "block") ? "none" : "block";
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    cambiaVariante(0);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lezione 3.D: Espressioni senza parentesi</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #eff6ff;
+            --accent: #2563eb;
+            --accent-bg: #eff6ff;
+            --accent-border: #bfdbfe;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --border-color: #cbd5e1;
+            --success: #15803d;
+            --success-bg: #f0fdf4;
+            --danger: #b91c1c;
+            --danger-bg: #fef2f2;
+            --highlight-color: #d97706;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8fafc;
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 12px;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-top: 6px solid var(--accent);
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-top: 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        h2 {
+            color: #1e40af;
+            font-size: 1.2rem;
+            margin-top: 28px;
+            margin-bottom: 14px;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+        }
+
+        p, li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .etichetta-esempio {
+            display: inline-block;
+            font-weight: 700;
+            color: var(--highlight-color);
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .box-formula {
+            text-align: center;
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            border-radius: 8px;
+            margin: 6px 0 14px 0;
+            font-size: 1.1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+
+        .sottolineato {
+            text-decoration: underline;
+            text-decoration-color: var(--highlight-color);
+            text-decoration-thickness: 3px;
+            text-underline-offset: 4px;
+        }
+
+        .quiz-card {
+            background: var(--accent-bg);
+            border: 1px solid var(--accent-border);
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.05);
+        }
+
+        .quiz-titolo {
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .quiz-opzioni {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .btn-opzione {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .btn-opzione:hover, .btn-opzione:focus {
+            border-color: var(--accent);
+            background: #f1f5f9;
+            outline: none;
+        }
+
+        .badge-lettera {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            color: white;
+            font-weight: bold;
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }
+
+        .feedback-quiz {
+            font-weight: 600;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .tastierino-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 14px;
+            background: white;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .campi-input-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .riga-passaggio {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .input-tastierino {
+            width: 220px;
+            padding: 6px;
+            font-size: 0.95rem;
+            text-align: left;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .input-tastierino.attivo {
+            border-color: var(--accent);
+            background: var(--accent-bg);
+        }
+
+        .numpad-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            max-width: 360px;
+            margin-top: 8px;
+        }
+
+        .btn-num {
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .btn-num:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-invia {
+            grid-column: span 3;
+            padding: 10px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-canc {
+            grid-column: span 3;
+            padding: 10px;
+            background: #cbd5e1;
+            color: var(--text-main);
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .box-quaderno-es {
+            background: #ffffff;
+            border: 1px dashed var(--border-color);
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .titolo-quaderno-es {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .card-allenamento {
+            margin-top: 36px;
+            padding: 22px;
+            border: 2px solid var(--accent);
+            border-radius: 14px;
+            background: var(--accent-bg);
+        }
+
+        .titolo-allenamento {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.1rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .barra-varianti {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            background: var(--accent-border);
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .btn-v {
+            flex: 1;
+            min-width: 75px;
+            padding: 8px 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: none;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--primary);
+            transition: all 0.2s;
+        }
+
+        .btn-v.attiva {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .blocco-esercizi {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--accent-border);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            box-sizing: border-box;
+            overflow-x: auto;
+            width: 100%;
+            white-space: nowrap;
+        }
+
+        .griglia-e-riga {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .btn-docente {
+            width: 100%;
+            margin-top: 16px;
+            padding: 10px;
+            background: #475569;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .chiave-docente {
+            display: none;
+            margin-top: 12px;
+            padding: 14px;
+            background: #f1f5f9;
+            border-left: 4px solid #475569;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.88rem;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>3.D: Espressioni senza parentesi</h1>
+
+    <section id="parte1">
+        <h2>Parte 1: Solo addizioni e sottrazioni</h2>
+        
+        <p>Un'espressione aritmetica è una lunga catena di operazioni da svolgere rispettando regole precise. Per prima cosa, sul quaderno devi seguire la regola fondamentale dell'incolonnamento: <b>non si calcola mai tutto a mente e non si scrive mai il risultato finale di seguito sulla stessa riga</b>. Devi sempre andare a capo, scrivere il segno di uguale e svolgere un solo passaggio alla volta, ricopiando tutto il resto esattamente com'è.</p>
+
+        <p>Quando in un'espressione ci sono solo addizioni e sottrazioni, la regola è ferrea: <b>si procede rigorosamente da sinistra a destra</b>, nell'ordine esatto in cui le operazioni compiono.</p>
+
+        <div class="etichetta-esempio">Esempio svolto</div>
+        <div class="box-formula">
+            <span class="sottolineato">15 - 4</span> + 7 - 3 =<br>
+            = <span class="sottolineato">11 + 7</span> - 3 =<br>
+            = <span class="sottolineato">18 - 3</span> =<br>
+            = 15
+        </div>
+
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+            <b>Spiegazione del passaggio:</b> Svolgiamo per prima la sottrazione più a sinistra (15 - 4 = 11) e ricopriamo il resto della riga (+ 7 - 3). Nella riga sotto, rifacciamo la stessa cosa con i primi due numeri a sinistra (11 + 7 = 18) ricopiando - 3. Infine, completiamo l'ultima operazione ottenendo 15.
+        </p>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 1">
+            <p class="quiz-titolo">Quiz 1: Qual è la prima operazione da svolgere nell'espressione 20 - 8 + 5 - 2?</p>
+            <div class="quiz-opzioni" role="radiogroup" aria-label="Opzioni Quiz 1">
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, false, 'Non è corretto. Le operazioni si fanno da sinistra a destra.')">
+                    <span class="badge-lettera">A</span> 5 - 2
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, true, 'Esatto!')">
+                    <span class="badge-lettera">B</span> 20 - 8
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, false, 'Non è corretto. Verifica l\'ordine delle operazioni.')">
+                    <span class="badge-lettera">C</span> 8 + 5
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, false, 'Non è corretto. Riprova partendo dall\'inizio.')">
+                    <span class="badge-lettera">D</span> 20 + 5
+                </button>
+            </div>
+            <div id="fb-quiz1" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 2">
+            <p class="quiz-titolo">Quiz 2: Svolgi passo dopo passo l'espressione 18 - 5 + 10 - 4</p>
+            <p style="margin-bottom: 8px;">Completa i passaggi riga per riga:</p>
+            
+            <div class="tastierino-box">
+                <div class="campi-input-box">
+                    <div class="riga-passaggio">18 - 5 + 10 - 4 =</div>
+                    <div class="riga-passaggio">= <input type="text" id="q2-r1" class="input-tastierino attivo" readonly onclick="selezionaCampoQ2(1)"> =</div>
+                    <div class="riga-passaggio">= <input type="text" id="q2-r2" class="input-tastierino" readonly onclick="selezionaCampoQ2(2)"> =</div>
+                    <div class="riga-passaggio">= <input type="text" id="q2-r3" class="input-tastierino" readonly onclick="selezionaCampoQ2(3)"></div>
+                </div>
+
+                <div class="numpad-grid">
+                    <button class="btn-num" onclick="digitaQ2('1')">1</button>
+                    <button class="btn-num" onclick="digitaQ2('2')">2</button>
+                    <button class="btn-num" onclick="digitaQ2('3')">3</button>
+                    <button class="btn-num" onclick="digitaQ2('4')">4</button>
+                    <button class="btn-num" onclick="digitaQ2('5')">5</button>
+                    <button class="btn-num" onclick="digitaQ2('6')">6</button>
+                    <button class="btn-num" onclick="digitaQ2('7')">7</button>
+                    <button class="btn-num" onclick="digitaQ2('8')">8</button>
+                    <button class="btn-num" onclick="digitaQ2('9')">9</button>
+                    <button class="btn-num" onclick="digitaQ2('0')">0</button>
+                    <button class="btn-num" onclick="digitaQ2('+')">+</button>
+                    <button class="btn-num" onclick="digitaQ2('-')">-</button>
+                    <button class="btn-num" onclick="digitaQ2('×')">×</button>
+                    <button class="btn-num" onclick="digitaQ2(':')">:</button>
+                    <button class="btn-canc" onclick="cancellaQ2()">⌫</button>
+                    <button class="btn-invia" style="grid-column: span 6;" onclick="verificaQuiz2()">Verifica</button>
+                </div>
+            </div>
+            <div id="fb-quiz2" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="box-quaderno-es">
+            <h3 class="titolo-quaderno-es">Esercizi sul quaderno</h3>
+            <p><b>Es 7.</b> Svolgi sul quaderno rispettando l'incolonnamento e procedendo da sinistra:</p>
+            <p>a) 25 - 10 + 6 - 4 &nbsp;&nbsp;&nbsp;&nbsp; b) 40 - 15 + 8 - 5</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+            <p><b>Es 8.</b> Calcola passo dopo passo:</p>
+            <p>a) 32 + 8 - 12 + 5 - 3 &nbsp;&nbsp;&nbsp;&nbsp; b) 50 - 20 + 10 - 7 + 4</p>
+        </div>
+    </section>
+
+    <section id="parte2">
+        <h2>Parte 2: L'arrivo di moltiplicazioni e divisioni</h2>
+
+        <p>Cosa succede se nell'espressione compaiono anche moltiplicazioni e divisioni? Entra in gioco la regola della precedenza assoluta: <b>moltiplicazioni e divisioni devono essere eseguite prima delle addizioni e delle sottrazioni</b>.</p>
+
+        <p>Se queste moltiplicazioni o divisioni sono separate da somme o sottrazioni e non attaccate l'una all'altra, puoi svolgerle tutte nello stesso primo passaggio. Una volta eliminate tutte le moltiplicazioni e divisioni, l'espressione si trasformerà in una normale sequenza di addizioni e sottrazioni da fare da sinistra a destra.</p>
+
+        <div class="etichetta-esempio">Esempio svolto</div>
+        <div class="box-formula">
+            30 <span class="sottolineato">- 3 × 4</span> <span class="sottolineato">+ 18 : 2</span> - 5 =<br>
+            = 30 - 12 + 9 - 5 =<br>
+            = 18 + 9 - 5 =<br>
+            = 27 - 5 =<br>
+            = 22
+        </div>
+
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+            <b>Spiegazione del passaggio:</b> Nel primo passaggio calcoliamo contemporaneamente le due operazioni prioritarie: la moltiplicazione (3 × 4 = 12) e la divisione (18 : 2 = 9), ricopiando tutto il resto. Dalla riga successiva, essendo rimaste solo somme e sottrazioni, si procede regolarmente da sinistra a destra.
+        </p>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 3">
+            <p class="quiz-titolo">Quiz 3: Nell'espressione 14 + 5 × 2 - 8, quale operazione va eseguita per prima?</p>
+            <div class="quiz-opzioni" role="radiogroup" aria-label="Opzioni Quiz 3">
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, false, 'Non è corretto. Controlla le precedenze tra le operazioni.')">
+                    <span class="badge-lettera">A</span> 14 + 5
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, true, 'Esatto!')">
+                    <span class="badge-lettera">B</span> 5 × 2
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, false, 'Non è corretto. Cerca l\'operazione prioritaria.')">
+                    <span class="badge-lettera">C</span> 2 - 8
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, false, 'Non è corretto. Riprova.')">
+                    <span class="badge-lettera">D</span> 14 - 8
+                </button>
+            </div>
+            <div id="fb-quiz3" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 4">
+            <p class="quiz-titolo">Quiz 4: Svolgi passo dopo passo l'espressione 25 - 3 × 4 + 10</p>
+            <p style="margin-bottom: 8px;">Completa i passaggi riga per riga:</p>
+            
+            <div class="tastierino-box">
+                <div class="campi-input-box">
+                    <div class="riga-passaggio">25 - 3 × 4 + 10 =</div>
+                    <div class="riga-passaggio">= <input type="text" id="q4-r1" class="input-tastierino attivo" readonly onclick="selezionaCampoQ4(1)"> =</div>
+                    <div class="riga-passaggio">= <input type="text" id="q4-r2" class="input-tastierino" readonly onclick="selezionaCampoQ4(2)"> =</div>
+                    <div class="riga-passaggio">= <input type="text" id="q4-r3" class="input-tastierino" readonly onclick="selezionaCampoQ4(3)"></div>
+                </div>
+
+                <div class="numpad-grid">
+                    <button class="btn-num" onclick="digitaQ4('1')">1</button>
+                    <button class="btn-num" onclick="digitaQ4('2')">2</button>
+                    <button class="btn-num" onclick="digitaQ4('3')">3</button>
+                    <button class="btn-num" onclick="digitaQ4('4')">4</button>
+                    <button class="btn-num" onclick="digitaQ4('5')">5</button>
+                    <button class="btn-num" onclick="digitaQ4('6')">6</button>
+                    <button class="btn-num" onclick="digitaQ4('7')">7</button>
+                    <button class="btn-num" onclick="digitaQ4('8')">8</button>
+                    <button class="btn-num" onclick="digitaQ4('9')">9</button>
+                    <button class="btn-num" onclick="digitaQ4('0')">0</button>
+                    <button class="btn-num" onclick="digitaQ4('+')">+</button>
+                    <button class="btn-num" onclick="digitaQ4('-')">-</button>
+                    <button class="btn-num" onclick="digitaQ4('×')">×</button>
+                    <button class="btn-num" onclick="digitaQ4(':')">:</button>
+                    <button class="btn-canc" onclick="cancellaQ4()">⌫</button>
+                    <button class="btn-invia" style="grid-column: span 6;" onclick="verificaQuiz4()">Verifica</button>
+                </div>
+            </div>
+            <div id="fb-quiz4" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="box-quaderno-es">
+            <h3 class="titolo-quaderno-es">Esercizi sul quaderno</h3>
+            <p><b>Es 9.</b> Esegui sul quaderno applicando le precedenze:</p>
+            <p>a) 20 + 3 × 4 - 5 &nbsp;&nbsp;&nbsp;&nbsp; b) 45 - 6 : 3 + 12</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+            <p><b>Es 10.</b> Calcola con moltiplicazioni e divisioni:</p>
+            <p>a) 50 - 4 × 5 + 24 : 3 - 6 &nbsp;&nbsp;&nbsp;&nbsp; b) 18 + 2 × 7 - 15 : 3 + 4</p>
+        </div>
+    </section>
+
+    <section id="parte3">
+        <h2>Parte 3: Moltiplicazioni e divisioni concatenate</h2>
+
+        <p>Cosa accade se in un'espressione incontriamo più moltiplicazioni o divisioni attaccate tra loro (concatenate, tipo 48 : 8 : 2)? La regola è svolgerle una alla volta in ordine rigoroso da sinistra, così come fai quando ci sono solo addizioni e sottrazioni.</p>
+
+        <div class="etichetta-esempio">Esempio svolto</div>
+        <div class="box-formula">
+            <span class="sottolineato">48 : 8</span> : 2 × 3 =<br>
+            = <span class="sottolineato">6 : 2</span> × 3 =<br>
+            = <span class="sottolineato">3 × 3</span> =<br>
+            = 9
+        </div>
+
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+            <b>Spiegazione:</b> Tra 48, 8 e 2 la prima operazione a sinistra è 48 : 8 che fa 6. Si riscrive : 2 × 3. Poi si fa 6 : 2 che fa 3, e infine 3 × 3 = 9.
+        </p>
+
+        <p style="margin-top: 16px;">Vediamo ora un esempio completo in cui sono presenti tutte e quattro le operazioni e una catena di moltiplicazioni/divisioni concatenate. In questo caso, per eliminare la parte prioritaria, occorrono più passaggi sequenziali prima di passare alle addizioni e sottrazioni.</p>
+
+        <div class="etichetta-esempio">Esempio svolto avanzato</div>
+        <div class="box-formula">
+            50 - <span class="sottolineato">24 : 4</span> : 2 + <span class="sottolineato">3 × 5</span> =<br>
+            = 50 - <span class="sottolineato">6 : 2</span> + 15 =<br>
+            = 50 - 3 + 15 =<br>
+            = 47 + 15 =<br>
+            = 62
+        </div>
+
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+            <b>Spiegazione dei passaggi:</b> Nel primo passaggio eseguiamo la prima divisione a sinistra del blocco concatenato (24 : 4 = 6, ricopiando : 2) e calcoliamo l'altra moltiplicazione (3 × 5 = 15). Nel secondo passaggio completiamo la divisione rimasta nel blocco concatenato (6 : 2 = 3). Da lì in poi, rimaste solo somme e sottrazioni, procediamo regolarmente da sinistra a destra.
+        </p>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 5">
+            <p class="quiz-titolo">Quiz 5: Nell'espressione 36 : 4 : 3, quale operazione va fatta per prima?</p>
+            <div class="quiz-opzioni" role="radiogroup" aria-label="Opzioni Quiz 5">
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, false, 'Non è corretto. Controlla l\'ordine da sinistra.')">
+                    <span class="badge-lettera">A</span> 4 : 3
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, true, 'Esatto!')">
+                    <span class="badge-lettera">B</span> 36 : 4
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, false, 'Non è corretto. Riprova dall\'inizio.')">
+                    <span class="badge-lettera">C</span> 36 : 3
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, false, 'Non è corretto. Verifica l\'espressione.')">
+                    <span class="badge-lettera">D</span> Nessuna delle precedenti
+                </button>
+            </div>
+            <div id="fb-quiz5" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 6">
+            <p class="quiz-titolo">Quiz 6: Svolgi passo dopo passo l'espressione 32 : 4 : 2 + 5</p>
+            <p style="margin-bottom: 8px;">Completa i passaggi riga per riga:</p>
+            
+            <div class="tastierino-box">
+                <div class="campi-input-box">
+                    <div class="riga-passaggio">32 : 4 : 2 + 5 =</div>
+                    <div class="riga-passaggio">= <input type="text" id="q6-r1" class="input-tastierino attivo" readonly onclick="selezionaCampoQ6(1)"> =</div>
+                    <div class="riga-passaggio">= <input type="text" id="q6-r2" class="input-tastierino" readonly onclick="selezionaCampoQ6(2)"> =</div>
+                    <div class="riga-passaggio">= <input type="text" id="q6-r3" class="input-tastierino" readonly onclick="selezionaCampoQ6(3)"></div>
+                </div>
+
+                <div class="numpad-grid">
+                    <button class="btn-num" onclick="digitaQ6('1')">1</button>
+                    <button class="btn-num" onclick="digitaQ6('2')">2</button>
+                    <button class="btn-num" onclick="digitaQ6('3')">3</button>
+                    <button class="btn-num" onclick="digitaQ6('4')">4</button>
+                    <button class="btn-num" onclick="digitaQ6('5')">5</button>
+                    <button class="btn-num" onclick="digitaQ6('6')">6</button>
+                    <button class="btn-num" onclick="digitaQ6('7')">7</button>
+                    <button class="btn-num" onclick="digitaQ6('8')">8</button>
+                    <button class="btn-num" onclick="digitaQ6('9')">9</button>
+                    <button class="btn-num" onclick="digitaQ6('0')">0</button>
+                    <button class="btn-num" onclick="digitaQ6('+')">+</button>
+                    <button class="btn-num" onclick="digitaQ6('-')">-</button>
+                    <button class="btn-num" onclick="digitaQ6('×')">×</button>
+                    <button class="btn-num" onclick="digitaQ6(':')">:</button>
+                    <button class="btn-canc" onclick="cancellaQ6()">⌫</button>
+                    <button class="btn-invia" style="grid-column: span 6;" onclick="verificaQuiz6()">Verifica</button>
+                </div>
+            </div>
+            <div id="fb-quiz6" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="box-quaderno-es">
+            <h3 class="titolo-quaderno-es">Esercizi sul quaderno</h3>
+            <p><b>Es 31.</b> Esegui espressioni con concatenazioni:</p>
+            <p>a) 48 : 4 : 2 + 5 &nbsp;&nbsp;&nbsp;&nbsp; b) 2 × 3 × 4 - 10</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+            <p><b>Es 32.</b> Espressioni complesse con tutte le operazioni:</p>
+            <p>a) 60 - 36 : 6 : 2 + 4 × 3 &nbsp;&nbsp;&nbsp;&nbsp; b) 100 - 48 : 8 × 2 + 5 × 4</p>
+        </div>
+    </section>
+
+    <div class="card-allenamento">
+        <h3 class="titolo-allenamento">Esercizi sul quaderno</h3>
+        
+        <div class="barra-varianti" role="toolbar" aria-label="Varianti esercizi">
+            <button id="btn-v-0" class="btn-v attiva" onclick="cambiaVariante(0)">SEMEL</button>
+            <button id="btn-v-1" class="btn-v" onclick="cambiaVariante(1)">BIS</button>
+            <button id="btn-v-2" class="btn-v" onclick="cambiaVariante(2)">TER</button>
+            <button id="btn-v-3" class="btn-v" onclick="cambiaVariante(3)">QUATER</button>
+            <button id="btn-v-4" class="btn-v" style="background:var(--accent); color:white;" onclick="cambiaVariante(4)">MIX</button>
+        </div>
+
+        <div id="badge-variante" style="background: #ffffff; border: 1px solid var(--accent-border); padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85rem; color: var(--primary); font-weight: 500;">
+            Modalità SEMEL attiva: Risolvi i 24 esercizi sul tuo quaderno.
+        </div>
+        
+        <div id="campo-batteria" class="blocco-esercizi"></div>
+
+        <button id="btn-risultati" class="btn-docente" style="display: none;" onclick="toggleVisioneDoc('sol-batteria')">Mostra/Nascondi Risultati</button>
+        <div id="sol-batteria" class="chiave-docente"></div>
+    </div>
+</div>
+
+<script>
+let statoQ2 = { attivo: 1, val1: "", val2: "", val3: "" };
+function selezionaCampoQ2(num) {
+    statoQ2.attivo = num;
+    for(let i=1; i<=3; i++) {
+        let el = document.getElementById('q2-r' + i);
+        if(el) el.classList.toggle('attivo', i === num);
+    }
+}
+function digitaQ2(car) {
+    let curr = statoQ2.attivo;
+    let campo = document.getElementById('q2-r' + curr);
+    if(statoQ2['val' + curr].length < 25) statoQ2['val' + curr] += car;
+    if(campo) campo.value = statoQ2['val' + curr];
+}
+function cancellaQ2() {
+    let curr = statoQ2.attivo;
+    let campo = document.getElementById('q2-r' + curr);
+    statoQ2['val' + curr] = statoQ2['val' + curr].slice(0, -1);
+    if(campo) campo.value = statoQ2['val' + curr];
+}
+function verificaQuiz2() {
+    const v1 = statoQ2.val1.replace(/\s+/g, '').toLowerCase();
+    const v2 = statoQ2.val2.replace(/\s+/g, '').toLowerCase();
+    const v3 = statoQ2.val3.replace(/\s+/g, '').toLowerCase();
+    const fb = document.getElementById('fb-quiz2');
+    const corretto = (v1 === "13+10-4" && v2 === "23-4" && v3 === "19");
+    gestisciFeedback(fb, corretto, corretto ? 'Esatto!' : 'Non è corretto. Controlla i passaggi riga per riga.');
+}
+
+let statoQ4 = { attivo: 1, val1: "", val2: "", val3: "" };
+function selezionaCampoQ4(num) {
+    statoQ4.attivo = num;
+    for(let i=1; i<=3; i++) {
+        let el = document.getElementById('q4-r' + i);
+        if(el) el.classList.toggle('attivo', i === num);
+    }
+}
+function digitaQ4(car) {
+    let curr = statoQ4.attivo;
+    let campo = document.getElementById('q4-r' + curr);
+    if(statoQ4['val' + curr].length < 25) statoQ4['val' + curr] += car;
+    if(campo) campo.value = statoQ4['val' + curr];
+}
+function cancellaQ4() {
+    let curr = statoQ4.attivo;
+    let campo = document.getElementById('q4-r' + curr);
+    statoQ4['val' + curr] = statoQ4['val' + curr].slice(0, -1);
+    if(campo) campo.value = statoQ4['val' + curr];
+}
+function verificaQuiz4() {
+    const v1 = statoQ4.val1.replace(/\s+/g, '').toLowerCase();
+    const v2 = statoQ4.val2.replace(/\s+/g, '').toLowerCase();
+    const v3 = statoQ4.val3.replace(/\s+/g, '').toLowerCase();
+    const fb = document.getElementById('fb-quiz4');
+    const corretto = (v1 === "25-12+10" && v2 === "13+10" && v3 === "23");
+    gestisciFeedback(fb, corretto, corretto ? 'Esatto!' : 'Non è corretto. Controlla i passaggi riga per riga.');
+}
+
+let statoQ6 = { attivo: 1, val1: "", val2: "", val3: "" };
+function selezionaCampoQ6(num) {
+    statoQ6.attivo = num;
+    for(let i=1; i<=3; i++) {
+        let el = document.getElementById('q6-r' + i);
+        if(el) el.classList.toggle('attivo', i === num);
+    }
+}
+function digitaQ6(car) {
+    let curr = statoQ6.attivo;
+    let campo = document.getElementById('q6-r' + curr);
+    if(statoQ6['val' + curr].length < 25) statoQ6['val' + curr] += car;
+    if(campo) campo.value = statoQ6['val' + curr];
+}
+function cancellaQ6() {
+    let curr = statoQ6.attivo;
+    let campo = document.getElementById('q6-r' + curr);
+    statoQ6['val' + curr] = statoQ6['val' + curr].slice(0, -1);
+    if(campo) campo.value = statoQ6['val' + curr];
+}
+function verificaQuiz6() {
+    const v1 = statoQ6.val1.replace(/\s+/g, '').toLowerCase();
+    const v2 = statoQ6.val2.replace(/\s+/g, '').toLowerCase();
+    const v3 = statoQ6.val3.replace(/\s+/g, '').toLowerCase();
+    const fb = document.getElementById('fb-quiz6');
+    const corretto = ((v1 === "8:2+5" || v1 === "8/2+5") && (v2 === "4+5" || v2 === "4 + 5") && v3 === "9");
+    gestisciFeedback(fb, corretto, corretto ? 'Esatto!' : 'Non è corretto. Controlla i passaggi riga per riga.');
+}
+
+function gestisciFeedback(el, corretto, msg) {
+    el.style.display = 'block';
+    el.innerHTML = (corretto ? '[ESATTO] ' : '') + msg;
+    el.style.background = corretto ? 'var(--success-bg)' : 'var(--danger-bg)';
+    el.style.color = corretto ? 'var(--success)' : 'var(--danger)';
+    el.style.border = '1px solid ' + (corretto ? '#bbf7d0' : '#fecaca');
+}
+
+function verificaQuiz1(btn, corretto, msg) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.btn-opzione').forEach(b => b.setAttribute('aria-checked', 'false'));
+    btn.setAttribute('aria-checked', 'true');
+    gestisciFeedback(document.getElementById('fb-quiz1'), corretto, msg);
+}
+
+function verificaQuiz3(btn, corretto, msg) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.btn-opzione').forEach(b => b.setAttribute('aria-checked', 'false'));
+    btn.setAttribute('aria-checked', 'true');
+    gestisciFeedback(document.getElementById('fb-quiz3'), corretto, msg);
+}
+
+function verificaQuiz5(btn, corretto, msg) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.btn-opzione').forEach(b => b.setAttribute('aria-checked', 'false'));
+    btn.setAttribute('aria-checked', 'true');
+    gestisciFeedback(document.getElementById('fb-quiz5'), corretto, msg);
+}
+
+const dbBatteria = [
+    {
+        es: [
+            "7) 30 - 12 + 8 - 5",
+            "8) 45 - 20 + 15 - 8",
+            "9) 85 - 34 + 26 - 12",
+            "10) 40 - 12 + 8 - 5 + 3",
+            "11) 65 - 24 + 16 - 10 + 4",
+            "12) 50 - 12 + 6 - 4 + 8 - 3",
+            "13) 75 - 24 + 12 - 8 + 10 - 5",
+            "14) 90 - 30 + 15 - 10 + 20 - 8 + 6",
+            "15) 20 + 24 : 4 - 3 + 5",
+            "16) 30 - 18 : 3 + 2 × 4 - 5",
+            "17) 4 × 3 + 15 - 18 : 2 + 6",
+            "18) 36 : 6 - 2 + 3 × 4 - 5 + 8",
+            "19) 48 : 6 - 2 + 3 × 4 - 5 + 2 × 3 - 4",
+            "20) 60 - 2 × 3 + 36 : 4 - 5 × 2 + 10 - 3 × 3 + 4",
+            "21) 75 - 3 × 4 + 48 : 6 - 2 × 3 + 15 - 10 + 4 × 2 - 5 + 6",
+            "22) 48 : 8 : 2 × 3",
+            "23) 72 : 8 : 3 × 2 : 2",
+            "24) 60 : 3 : 2 × 4 - 5 + 3 × 2 - 4 + 10",
+            "25) 80 - 48 : 6 : 2 × 3 + 4 × 2 - 5 + 6 - 2",
+            "26) 90 : 3 : 3 × 2 + 5 × 4 - 10 + 8 - 3 × 2 + 4",
+            "27) 100 - 64 : 8 : 2 × 3 + 4 × 3 - 5 + 6 : 2 × 3 - 4",
+            "28) 120 : 4 : 3 × 2 + 5 × 4 - 10 + 15 : 3 × 2 - 6 + 4 - 2",
+            "29) 140 - 72 : 9 : 2 × 4 + 6 × 3 - 10 + 20 : 2 × 3 - 5 + 8 - 4",
+            "30) 150 : 5 : 3 × 4 + 6 × 3 - 12 + 24 : 4 × 2 - 10 + 15 - 3 × 2 + 8"
+        ],
+        sol: [
+            "Es 7) 21", "Es 8) 32", "Es 9) 65", "Es 10) 34",
+            "Es 11) 51", "Es 12) 45", "Es 13) 60", "Es 14) 83",
+            "Es 15) 28", "Es 16) 27", "Es 17) 24", "Es 18) 19",
+            "Es 19) 15", "Es 20) 58", "Es 21) 79", "Es 22) 9",
+            "Es 23) 3", "Es 24) 47", "Es 25) 75", "Es 26) 36",
+            "Es 27) 100", "Es 28) 36", "Es 29) 161", "Es 30) 65"
+        ]
+    },
+    {
+        es: [
+            "7) 35 - 14 + 6 - 2",
+            "8) 50 - 18 + 12 - 5",
+            "9) 90 - 40 + 30 - 15",
+            "10) 45 - 14 + 10 - 6 + 4",
+            "11) 70 - 28 + 18 - 12 + 5",
+            "12) 55 - 15 + 8 - 5 + 10 - 4",
+            "13) 80 - 28 + 14 - 10 + 12 - 6",
+            "14) 95 - 35 + 18 - 12 + 25 - 10 + 8",
+            "15) 24 + 28 : 4 - 5 + 6",
+            "16) 35 - 20 : 4 + 3 × 4 - 6",
+            "17) 5 × 3 + 18 - 20 : 2 + 4",
+            "18) 42 : 6 - 3 + 4 × 3 - 6 + 10",
+            "19) 54 : 6 - 3 + 4 × 3 - 6 + 3 × 2 - 5",
+            "20) 70 - 3 × 3 + 40 : 4 - 4 × 2 + 12 - 4 × 2 + 5",
+            "21) 80 - 4 × 3 + 54 : 6 - 3 × 2 + 18 - 12 + 5 × 2 - 6 + 8",
+            "22) 54 : 9 : 2 × 3",
+            "23) 81 : 9 : 3 × 2 : 2",
+            "24) 64 : 4 : 2 × 3 - 4 + 4 × 2 - 5 + 12",
+            "25) 85 - 54 : 9 : 2 × 3 + 5 × 2 - 6 + 8 - 3",
+            "26) 96 : 4 : 3 × 2 + 6 × 4 - 12 + 10 - 4 × 2 + 5",
+            "27) 110 - 72 : 9 : 2 × 3 + 5 × 3 - 6 + 8 : 2 × 3 - 5",
+            "28) 130 : 5 : 2 × 3 + 6 × 4 - 12 + 18 : 3 × 2 - 8 + 6 - 3",
+            "29) 150 - 80 : 8 : 2 × 4 + 7 × 3 - 12 + 24 : 2 × 3 - 6 + 10 - 5",
+            "30) 160 : 5 : 4 × 4 + 7 × 3 - 14 + 28 : 4 × 2 - 12 + 18 - 4 × 2 + 10"
+        ],
+        sol: [
+            "Es 7) 25", "Es 8) 39", "Es 9) 65", "Es 10) 39",
+            "Es 11) 53", "Es 12) 49", "Es 13) 62", "Es 14) 89",
+            "Es 15) 32", "Es 16) 36", "Es 17) 27", "Es 18) 20",
+            "Es 19) 13", "Es 20) 72", "Es 21) 89", "Es 22) 9",
+            "Es 23) 3", "Es 24) 35", "Es 25) 85", "Es 26) 35",
+            "Es 27) 114", "Es 28) 58", "Es 29) 174", "Es 30) 61"
+        ]
+    },
+    {
+        es: [
+            "7) 40 - 15 + 9 - 4",
+            "8) 60 - 25 + 15 - 8",
+            "9) 95 - 42 + 32 - 18",
+            "10) 50 - 16 + 12 - 7 + 5",
+            "11) 75 - 30 + 20 - 14 + 6",
+            "12) 60 - 18 + 10 - 6 + 12 - 5",
+            "13) 85 - 32 + 16 - 12 + 15 - 7",
+            "14) 100 - 40 + 20 - 15 + 30 - 12 + 10",
+            "15) 25 + 32 : 4 - 6 + 8",
+            "16) 40 - 24 : 4 + 4 × 3 - 7",
+            "17) 6 × 3 + 20 - 24 : 2 + 5",
+            "18) 48 : 6 - 4 + 5 × 3 - 7 + 12",
+            "19) 56 : 7 - 4 + 5 × 3 - 7 + 4 × 2 - 6",
+            "20) 80 - 4 × 3 + 44 : 4 - 5 × 2 + 15 - 5 × 2 + 6",
+            "21) 85 - 5 × 3 + 60 : 6 - 4 × 2 + 20 - 15 + 6 × 2 - 7 + 10",
+            "22) 64 : 8 : 2 × 3",
+            "23) 96 : 8 : 4 × 2 : 2",
+            "24) 72 : 6 : 2 × 4 - 6 + 5 × 2 - 6 + 15",
+            "25) 90 - 64 : 8 : 2 × 3 + 6 × 2 - 7 + 9 - 4",
+            "26) 100 : 5 : 2 × 3 + 7 × 4 - 15 + 12 - 5 × 2 + 6",
+            "27) 120 - 80 : 8 : 2 × 3 + 6 × 3 - 8 + 10 : 2 × 3 - 6",
+            "28) 140 : 5 : 2 × 3 + 7 × 4 - 15 + 20 : 4 × 3 - 10 + 8 - 4",
+            "29) 160 - 90 : 9 : 2 × 4 + 8 × 3 - 15 + 30 : 3 × 2 - 8 + 12 - 6",
+            "30) 180 : 6 : 3 × 4 + 8 × 3 - 16 + 32 : 4 × 2 - 14 + 20 - 5 × 2 + 12"
+        ],
+        sol: [
+            "Es 7) 30", "Es 8) 42", "Es 9) 67", "Es 10) 44",
+            "Es 11) 57", "Es 12) 53", "Es 13) 65", "Es 14) 93",
+            "Es 15) 35", "Es 16) 39", "Es 17) 31", "Es 18) 24",
+            "Es 19) 14", "Es 20) 80", "Es 21) 92", "Es 22) 12",
+            "Es 23) 3", "Es 24) 37", "Es 25) 88", "Es 26) 51",
+            "Es 27) 124", "Es 28) 64", "Es 29) 167", "Es 30) 72"
+        ]
+    },
+    {
+        es: [
+            "7) 45 - 18 + 7 - 3",
+            "8) 70 - 30 + 12 - 6",
+            "9) 100 - 45 + 35 - 20",
+            "10) 55 - 18 + 14 - 8 + 6",
+            "11) 80 - 32 + 22 - 15 + 7",
+            "12) 65 - 20 + 12 - 8 + 14 - 6",
+            "13) 90 - 36 + 18 - 14 + 18 - 8",
+            "14) 105 - 45 + 22 - 18 + 35 - 14 + 12",
+            "15) 28 + 36 : 4 - 7 + 9",
+            "16) 45 - 28 : 4 + 5 × 3 - 8",
+            "17) 7 × 3 + 22 - 28 : 2 + 6",
+            "18) 54 : 6 - 5 + 6 × 3 - 8 + 14",
+            "19) 63 : 9 - 5 + 6 × 3 - 8 + 5 × 2 - 7",
+            "20) 90 - 5 × 3 + 48 : 4 - 6 × 2 + 18 - 6 × 2 + 7",
+            "21) 90 - 6 × 3 + 72 : 6 - 5 × 2 + 22 - 18 + 7 × 2 - 8 + 12",
+            "22) 72 : 9 : 2 × 3",
+            "23) 108 : 9 : 3 × 2 : 2",
+            "24) 80 : 8 : 2 × 4 - 7 + 6 × 2 - 7 + 18",
+            "25) 95 - 72 : 9 : 2 × 3 + 7 × 2 - 8 + 10 - 5",
+            "26) 105 : 5 : 3 × 3 + 8 × 4 - 18 + 14 - 6 × 2 + 7",
+            "27) 130 - 90 : 9 : 2 × 3 + 7 × 3 - 9 + 12 : 2 × 3 - 7",
+            "28) 150 : 5 : 3 × 3 + 8 × 4 - 18 + 24 : 4 × 3 - 12 + 10 - 5",
+            "29) 170 - 96 : 8 : 2 × 4 + 9 × 3 - 18 + 36 : 3 × 2 - 10 + 14 - 7",
+            "30) 200 : 8 : 5 × 5 + 9 × 3 - 18 + 36 : 4 × 2 - 16 + 24 - 6 × 2 + 15"
+        ],
+        sol: [
+            "Es 7) 31", "Es 8) 46", "Es 9) 70", "Es 10) 49",
+            "Es 11) 62", "Es 12) 57", "Es 13) 68", "Es 14) 97",
+            "Es 15) 39", "Es 16) 45", "Es 17) 35", "Es 18) 28",
+            "Es 19) 15", "Es 20) 88", "Es 21) 96", "Es 22) 12",
+            "Es 23) 4", "Es 24) 36", "Es 25) 94", "Es 26) 44",
+            "Es 27) 138", "Es 28) 55", "Es 29) 176", "Es 30) 63"
+        ]
+    }
+];
+
+function generaBatteriaCompleta(dati) {
+    let html = "<div class='griglia-e-riga'>";
+    let sDoc = "";
+    for(let i=0; i<dati.es.length; i++) {
+        html += `<div>${dati.es[i]}</div>`;
+        sDoc += dati.sol[i] + "\n";
+    }
+    html += "</div>";
+    return { html, sDoc };
+}
+
+function cambiaVariante(indice) {
+    for(let i=0; i<=4; i++) document.getElementById("btn-v-" + i).classList.remove("attiva");
+    document.getElementById("btn-v-" + indice).classList.add("attiva");
+    
+    let dati = (indice === 4) ? dbBatteria[Math.floor(Math.random()*4)] : dbBatteria[indice];
+    let nomi = ["SEMEL", "BIS", "TER", "QUATER", "MIX"];
+    
+    if (indice === 4) {
+        document.getElementById("badge-variante").innerHTML = `<b>Modalità MIX attiva!</b> Esercizi rimescolati casualmente tra le varianti.`;
+    } else {
+        document.getElementById("badge-variante").innerHTML = `Modalità ${nomi[indice]} attiva: Risolvi i 24 esercizi sul tuo quaderno.`;
+    }
+    
+    let res = generaBatteriaCompleta(dati);
+    document.getElementById("campo-batteria").innerHTML = res.html;
+    document.getElementById("sol-batteria").innerText = res.sDoc;
+    document.getElementById("sol-batteria").style.display = "none";
+
+    let btnRisultati = document.getElementById("btn-risultati");
+    if (indice === 1 || indice === 3) {
+        btnRisultati.style.display = "block";
+    } else {
+        btnRisultati.style.display = "none";
+    }
+}
+
+function toggleVisioneDoc(id) {
+    let el = document.getElementById(id);
+    el.style.display = (el.style.display === "block") ? "none" : "block";
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    cambiaVariante(0);
+});
+</script>
+</body>
+</html>

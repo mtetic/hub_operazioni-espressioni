@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lezione 3.C: Divisione</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #eff6ff;
+            --accent: #0f766e;
+            --accent-bg: #f0fdfa;
+            --accent-border: #99f6e4;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --border-color: #cbd5e1;
+            --success: #15803d;
+            --success-bg: #f0fdf4;
+            --danger: #b91c1c;
+            --danger-bg: #fef2f2;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8fafc;
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 12px;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-top: 6px solid var(--accent);
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-top: 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        h2 {
+            color: #0f766e;
+            font-size: 1.2rem;
+            margin-top: 28px;
+            margin-bottom: 14px;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+        }
+
+        p, li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .nota-quaderno {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--accent);
+            padding: 18px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .box-formula {
+            text-align: center;
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            border-radius: 8px;
+            margin: 14px 0;
+            font-size: 1.1rem;
+        }
+
+        .tabella-operazione {
+            margin: 15px auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.25rem;
+            font-weight: bold;
+            border-collapse: collapse;
+            line-height: 1.4;
+        }
+
+        .tabella-operazione td {
+            text-align: center;
+            padding: 3px 6px;
+        }
+
+        .cifra-unita {
+            color: #0f766e;
+            font-weight: bold;
+        }
+
+        .quiz-card {
+            background: var(--accent-bg);
+            border: 1px solid var(--accent-border);
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+            box-shadow: 0 2px 6px rgba(15, 118, 110, 0.05);
+        }
+
+        .quiz-titolo {
+            font-weight: 700;
+            color: #115e59;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .quiz-opzioni {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .btn-opzione {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .btn-opzione:hover, .btn-opzione:focus {
+            border-color: var(--accent);
+            background: #f1f5f9;
+            outline: none;
+        }
+
+        .badge-lettera {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: #0f766e;
+            color: white;
+            font-weight: bold;
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }
+
+        .feedback-quiz {
+            font-weight: 600;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .tastierino-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 14px;
+            background: white;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .campi-input-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .input-tastierino {
+            width: 80px;
+            padding: 8px;
+            font-size: 1rem;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .input-tastierino.attivo {
+            border-color: var(--accent);
+            background: var(--accent-bg);
+        }
+
+        .input-cella-cifra {
+            width: 22px;
+            height: 26px;
+            padding: 0;
+            font-size: 1.15rem;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            background: white;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .input-cella-cifra.attivo {
+            border-color: var(--accent);
+            background: var(--accent-bg);
+        }
+
+        .numpad-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            max-width: 320px;
+            margin-top: 8px;
+        }
+
+        .btn-num {
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        .btn-num:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-invia {
+            grid-column: span 3;
+            padding: 10px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-canc {
+            grid-column: span 2;
+            padding: 10px;
+            background: #cbd5e1;
+            color: var(--text-main);
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .box-quaderno-es {
+            background: #ffffff;
+            border: 1px dashed var(--border-color);
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .titolo-quaderno-es {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .card-allenamento {
+            margin-top: 36px;
+            padding: 22px;
+            border: 2px solid var(--accent);
+            border-radius: 14px;
+            background: var(--accent-bg);
+        }
+
+        .titolo-allenamento {
+            margin-top: 0;
+            color: #115e59;
+            font-size: 1.1rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .barra-varianti {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            background: var(--accent-border);
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .btn-v {
+            flex: 1;
+            min-width: 75px;
+            padding: 8px 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: none;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #134e4a;
+            transition: all 0.2s;
+        }
+
+        .btn-v.attiva {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .blocco-esercizi {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #5eead4;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            box-sizing: border-box;
+        }
+
+        .griglia-e-riga {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            width: 100%;
+            white-space: nowrap;
+        }
+
+        .btn-docente {
+            width: 100%;
+            margin-top: 16px;
+            padding: 10px;
+            background: #475569;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .chiave-docente {
+            display: none;
+            margin-top: 12px;
+            padding: 14px;
+            background: #f1f5f9;
+            border-left: 4px solid #475569;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.88rem;
+            white-space: pre-wrap;
+        }
+
+        .overlay-tavola {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .finestra-tavola {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            border-top: 6px solid #f59e0b;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .chiudi-tavola {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #64748b;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .chiudi-tavola:hover {
+            color: #ef4444;
+        }
+
+        .griglia-pitagorica {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            gap: 2px;
+            background: #e2e8f0;
+            padding: 5px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .cella-p {
+            padding: 5px 2px;
+            background: white;
+            font-weight: bold;
+        }
+
+        .cella-p.testata {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .cella-p.incrocio {
+            background: #fffbe6;
+            color: #d97706;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>3.C: Divisione</h1>
+
+    <section id="parte1">
+        <h2>Parte 1: Il concetto, la terminologia e i casi particolari</h2>
+        
+        <p>La divisione è l'operazione inversa della moltiplicazione: serve a distribuire una quantità in parti uguali o a raggrupparla. I termini della divisione sono il <b>dividendo</b> (il primo termine), il <b>divisore</b> (il secondo termine), il <b>quoziente</b> (o quoto se il resto è zero) e l'eventuale <b>resto</b>.</p>
+
+        <div class="box-formula">
+            <span style="font-weight:bold; font-size:1.3rem;">42 : 6 = 7 &nbsp; (resto 0)</span>
+            <p style="margin: 8px 0 0 0; font-size: 0.88rem; color: var(--text-muted);">
+                <b>42</b> è il dividendo &nbsp;|&nbsp; <b>6</b> è il divisore &nbsp;|&nbsp; <b>7</b> è il quoziente
+            </p>
+        </div>
+
+        <p>Per risolvere rapidamente una divisione semplice, basta ricordare le tabelline a memoria e usarle al contrario: se sai che 6 per 7 fa 42, sai immediatamente che 42 diviso 6 fa 7!</p>
+
+        <div style="text-align: center; margin: 15px 0;">
+            <button onclick="document.getElementById('tavolaPitagorica').style.display='flex'" style="padding: 10px 18px; background: #d97706; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(217,119,6,0.25);">
+                🧮 Apri Tavola Pitagorica di Supporto
+            </button>
+        </div>
+
+        <div id="tavolaPitagorica" class="overlay-tavola" onclick="if(event.target===this) this.style.display='none'">
+            <div class="finestra-tavola">
+                <button class="chiudi-tavola" onclick="document.getElementById('tavolaPitagorica').style.display='none'">&times;</button>
+                <h3 style="margin-top: 0; color: #b45309; border-bottom: 2px solid #fef08a; padding-bottom: 5px; text-align: center;">Tavola Pitagorica</h3>
+                <div class="griglia-pitagorica">
+                    <div class="cella-p testata">×</div>
+                    <div class="cella-p testata">1</div><div class="cella-p testata">2</div><div class="cella-p testata">3</div><div class="cella-p testata">4</div><div class="cella-p testata">5</div>
+                    <div class="cella-p testata">6</div><div class="cella-p testata">7</div><div class="cella-p testata">8</div><div class="cella-p testata">9</div><div class="cella-p testata">10</div>
+                    <div class="cella-p testata">1</div><div class="cella-p incrocio">1</div><div class="cella-p">2</div><div class="cella-p">3</div><div class="cella-p">4</div><div class="cella-p">5</div><div class="cella-p">6</div><div class="cella-p">7</div><div class="cella-p">8</div><div class="cella-p">9</div><div class="cella-p">10</div>
+                    <div class="cella-p testata">2</div><div class="cella-p">2</div><div class="cella-p incrocio">4</div><div class="cella-p">6</div><div class="cella-p">8</div><div class="cella-p">10</div><div class="cella-p">12</div><div class="cella-p">14</div><div class="cella-p">16</div><div class="cella-p">18</div><div class="cella-p">20</div>
+                    <div class="cella-p testata">3</div><div class="cella-p">3</div><div class="cella-p">6</div><div class="cella-p incrocio">9</div><div class="cella-p">12</div><div class="cella-p">15</div><div class="cella-p">18</div><div class="cella-p">21</div><div class="cella-p">24</div><div class="cella-p">27</div><div class="cella-p">30</div>
+                    <div class="cella-p testata">4</div><div class="cella-p">4</div><div class="cella-p">8</div><div class="cella-p">12</div><div class="cella-p incrocio">16</div><div class="cella-p">20</div><div class="cella-p">24</div><div class="cella-p">28</div><div class="cella-p">32</div><div class="cella-p">36</div><div class="cella-p">40</div>
+                    <div class="cella-p testata">5</div><div class="cella-p">5</div><div class="cella-p">10</div><div class="cella-p">15</div><div class="cella-p">20</div><div class="cella-p incrocio">25</div><div class="cella-p">30</div><div class="cella-p">35</div><div class="cella-p">40</div><div class="cella-p">45</div><div class="cella-p">50</div>
+                    <div class="cella-p testata">6</div><div class="cella-p">6</div><div class="cella-p">12</div><div class="cella-p">18</div><div class="cella-p">24</div><div class="cella-p">30</div><div class="cella-p incrocio">36</div><div class="cella-p">42</div><div class="cella-p">48</div><div class="cella-p">54</div><div class="cella-p">60</div>
+                    <div class="cella-p testata">7</div><div class="cella-p">7</div><div class="cella-p">14</div><div class="cella-p">21</div><div class="cella-p">28</div><div class="cella-p">35</div><div class="cella-p">42</div><div class="cella-p incrocio">49</div><div class="cella-p">56</div><div class="cella-p">63</div><div class="cella-p">70</div>
+                    <div class="cella-p testata">8</div><div class="cella-p">8</div><div class="cella-p">16</div><div class="cella-p">24</div><div class="cella-p">32</div><div class="cella-p">40</div><div class="cella-p">48</div><div class="cella-p">56</div><div class="cella-p incrocio">64</div><div class="cella-p">72</div><div class="cella-p">80</div>
+                    <div class="cella-p testata">9</div><div class="cella-p">9</div><div class="cella-p">18</div><div class="cella-p">27</div><div class="cella-p">36</div><div class="cella-p">45</div><div class="cella-p">54</div><div class="cella-p">63</div><div class="cella-p">72</div><div class="cella-p incrocio">81</div><div class="cella-p">90</div>
+                    <div class="cella-p testata">10</div><div class="cella-p">10</div><div class="cella-p">20</div><div class="cella-p">30</div><div class="cella-p">40</div><div class="cella-p">50</div><div class="cella-p">60</div><div class="cella-p">70</div><div class="cella-p">80</div><div class="cella-p">90</div><div class="cella-p incrocio">100</div>
+                </div>
+                <p style="font-size: 0.8rem; color: #64748b; margin-top: 10px; margin-bottom: 0; text-align: center;">Trova il prodotto al centro e risali lungo i lati per fare la divisione al contrario.</p>
+            </div>
+        </div>
+
+        <div class="nota-quaderno" style="border-left-color: #0d9488; background: #f0fdfa;">
+            <strong style="color: #115e59; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">I casi particolari con lo zero (la prova della moltiplicazione):</strong>
+            <p style="margin: 6px 0 0 0; color: #115e59;">
+                • <b>0 : 7 = 0 (SI PUÒ FARE):</b> Perché la divisione è l'inversa della moltiplicazione, e 0 × 7 fa esattamente 0. Questo vale per qualsiasi numero al posto del 7.<br>
+                • <b>7 : 0 = IMPOSSIBILE (NON SI PUÒ FARE):</b> Non esiste alcun numero che, moltiplicato per 0, dia come risultato 7 (qualsiasi numero moltiplicato per zero dà sempre zero!). Questo vale per qualsiasi numero al posto del 7.<br>
+                • <b>0 : 0 = INDETERMINATO:</b> Qualsiasi numero moltiplicato per zero dà zero, quindi non esiste un unico quoziente definitivo.
+            </p>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 1">
+            <p class="quiz-titolo">Quiz 1: Come si chiama il risultato di una divisione con resto zero?</p>
+            <div class="quiz-opzioni" role="radiogroup" aria-label="Opzioni Quiz 1">
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, false, 'Attenzione: il fattore appartiene alla moltiplicazione.')">
+                    <span class="badge-lettera">A</span> Fattore
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, true, 'Esatto!')">
+                    <span class="badge-lettera">B</span> Quoto / Quoziente
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, false, 'No: il minuendo appartiene alla sottrazione.')">
+                    <span class="badge-lettera">C</span> Minuendo
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz1(this, false, 'No: la somma appartiene all\'addizione.')">
+                    <span class="badge-lettera">D</span> Somma
+                </button>
+            </div>
+            <div id="fb-quiz1" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 2">
+            <p class="quiz-titolo">Quiz 2: Risolvi le seguenti operazioni</p>
+            <p style="margin-bottom: 8px;">Inserisci il risultato numerico oppure la parola <b>impossibile</b>:</p>
+            
+            <div class="tastierino-box">
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border-color);">
+                        <span>a) 0 : 15 =</span>
+                        <input type="text" id="q2-r1" class="input-tastierino attivo" readonly onclick="selezionaCampoQ2(1)" style="width: 120px;">
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border-color);">
+                        <span>b) 24 : 0 =</span>
+                        <input type="text" id="q2-r2" class="input-tastierino" readonly onclick="selezionaCampoQ2(2)" style="width: 120px;">
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border-color);">
+                        <span>c) 42 : 1 =</span>
+                        <input type="text" id="q2-r3" class="input-tastierino" readonly onclick="selezionaCampoQ2(3)" style="width: 120px;">
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border-color);">
+                        <span>d) 18 : 18 =</span>
+                        <input type="text" id="q2-r4" class="input-tastierino" readonly onclick="selezionaCampoQ2(4)" style="width: 120px;">
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border-color);">
+                        <span>e) 7 : 0 =</span>
+                        <input type="text" id="q2-r5" class="input-tastierino" readonly onclick="selezionaCampoQ2(5)" style="width: 120px;">
+                    </div>
+                </div>
+
+                <div class="numpad-grid" style="grid-template-columns: repeat(5, 1fr); max-width: 100%; margin: 8px auto 0 auto;">
+                    <button class="btn-num" onclick="digitaQ2('1')">1</button>
+                    <button class="btn-num" onclick="digitaQ2('2')">2</button>
+                    <button class="btn-num" onclick="digitaQ2('3')">3</button>
+                    <button class="btn-num" onclick="digitaQ2('4')">4</button>
+                    <button class="btn-num" onclick="digitaQ2('5')">5</button>
+                    <button class="btn-num" onclick="digitaQ2('6')">6</button>
+                    <button class="btn-num" onclick="digitaQ2('7')">7</button>
+                    <button class="btn-num" onclick="digitaQ2('8')">8</button>
+                    <button class="btn-num" onclick="digitaQ2('9')">9</button>
+                    <button class="btn-num" onclick="digitaQ2('0')">0</button>
+                    <button class="btn-num" style="grid-column: span 3; font-size: 0.85rem;" onclick="digitaQ2('impossibile')">impossibile</button>
+                    <button class="btn-canc" onclick="cancellaQ2()">⌫</button>
+                    <button class="btn-invia" style="grid-column: span 5;" onclick="verificaQuiz2()">Verifica</button>
+                </div>
+            </div>
+            <div id="fb-quiz2" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="box-quaderno-es">
+            <h3 class="titolo-quaderno-es">Esercizi sul quaderno</h3>
+            <p><b>Es 1.</b> Calcola a mente usando le tabelline al contrario:</p>
+            <p>a) 42 : 6 &nbsp;&nbsp;&nbsp;&nbsp; b) 56 : 8 &nbsp;&nbsp;&nbsp;&nbsp; c) 72 : 9</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+            <p><b>Es 2.</b> Risolvi i casi particolari con 0 e 1:</p>
+            <p>a) 35 : 1 &nbsp;&nbsp;&nbsp;&nbsp; b) 48 : 48 &nbsp;&nbsp;&nbsp;&nbsp; c) 0 : 12 &nbsp;&nbsp;&nbsp;&nbsp; d) 15 : 0</p>
+        </div>
+    </section>
+
+    <section id="parte2">
+        <h2>Parte 2: L'algoritmo in colonna e le divisioni per 10, 100, 1000</h2>
+
+        <p>Per dividere rapidamente un numero intero per <b>10, 100, 1000</b> si tolgono rispettivamente uno, two o tre zeri dalla sua destra (es. <b>340 : 10 = 34</b>, <b>1500 : 100 = 15</b>).</p>
+
+        <div class="nota-quaderno" style="border-left-color: #0d9488; background: #f0fdfa;">
+            <strong style="color: #115e59; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">Algoritmo in Colonna:</strong>
+            <p style="margin: 6px 0 10px 0; color: #115e59;">
+                A differenza delle altre operazioni, la divisione si sviluppa da <b>sinistra verso destra</b>. Si prende una o più cifre del dividendo, si vede quante volte il divisore vi è contenuto, si scrive nel quoziente, si moltiplica per il divisore scrivendo il prodotto sotto, si esegue la sottrazione per trovare il resto parziale e infine si abbassa la cifra successiva.
+            </p>
+
+            <p style="margin: 12px 0 6px 0; font-weight: bold; color: #115e59; font-size: 0.95rem;">Esempio 1: Divisore a una cifra con resto zero (584 : 4 = 146)</p>
+            <table class="tabella-operazione" style="color: #115e59; margin: 10px auto;">
+                <tr><td><u>5</u></td><td>8</td><td>4</td><td>|</td><td>4</td></tr>
+                <tr><td>1</td><td>8</td><td></td><td>|</td><td style="border-left: 2px solid #115e59; padding-left: 8px;">1</td><td>4</td><td>6</td></tr>
+                <tr><td>-4</td><td></td><td></td><td>|</td></tr>
+                <tr><td>--</td><td></td><td></td><td>|</td></tr>
+                <tr><td>1</td><td>8</td><td></td><td>|</td></tr>
+                <tr><td>-1</td><td>6</td><td></td><td>|</td></tr>
+                <tr><td>--</td><td></td><td></td><td>|</td></tr>
+                <tr><td></td><td>2</td><td>4</td><td>|</td></tr>
+                <tr><td>- 2</td><td>4</td><td></td><td>|</td></tr>
+                <tr><td>--</td><td>--</td><td></td><td>|</td></tr>
+                <tr><td></td><td>0</td><td>0</td><td>|</td></tr>
+            </table>
+            <p style="font-size: 0.85rem; color: #134e4a; margin: 4px 0;">Spiegazione passo-passo:<br>
+            1. Mettiamo il cappelletto sulla prima cifra del dividendo (5). Il 4 nel 5 sta 1 volta. Scriviamo 1 nel quoziente.<br>
+            2. Moltiplichiamo 1 × 4 = 4. Scriviamo 4 sotto il 5 e facciamo la sottrazione: 5 - 4 = 1 (resto parziale).<br>
+            3. Abbassiamo la cifra successiva (l'8) accanto all'1, formando il numero 18.<br>
+            4. Il 4 nel 18 sta 4 volte (4 × 4 = 16). Scriviamo 4 nel quoziente. Sottraiamo 18 - 16 = 2.<br>
+            5. Abbassiamo l'ultima cifra (il 4) accanto al 2, formando 24.<br>
+            6. Il 4 nel 24 sta 6 volte esatte (6 × 4 = 24). Scriviamo 6 nel quoziente. Sottraiamo 24 - 24 = 0 (resto finale).</p>
+
+            <p style="margin: 18px 0 6px 0; font-weight: bold; color: #115e59; font-size: 0.95rem;">Esempio 2: Divisore a due cifre con resto zero (732 : 12 = 61)</p>
+            <table class="tabella-operazione" style="color: #115e59; margin: 10px auto;">
+                <tr><td><u>7</u></td><td><u>3</u></td><td>2</td><td>|</td><td>1</td><td>2</td></tr>
+                <tr><td>7</td><td>3</td><td></td><td>|</td><td style="border-left: 2px solid #115e59; padding-left: 8px;">6</td><td>1</td></tr>
+                <tr><td>-7</td><td>2</td><td></td><td>|</td></tr>
+                <tr><td>--</td><td>--</td><td></td><td>|</td></tr>
+                <tr><td></td><td>1</td><td>2</td><td>|</td></tr>
+                <tr><td>- 1</td><td>2</td><td></td><td>|</td></tr>
+                <tr><td>--</td><td>--</td><td></td><td>|</td></tr>
+                <tr><td></td><td>0</td><td>0</td><td>|</td></tr>
+            </table>
+            <p style="font-size: 0.85rem; color: #134e4a; margin: 4px 0;">Spiegazione passo-passo:<br>
+            1. Con il divisore a due cifre (12), mettiamo il cappelletto sulle prime due cifre del dividendo (73).<br>
+            2. Quante volte il 12 sta nel 73? Facciamo una stima: 12 × 5 = 60, 12 × 6 = 72. Ci sta 6 volte. Scriviamo 6 nel quoziente.<br>
+            3. Moltiplichiamo 6 × 12 = 72. Lo scriviamo sotto il 73 e sottraiamo: 73 - 72 = 1.<br>
+            4. Abbassiamo il 2 accanto all'1, formando 12.<br>
+            5. Il 12 nel 12 sta 1 volta esatta (1 × 12 = 12). Scriviamo 1 nel quoziente. Sottraiamo 12 - 12 = 0 (resto finale).</p>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 3">
+            <p class="quiz-titolo">Quiz 3: Quanto vale il quoziente di 1400 : 100?</p>
+            <div class="quiz-opzioni" role="radiogroup" aria-label="Opzioni Quiz 3">
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, false, 'Ritenta! Hai tolto un solo zero anziché due.')">
+                    <span class="badge-lettera">A</span> 140
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, true, 'Esatto!')">
+                    <span class="badge-lettera">B</span> 14
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, false, 'Ritenta! Hai tolto troppo.')">
+                    <span class="badge-lettera">C</span> 1,4
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz3(this, false, 'Ritenta! Gli zeri con la divisione si tolgono, non si aggiungono.')">
+                    <span class="badge-lettera">D</span> 140000
+                </button>
+            </div>
+            <div id="fb-quiz3" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 4">
+            <p class="quiz-titolo">Quiz 4: Completa la divisione in colonna (144 : 4 = 36)</p>
+            <p style="margin-bottom: 8px;">Inserisci le cifre mancanti (resti intermedi, prodotti parziali e quoziente):</p>
+            
+            <div class="tastierino-box">
+                <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid var(--border-color); width: fit-content; margin: 0 auto 10px auto;">
+                    <table class="tabella-operazione" style="margin: 0; font-size: 1.15rem;">
+                        <tr>
+                            <td>1</td><td>4</td><td>4</td><td class="op-segno">|</td><td>4</td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="q4-c1" class="input-cella-cifra attivo" readonly onclick="selezionaCampoQ4(1)"></td>
+                            <td><input type="text" id="q4-c2" class="input-cella-cifra" readonly onclick="selezionaCampoQ4(2)"></td>
+                            <td></td>
+                            <td class="op-segno">|</td>
+                            <td style="border-left: 2px solid #334155; padding-left: 8px;"><input type="text" id="q4-c5" class="input-cella-cifra" readonly onclick="selezionaCampoQ4(5)"></td>
+                            <td><input type="text" id="q4-c6" class="input-cella-cifra" readonly onclick="selezionaCampoQ4(6)"></td>
+                        </tr>
+                        <tr>
+                            <td>-</td>
+                            <td><input type="text" id="q4-c3" class="input-cella-cifra" readonly onclick="selezionaCampoQ4(3)"></td>
+                            <td><input type="text" id="q4-c4" class="input-cella-cifra" readonly onclick="selezionaCampoQ4(4)"></td>
+                            <td class="op-segno">|</td>
+                            <td></td><td></td>
+                        </tr>
+                        <tr>
+                            <td></td><td></td><td>0</td><td class="op-segno">|</td><td></td><td></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <p style="font-size: 0.8rem; color: #64748b; margin: 0; text-align: center;">Caselle: c1,c2 = resto parziale (18), c3,c4 = prodotto sottratto (16), c5,c6 = quoziente (36).</p>
+
+                <div class="numpad-grid" style="margin: 8px auto 0 auto;">
+                    <button class="btn-num" onclick="digitaQ4('1')">1</button>
+                    <button class="btn-num" onclick="digitaQ4('2')">2</button>
+                    <button class="btn-num" onclick="digitaQ4('3')">3</button>
+                    <button class="btn-num" onclick="digitaQ4('4')">4</button>
+                    <button class="btn-num" onclick="digitaQ4('5')">5</button>
+                    <button class="btn-num" onclick="digitaQ4('6')">6</button>
+                    <button class="btn-num" onclick="digitaQ4('7')">7</button>
+                    <button class="btn-num" onclick="digitaQ4('8')">8</button>
+                    <button class="btn-num" onclick="digitaQ4('9')">9</button>
+                    <button class="btn-num" onclick="digitaQ4('0')">0</button>
+                    <button class="btn-canc" onclick="cancellaQ4()">⌫</button>
+                    <button class="btn-invia" onclick="verificaQuiz4()">Verifica</button>
+                </div>
+            </div>
+            <div id="fb-quiz4" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="box-quaderno-es">
+            <h3 class="titolo-quaderno-es">Esercizi sul quaderno</h3>
+            <p><b>Es 3.</b> Calcola rapidamente dividendo per 10, 100, 1000:</p>
+            <p>a) 420 : 10 &nbsp;&nbsp;&nbsp;&nbsp; b) 1800 : 100 &nbsp;&nbsp;&nbsp;&nbsp; c) 7000 : 1000</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+            <p><b>Es 4.</b> Incolonna ed esegui sul quaderno con l'algoritmo in colonna:</p>
+            <p>a) 138 : 6 &nbsp;&nbsp;&nbsp;&nbsp; b) 144 : 4 &nbsp;&nbsp;&nbsp;&nbsp; c) 288 : 24</p>
+        </div>
+    </section>
+
+    <section id="parte3">
+        <h2>Parte 3: I numeri decimali e la proprietà invariantiva</h2>
+
+        <p>Quando dividiamo un numero decimale per <b>10, 100, 1000</b>, la virgola si sposta verso <b>sinistra</b>. Quando invece incontriamo un divisore con la virgola, non possiamo eseguire la divisione direttamente: dobbiamo trasformarlo in un numero intero.</p>
+
+        <div class="nota-quaderno" style="border-left-color: #0d9488; background: #f0fdfa;">
+            <strong style="color: #115e59; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px;">La Proprietà Invariantiva:</strong>
+            <p style="margin: 6px 0 6px 0; color: #115e59;">
+                La proprietà invariantiva della divisione ci dice che se <b>moltiplichiamo (o dividiamo) sia il dividendo che il divisore per uno stesso numero diverso da zero, il risultato (quoziente) non cambia affatto</b>. Sfruttiamo questa regola moltiplicando entrambi i termini per 10, 100 o 1000 finché il divisore perde la virgola e diventa un numero intero.
+            </p>
+            <p style="margin: 6px 0 0 0; font-weight: bold; color: #115e59; font-size: 0.95rem;">Esempio pratico: 4,5 : 0,15</p>
+            <p style="margin: 4px 0 0 0; color: #115e59; font-size: 0.9rem;">
+                Il divisore è <b>0,15</b> (ha due cifre decimali). Moltiplichiamo sia 4,5 che 0,15 per <b>100</b>:<br>
+                • 0,15 × 100 = 15 (divisore intero)<br>
+                • 4,5 × 100 = 450 (aggiungendo uno zero segnaposto)<br>
+                L'operazione diventa così l'equivalente semplice: <b>450 : 15 = 30</b>.
+            </p>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 5">
+            <p class="quiz-titolo">Quiz 5: Come trasformi 4,5 : 0,15 con la proprietà invariantiva?</p>
+            <div class="quiz-opzioni" role="radiogroup" aria-label="Opzioni Quiz 5">
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, false, 'Ritenta!')">
+                    <span class="badge-lettera">A</span> 45 : 1,5
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, true, 'Esatto!')">
+                    <span class="badge-lettera">B</span> 450 : 15
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, false, 'Ritenta!')">
+                    <span class="badge-lettera">C</span> 45 : 15
+                </button>
+                <button class="btn-opzione" role="radio" aria-checked="false" onclick="verificaQuiz5(this, false, 'Ritenta!')">
+                    <span class="badge-lettera">D</span> 4,5 : 15
+                </button>
+            </div>
+            <div id="fb-quiz5" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="quiz-card" role="region" aria-label="Quiz 6">
+            <p class="quiz-titolo">Quiz 6: Dividi un decimale per 10</p>
+            <p style="margin-bottom: 8px;">Inserisci la parte intera e i decimi del risultato di <b>45,6 : 10</b>:</p>
+            <div class="tastierino-box">
+                <div class="campi-input-box">
+                    <label>Parte intera: <input type="text" id="q6-box1" class="input-tastierino attivo" readonly onclick="selezionaCampoQ6(1)"></label>
+                    <label style="margin-left: 15px;">Decimi: ,<input type="text" id="q6-box2" class="input-tastierino" readonly onclick="selezionaCampoQ6(2)"></label>
+                </div>
+                <div class="numpad-grid">
+                    <button class="btn-num" onclick="digitaQ6('1')">1</button>
+                    <button class="btn-num" onclick="digitaQ6('2')">2</button>
+                    <button class="btn-num" onclick="digitaQ6('3')">3</button>
+                    <button class="btn-num" onclick="digitaQ6('4')">4</button>
+                    <button class="btn-num" onclick="digitaQ6('5')">5</button>
+                    <button class="btn-num" onclick="digitaQ6('6')">6</button>
+                    <button class="btn-num" onclick="digitaQ6('7')">7</button>
+                    <button class="btn-num" onclick="digitaQ6('8')">8</button>
+                    <button class="btn-num" onclick="digitaQ6('9')">9</button>
+                    <button class="btn-num" onclick="digitaQ6('0')">0</button>
+                    <button class="btn-canc" onclick="cancellaQ6()">⌫</button>
+                    <button class="btn-invia" onclick="verificaQuiz6()">Verifica</button>
+                </div>
+            </div>
+            <div id="fb-quiz6" class="feedback-quiz" aria-live="polite"></div>
+        </div>
+
+        <div class="box-quaderno-es">
+            <h3 class="titolo-quaderno-es">Esercizi sul quaderno</h3>
+            <p><b>Es 5.</b> Dividi i decimali per 10, 100, 1000 spostando la virgola a sinistra:</p>
+            <p>a) 45,6 : 10 &nbsp;&nbsp;&nbsp;&nbsp; b) 125,4 : 100 &nbsp;&nbsp;&nbsp;&nbsp; c) 8,2 : 10</p>
+            <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+            <p><b>Es 6.</b> Applica la proprietà invariantiva ed esegui in colonna:</p>
+            <p>a) 12,5 : 5 &nbsp;&nbsp;&nbsp;&nbsp; b) 24 : 1,2 &nbsp;&nbsp;&nbsp;&nbsp; c) 4,5 : 0,15</p>
+        </div>
+    </section>
+
+    <div class="card-allenamento">
+        <h3 class="titolo-allenamento">Esercizi sul quaderno</h3>
+        
+        <div class="barra-varianti" role="toolbar" aria-label="Varianti esercizi">
+            <button id="btn-v-0" class="btn-v attiva" onclick="cambiaVariante(0)">SEMEL</button>
+            <button id="btn-v-1" class="btn-v" onclick="cambiaVariante(1)">BIS</button>
+            <button id="btn-v-2" class="btn-v" onclick="cambiaVariante(2)">TER</button>
+            <button id="btn-v-3" class="btn-v" onclick="cambiaVariante(3)">QUATER</button>
+            <button id="btn-v-4" class="btn-v" style="background:#0f766e; color:white;" onclick="cambiaVariante(4)">MIX</button>
+        </div>
+
+        <div id="badge-variante" style="background: #ffffff; border: 1px solid #99f6e4; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85rem; color: #115e59; font-weight: 500;">
+            Modalità SEMEL attiva: Risolvi i 24 esercizi sul tuo quaderno.
+        </div>
+        
+        <div id="campo-batteria" class="blocco-esercizi"></div>
+
+        <button id="btn-risultati" class="btn-docente" style="display: none;" onclick="toggleVisioneDoc('sol-batteria')">Mostra/Nascondi Risultati</button>
+        <div id="sol-batteria" class="chiave-docente"></div>
+    </div>
+</div>
+
+<script>
+let statoQ2 = { attivo: 1, val1: "", val2: "", val3: "", val4: "", val5: "" };
+
+function selezionaCampoQ2(num) {
+    statoQ2.attivo = num;
+    for(let i=1; i<=5; i++) {
+        let el = document.getElementById('q2-r' + i);
+        if(el) el.classList.toggle('attivo', i === num);
+    }
+}
+
+function digitaQ2(car) {
+    let curr = statoQ2.attivo;
+    let campo = document.getElementById('q2-r' + curr);
+    if(car === 'impossibile') {
+        statoQ2['val' + curr] = 'impossibile';
+    } else {
+        if(statoQ2['val' + curr] === 'impossibile') statoQ2['val' + curr] = '';
+        if(statoQ2['val' + curr].length < 12) {
+            statoQ2['val' + curr] += car;
+        }
+    }
+    if(campo) campo.value = statoQ2['val' + curr];
+}
+
+function cancellaQ2() {
+    let curr = statoQ2.attivo;
+    let campo = document.getElementById('q2-r' + curr);
+    statoQ2['val' + curr] = statoQ2['val' + curr].slice(0, -1);
+    if(campo) campo.value = statoQ2['val' + curr];
+}
+
+function verificaQuiz2() {
+    const v1 = statoQ2.val1.trim().toLowerCase();
+    const v2 = statoQ2.val2.trim().toLowerCase();
+    const v3 = statoQ2.val3.trim().toLowerCase();
+    const v4 = statoQ2.val4.trim().toLowerCase();
+    const v5 = statoQ2.val5.trim().toLowerCase();
+    const fb = document.getElementById('fb-quiz2');
+
+    const corretto = (v1 === "0" && (v2 === "impossibile" || v2 === "imp") && v3 === "42" && v4 === "1" && (v5 === "impossibile" || v5 === "imp"));
+
+    if (corretto) {
+        gestisciFeedback(fb, true, 'Esatto!');
+    } else {
+        gestisciFeedback(fb, false, 'Ritenta!');
+    }
+}
+
+let statoQ4 = {
+    attivo: 1,
+    valori: { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "" }
+};
+
+function selezionaCampoQ4(num) {
+    statoQ4.attivo = num;
+    for (let i = 1; i <= 6; i++) {
+        let el = document.getElementById('q4-c' + i);
+        if (el) el.classList.toggle('attivo', i === num);
+    }
+}
+
+function digitaQ4(cifra) {
+    let curr = statoQ4.attivo;
+    statoQ4.valori[curr] = cifra;
+    document.getElementById('q4-c' + curr).value = cifra;
+    if (curr < 6) {
+        selezionaCampoQ4(curr + 1);
+    }
+}
+
+function cancellaQ4() {
+    let curr = statoQ4.attivo;
+    if (statoQ4.valori[curr] !== "") {
+        statoQ4.valori[curr] = "";
+        document.getElementById('q4-c' + curr).value = "";
+    } else if (curr > 1) {
+        selezionaCampoQ4(curr - 1);
+        statoQ4.valori[curr - 1] = "";
+        document.getElementById('q4-c' + (curr - 1)).value = "";
+    }
+}
+
+function verificaQuiz4() {
+    const v = statoQ4.valori;
+    const fb = document.getElementById('fb-quiz4');
+    const corretto = (v[1] === "1" && v[2] === "8" && v[3] === "1" && v[4] === "6" && v[5] === "3" && v[6] === "6");
+
+    if (corretto) {
+        gestisciFeedback(fb, true, 'Esatto!');
+    } else {
+        gestisciFeedback(fb, false, 'Ritenta!');
+    }
+}
+
+let statoQ6 = { attivo: 1, val1: "", val2: "" };
+
+function selezionaCampoQ6(num) {
+    statoQ6.attivo = num;
+    document.getElementById('q6-box1').classList.toggle('attivo', num === 1);
+    document.getElementById('q6-box2').classList.toggle('attivo', num === 2);
+}
+
+function digitaQ6(cifra) {
+    if (statoQ6.attivo === 1 && statoQ6.val1.length < 4) {
+        statoQ6.val1 += cifra;
+        document.getElementById('q6-box1').value = statoQ6.val1;
+    } else if (statoQ6.attivo === 2 && statoQ6.val2.length < 3) {
+        statoQ6.val2 += cifra;
+        document.getElementById('q6-box2').value = statoQ6.val2;
+    }
+}
+
+function cancellaQ6() {
+    if (statoQ6.attivo === 1) {
+        statoQ6.val1 = statoQ6.val1.slice(0, -1);
+        document.getElementById('q6-box1').value = statoQ6.val1;
+    } else {
+        statoQ6.val2 = statoQ6.val2.slice(0, -1);
+        document.getElementById('q6-box2').value = statoQ6.val2;
+    }
+}
+
+function verificaQuiz6() {
+    const v1 = parseInt(statoQ6.val1);
+    const v2 = parseInt(statoQ6.val2);
+    const fb = document.getElementById('fb-quiz6');
+
+    if (v1 === 4 && v2 === 56) {
+        gestisciFeedback(fb, true, 'Esatto!');
+    } else {
+        gestisciFeedback(fb, false, 'Ritenta!');
+    }
+}
+
+function gestisciFeedback(el, corretto, msg) {
+    el.style.display = 'block';
+    el.innerHTML = (corretto ? '[ESATTO] ' : 'Ritenta! ') + msg;
+    el.style.background = corretto ? 'var(--success-bg)' : 'var(--danger-bg)';
+    el.style.color = corretto ? 'var(--success)' : 'var(--danger)';
+    el.style.border = '1px solid ' + (corretto ? '#bbf7d0' : '#fecaca');
+}
+
+function verificaQuiz1(btn, corretto, msg) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.btn-opzione').forEach(b => b.setAttribute('aria-checked', 'false'));
+    btn.setAttribute('aria-checked', 'true');
+    gestisciFeedback(document.getElementById('fb-quiz1'), corretto, msg);
+}
+
+function verificaQuiz3(btn, corretto, msg) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.btn-opzione').forEach(b => b.setAttribute('aria-checked', 'false'));
+    btn.setAttribute('aria-checked', 'true');
+    gestisciFeedback(document.getElementById('fb-quiz3'), corretto, msg);
+}
+
+function verificaQuiz5(btn, corretto, msg) {
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.btn-opzione').forEach(b => b.setAttribute('aria-checked', 'false'));
+    btn.setAttribute('aria-checked', 'true');
+    gestisciFeedback(document.getElementById('fb-quiz5'), corretto, msg);
+}
+
+const dbBatteria = [
+    {
+        riga_tabelline: ["42 : 6", "56 : 8", "72 : 9", "35 : 5", "100 : 4", "120 : 6"],
+        bucate_base: ["... : 3 = 5", "24 : ... = 6", "45 : 9 = ...", "50 : ... = 5", "... : 4 = 8", "160 : ... = 8"],
+        per_dieci_int: ["420 : 10", "1800 : 100", "7000 : 1000", "1200 : 10", "4500 : 100", "9000 : 1000"],
+        col_1cifra: ["144 : 4", "252 : 3", "345 : 5", "168 : 4"],
+        col_2cifre: ["168 : 12", "288 : 24", "432 : 18", "625 : 25"],
+        col_3cifre: ["375 : 15", "840 : 20", "576 : 24", "750 : 25"],
+        prob_int1: "Distribuisco 24 caramelle in parti uguali tra 4 bambini. Quante caramelle riceve ciascuno?",
+        prob_int2: "Divido 35 quaderni in pacchi da 5 quaderni ciascuno. Quanti pacchi ottengo in totale?",
+
+        dec_per_dieci: ["45,6 : 10", "125,4 : 100", "8,2 : 10", "0,45 : 100", "1450 : 1000", "12,5 : 10"],
+        dec_bucate_pot: ["4,5 : ... = 0,45", "... : 10 = 3,4", "120 : ... = 12", "... : 100 = 0,85", "80 : ... = 0,8", "56 : ... = 5,6"],
+        dec_riga_semplici: ["12,5 : 5", "14,4 : 6", "13,5 : 5", "11,2 : 4", "18,9 : 9", "14,8 : 4"],
+        col_int_dec: ["12,5 : 5", "14,4 : 6", "13,5 : 5", "11,2 : 4"],
+        col_dec_dec: ["6,25 : 2,5", "36 : 1,8", "7,5 : 2,5", "48 : 1,6"],
+        col_dec_zeri: ["4,5 : 0,15", "3,6 : 0,12", "2,4 : 0,08", "1,5 : 0,05"],
+        prob_dec1: "Un barista versa 1,5 litri di succo in bicchieri da 0,15 litri. Quanti bicchieri riesce a riempire?",
+        prob_dec2: "Una corda lunga 4,5 metri viene tagliata in pezzi da 0,5 metri. Quanti pezzi si ottengono?",
+
+        misto_conteggio_dec: ["15,6 : 3", "45 : 1,5", "36 : 1,8", "8,4 : 2,1", "54 : 1,8", "9,6 : 3,2"],
+        misto_riga: ["100 : 4", "120 : 6", "200 : 4", "150 : 5", "300 : 5", "400 : 8"],
+        misto_bucate: ["... : 0,5 = 10", "2,5 : ... = 5", "... : 4 = 2", "0,2 : ... = 2", "15 : ... = 1", "... : 10 = 4,5"],
+        col_avanzata1: ["432 : 6", "504 : 7", "135 : 3", "248 : 4"],
+        col_avanzata2: ["390 : 15", "576 : 24", "312 : 12", "276 : 23"],
+        col_avanzata3: ["420 : 14", "525 : 21", "416 : 13", "528 : 22"],
+        prob_avanz1: "Zio Mario distribuisce 50€ in parti uguali tra i suoi 2 nipoti. Quanto riceve ognuno?",
+        prob_avanz2: "Un operaio deve dividere un pannello di 3,6 metri in listelli da 0,12 metri. Quanti listelli ricava?"
+    },
+    {
+        riga_tabelline: ["30 : 5", "48 : 6", "63 : 7", "40 : 8", "200 : 4", "150 : 5"],
+        bucate_base: ["... : 4 = 5", "18 : ... = 6", "54 : 6 = ...", "60 : ... = 6", "... : 3 = 9", "140 : ... = 7"],
+        per_dieci_int: ["300 : 10", "1600 : 100", "5000 : 1000", "2400 : 10", "3500 : 100", "8000 : 1000"],
+        col_1cifra: ["135 : 3", "248 : 4", "435 : 5", "162 : 3"],
+        col_2cifre: ["156 : 13", "264 : 22", "390 : 15", "576 : 24"],
+        col_3cifre: ["312 : 12", "750 : 25", "420 : 14", "525 : 21"],
+        prob_int1: "Distribuisco 30 caramelle in parti uguali tra 5 amici. Quante caramelle a testa?",
+        prob_int2: "Divido 48 quaderni in pacchi da 6 quaderni ciascuno. Quanti pacchi ottengo?",
+
+        dec_per_dieci: ["56,4 : 10", "234,1 : 100", "9,1 : 10", "0,78 : 100", "2100 : 1000", "18,4 : 10"],
+        dec_bucate_pot: ["5,4 : ... = 0,54", "... : 10 = 4,2", "150 : ... = 15", "... : 100 = 0,92", "90 : ... = 0,9", "62 : ... = 6,2"],
+        dec_riga_semplici: ["14,4 : 6", "7,5 : 2,5", "8,4 : 2,1", "13,5 : 5", "48 : 1,6", "9,6 : 3,2"],
+        col_int_dec: ["135 : 3", "248 : 4", "435 : 5", "162 : 3"],
+        col_dec_dec: ["36 : 1,8", "7,5 : 2,5", "48 : 1,6", "8,4 : 2,1"],
+        col_dec_zeri: ["3,6 : 0,12", "2,4 : 0,08", "1,5 : 0,05", "4,5 : 0,15"],
+        prob_dec1: "Un barista versa 2,4 litri di tè in bicchieri da 0,2 litri. Quanti bicchieri riempie?",
+        prob_dec2: "Una sbarra di metallo lunga 6,4 metri viene tagliata in pezzi da 0,4 metri. Quanti pezzi?",
+
+        misto_conteggio_dec: ["18,9 : 9", "60 : 2,5", "14,4 : 6", "36 : 1,8", "7,5 : 2,5", "48 : 1,6"],
+        misto_riga: ["300 : 5", "180 : 6", "400 : 8", "210 : 7", "500 : 4", "360 : 6"],
+        misto_bucate: ["... : 0,5 = 16", "3,5 : ... = 7", "... : 5 = 3", "0,4 : ... = 4", "28 : ... = 2", "... : 100 = 3,5"],
+        col_avanzata1: ["512 : 8", "413 : 7", "126 : 3", "236 : 4"],
+        col_avanzata2: ["416 : 13", "640 : 20", "132 : 11", "252 : 12"],
+        col_avanzata3: ["440 : 20", "528 : 22", "345 : 15", "720 : 24"],
+        prob_avanz1: "Nonna Maria distribuisce 60€ in parti uguali tra i suoi 3 nipoti. Quanto riceve ognuno?",
+        prob_avanz2: "Un idraulico taglia un tubo di 4,8 metri in pezzetti da 0,15 metri. Quanti tagli interi fa?"
+    },
+    {
+        riga_tabelline: ["32 : 4", "49 : 7", "54 : 9", "45 : 5", "300 : 5", "180 : 6"],
+        bucate_base: ["... : 5 = 5", "28 : ... = 7", "56 : 8 = ...", "80 : ... = 8", "... : 6 = 7", "120 : ... = 4"],
+        per_dieci_int: ["500 : 10", "2500 : 100", "9000 : 1000", "3100 : 10", "4200 : 100", "6000 : 1000"],
+        col_1cifra: ["126 : 3", "236 : 4", "525 : 5", "147 : 3"],
+        col_2cifre: ["144 : 12", "276 : 23", "420 : 14", "525 : 21"],
+        col_3cifre: ["416 : 13", "640 : 20", "345 : 15", "720 : 24"],
+        prob_int1: "Distribuisco 32 figurine in parti uguali tra 4 bambini. Quante a testa?",
+        prob_int2: "Divido 49 penne in pacchi da 7 penne ciascuno. Quanti pacchi ottengo?",
+
+        dec_per_dieci: ["78,3 : 10", "412,5 : 100", "6,4 : 10", "0,34 : 100", "3400 : 1000", "19,2 : 10"],
+        dec_bucate_pot: ["8,4 : ... = 0,84", "... : 10 = 5,1", "180 : ... = 18", "... : 100 = 0,64", "70 : ... = 0,7", "43 : ... = 4,3"],
+        dec_riga_semplici: ["13,5 : 5", "48 : 1,6", "8,4 : 2,1", "2,4 : 0,08", "14,8 : 4", "75 : 1,5"],
+        col_int_dec: ["126 : 3", "236 : 4", "525 : 5", "147 : 3"],
+        col_dec_dec: ["8,4 : 2,1", "2,4 : 0,08", "14,8 : 4", "75 : 1,5"],
+        col_dec_zeri: ["2,4 : 0,08", "14,8 : 4", "75 : 1,5", "4,5 : 0,15"],
+        prob_dec1: "Un fruttivendolo divide 3,6 kg di fragole in cestini da 0,3 kg. Quanti cestini prepara?",
+        prob_dec2: "Un nastro lungo 8,4 metri viene diviso in fiocchi da 0,2 metri. Quanti fiocchi si ottengono?",
+
+        misto_conteggio_dec: ["14,8 : 4", "75 : 1,5", "13,5 : 5", "48 : 1,6", "8,4 : 2,1", "2,4 : 0,08"],
+        misto_riga: ["400 : 8", "210 : 7", "300 : 6", "240 : 4", "500 : 5", "180 : 3"],
+        misto_bucate: ["... : 0,5 = 20", "2,0 : ... = 4", "... : 3 = 4", "0,6 : ... = 3", "36 : ... = 4", "... : 100 = 5,2"],
+        col_avanzata1: ["612 : 6", "603 : 9", "112 : 4", "225 : 3"],
+        col_avanzata2: ["416 : 13", "640 : 20", "132 : 11", "252 : 12"],
+        col_avanzata3: ["440 : 20", "528 : 22", "345 : 15", "720 : 24"],
+        prob_avanz1: "Un gruppo di 4 amici spende 80€ in pizzeria in parti uguali. Quanto paga ciascuno?",
+        prob_avanz2: "Un falegname taglia un asse di legno di 5,4 metri in pezzetti da 0,18 metri. Quanti pezzi ottiene?"
+    },
+    {
+        riga_tabelline: ["21 : 3", "36 : 4", "40 : 5", "56 : 7", "400 : 8", "210 : 7"],
+        bucate_base: ["... : 6 = 5", "32 : ... = 8", "48 : 6 = ...", "90 : ... = 9", "... : 7 = 6", "180 : ... = 9"],
+        per_dieci_int: ["600 : 10", "3200 : 100", "4000 : 1000", "5100 : 10", "7500 : 100", "9000 : 1000"],
+        col_1cifra: ["112 : 4", "225 : 3", "616 : 7", "145 : 5"],
+        col_2cifre: ["132 : 11", "252 : 12", "440 : 20", "528 : 22"],
+        col_3cifre: ["345 : 15", "720 : 24", "416 : 13", "640 : 20"],
+        prob_int1: "Sistemiamo 21 libri in parti uguali su 3 ripiani. Quanti libri per ripiano?",
+        prob_int2: "Divido 36 caramelle in pacchi da 4 caramelle ciascuno. Quanti pacchi ottengo?",
+
+        dec_per_dieci: ["92,1 : 10", "514,8 : 100", "3,5 : 10", "0,89 : 100", "4500 : 1000", "24,6 : 10"],
+        dec_bucate_pot: ["9,5 : ... = 0,95", "... : 10 = 6,3", "210 : ... = 21", "... : 100 = 0,45", "50 : ... = 0,5", "31 : ... = 3,1"],
+        dec_riga_semplici: ["11,2 : 4", "54 : 1,8", "9,6 : 3,2", "1,5 : 0,05", "16,5 : 5", "90 : 4,5"],
+        col_int_dec: ["112 : 4", "225 : 3", "616 : 7", "145 : 5"],
+        col_dec_dec: ["54 : 1,8", "9,6 : 3,2", "1,5 : 0,05", "16,5 : 5"],
+        col_dec_zeri: ["1,5 : 0,05", "16,5 : 5", "90 : 4,5", "2,4 : 0,08"],
+        prob_dec1: "Un operaio divide un tubo di 5,4 metri in pezzi da 0,18 metri. Quanti pezzi ricava?",
+        prob_dec2: "Una confezione contiene 9,0 litri di vernice suddivisa in barattoli da 4,5 litri. Quanti barattoli?",
+
+        misto_conteggio_dec: ["16,5 : 5", "90 : 4,5", "11,2 : 4", "54 : 1,8", "9,6 : 3,2", "1,5 : 0,05"],
+        misto_riga: ["500 : 8", "210 : 7", "360 : 6", "480 : 8", "600 : 5", "270 : 9"],
+        misto_bucate: ["... : 0,5 = 30", "5,0 : ... = 5", "... : 4 = 5", "0,9 : ... = 3", "45 : ... = 5", "... : 100 = 8,1"],
+        col_avanzata1: ["424 : 8", "702 : 9", "126 : 3", "236 : 4"],
+        col_avanzata2: ["132 : 11", "252 : 12", "440 : 20", "528 : 22"],
+        col_avanzata3: ["345 : 15", "720 : 24", "416 : 13", "640 : 20"],
+        prob_avanz1: "Un fioraio incassa 90€ vendendo mazzi di fiori a 4,50€ l'uno. Quanti mazzi ha venduto?",
+        prob_avanz2: "Un terreno rettangolare ha un'area di 720 metri quadrati ed è lungo 24 metri. Qual è la sua larghezza?"
+    }
+];
+
+function generaBatteriaCompleta(dati) {
+    let html = "";
+    let sDoc = "";
+    let lett = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+    let calcola = (str) => {
+        try { 
+            return eval(str.replace(/:/g, '/').replace(/,/g, '.')); 
+        } catch(e) { 
+            return "..."; 
+        }
+    };
+
+    let formatta = (val, dec = 3) => {
+        if (typeof val !== "number" || isNaN(val)) return "...";
+        return Number(val.toFixed(dec)).toString().replace('.', ',');
+    };
+
+    html += `<h4 style="color:#115e59; margin-top:0; border-bottom:1px solid #5eead4; padding-bottom:4px;">Sezione A: Divisione tra Numeri Interi</h4>`;
+
+    html += `<b>Es 7. Calcola in riga le seguenti divisioni:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.riga_tabelline[i]);
+        html += `<div>${lett[i]}) ${dati.riga_tabelline[i]}</div>`;
+        sDoc += `Es 7.${lett[i]}) ${dati.riga_tabelline[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 8. Trova il fattore mancante:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let t = dati.bucate_base[i];
+        let p = t.replace(/:/g, '/').replace(/,/g, '.').split('=');
+        let r = "...";
+        if (p[0].startsWith('...')) {
+            r = eval(`${p[1]} * ${p[0].replace('... / ', '')}`);
+        } else if (p[0].includes('/ ...')) {
+            let num = parseFloat(p[0].replace(' / ...', ''));
+            r = num / parseFloat(p[1]);
+        }
+        html += `<div>${lett[i]}) ${t}</div>`;
+        sDoc += `Es 8.${lett[i]}) ${t.replace('...', r)}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 9. Calcola rapidamente dividendo per 10, 100, 1000:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.per_dieci_int[i]);
+        html += `<div>${lett[i]}) ${dati.per_dieci_int[i]}</div>`;
+        sDoc += `Es 9.${lett[i]}) ${dati.per_dieci_int[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 10. Incolonna ed esegui (divisore a 1 cifra):</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_1cifra[i]);
+        html += `<div>${lett[i]}) ${dati.col_1cifra[i].replace('/', ' : ')}</div>`;
+        sDoc += `Es 10.${lett[i]}) ${dati.col_1cifra[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 11. Incolonna ed esegui (divisore a 2 cifre):</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_2cifre[i]);
+        html += `<div>${lett[i]}) ${dati.col_2cifre[i].replace('/', ' : ')}</div>`;
+        sDoc += `Es 11.${lett[i]}) ${dati.col_2cifre[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 12. Divisioni avanzate in colonna:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_3cifre[i]);
+        html += `<div>${lett[i]}) ${dati.col_3cifre[i].replace('/', ' : ')}</div>`;
+        sDoc += `Es 12.${lett[i]}) ${dati.col_3cifre[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    let rIntProb1 = (dati.prob_int1.includes("caramelle")) ? 24 / 4 : ((dati.prob_int1.includes("caramelle")) ? 30 / 5 : (dati.prob_int1.includes("figurine") ? 32 / 4 : 21 / 3));
+    html += `<div style="margin-bottom:12px;"><b>Es 13. Problema:</b> ${dati.prob_int1}</div>`;
+    sDoc += `Es 13) Risultato = ${rIntProb1}\n`;
+
+    let rIntProb2 = (dati.prob_int2.includes("quaderni")) ? 35 / 5 : ((dati.prob_int2.includes("quaderni")) ? 48 / 6 : (dati.prob_int2.includes("penne") ? 49 / 7 : 36 / 4));
+    html += `<div style="margin-bottom:18px;"><b>Es 14. Problema:</b> ${dati.prob_int2}</div>`;
+    sDoc += `Es 14) Risultato = ${rIntProb2}\n`;
+
+    html += `<h4 style="color:#115e59; margin-top:20px; border-bottom:1px solid #5eead4; padding-bottom:4px;">Sezione B: Decimali con Potenze di 10 e Incolonnamento</h4>`;
+
+    html += `<b>Es 15. Dividi i numeri decimali per 10, 100, 1000:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.dec_per_dieci[i]);
+        let rf = formatta(r, 4);
+        html += `<div>${lett[i]}) ${dati.dec_per_dieci[i]}</div>`;
+        sDoc += `Es 15.${lett[i]}) ${dati.dec_per_dieci[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 16. Trova il dividendo o la potenza di 10 mancante:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let t = dati.dec_bucate_pot[i];
+        let p = t.replace(/:/g, '/').replace(/,/g, '.').split('=');
+        let r = "...";
+        if (p[0].startsWith('...')) {
+            r = eval(`${p[1]} * ${p[0].replace('... / ', '')}`);
+        } else if (p[0].includes('/ ...')) {
+            let num = parseFloat(p[0].replace(' / ...', ''));
+            r = num / parseFloat(p[1]);
+        }
+        let rf = formatta(r, 3);
+        html += `<div>${lett[i]}) ${t}</div>`;
+        sDoc += `Es 16.${lett[i]}) ${t.replace('...', rf)}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 17. Calcola in riga con decimali semplici:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.dec_riga_semplici[i]);
+        let rf = formatta(r, 2);
+        html += `<div>${lett[i]}) ${dati.dec_riga_semplici[i]}</div>`;
+        sDoc += `Es 17.${lett[i]}) ${dati.dec_riga_semplici[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 18. Incolonna ed esegui (virgola al dividendo):</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_int_dec[i]);
+        let rf = formatta(r, 2);
+        html += `<div>${lett[i]}) ${dati.col_int_dec[i].replace('/', ' : ')}</div>`;
+        sDoc += `Es 18.${lett[i]}) ${dati.col_int_dec[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 19. Applica l'invariantiva (virgola al divisore):</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_dec_dec[i]);
+        let rf = formatta(r, 2);
+        html += `<div>${lett[i]}) ${dati.col_dec_dec[i].replace('/', ' : ')}</div>`;
+        sDoc += `Es 19.${lett[i]}) ${dati.col_dec_dec[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 20. Divisioni decimali complesse con l'invariantiva:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_dec_zeri[i]);
+        let rf = formatta(r, 2);
+        html += `<div>${lett[i]}) ${dati.col_dec_zeri[i].replace('/', ' : ')}</div>`;
+        sDoc += `Es 20.${lett[i]}) ${dati.col_dec_zeri[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    let rDecProb1 = (dati.prob_dec1.includes("barista")) ? 1.5 / 0.15 : ((dati.prob_dec1.includes("fruttivendolo")) ? 3.6 / 0.3 : 2.4 / 0.2);
+    let rDecProb1F = formatta(rDecProb1, 0);
+    html += `<div style="margin-bottom:12px;"><b>Es 21. Problema:</b> ${dati.prob_dec1}</div>`;
+    sDoc += `Es 21) Risultato = ${rDecProb1F} bicchieri/cestini\n`;
+
+    let rDecProb2 = (dati.prob_dec2.includes("corda")) ? 4.5 / 0.5 : ((dati.prob_dec2.includes("sbarra")) ? 6.4 / 0.4 : (dati.prob_dec2.includes("nastro") ? 8.4 / 0.2 : 9.0 / 4.5));
+    let rDecProb2F = formatta(rDecProb2, 0);
+    html += `<div style="margin-bottom:18px;"><b>Es 22. Problema:</b> ${dati.prob_dec2}</div>`;
+    sDoc += `Es 22) Risultato = ${rDecProb2F} pezzi/barattoli\n`;
+
+    html += `<h4 style="color:#115e59; margin-top:20px; border-bottom:1px solid #5eead4; padding-bottom:4px;">Sezione C: Consolidamento Avanzato e Problemi Reali</h4>`;
+
+    html += `<b>Es 23. Calcola il quoziente esatto:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.misto_conteggio_dec[i]);
+        let rf = formatta(r, 2);
+        html += `<div>${lett[i]}) ${dati.misto_conteggio_dec[i]}</div>`;
+        sDoc += `Es 23.${lett[i]}) ${dati.misto_conteggio_dec[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 24. Calcoli rapidi misti:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let r = calcola(dati.misto_riga[i]);
+        let rf = formatta(r, 2);
+        html += `<div>${lett[i]}) ${dati.misto_riga[i]}</div>`;
+        sDoc += `Es 24.${lett[i]}) ${dati.misto_riga[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 25. Trova il termine mancante nelle uguaglianze:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<6; i++) {
+        let t = dati.misto_bucate[i];
+        let p = t.replace(/:/g, '/').replace(/,/g, '.').split('=');
+        let r = "...";
+        if (p[0].startsWith('...')) {
+            r = eval(`${p[1]} * ${p[0].replace('... / ', '')}`);
+        } else if (p[0].includes('/ ...')) {
+            let num = parseFloat(p[0].replace(' / ...', ''));
+            r = num / parseFloat(p[1]);
+        }
+        let rf = formatta(r, 3);
+        html += `<div>${lett[i]}) ${t}</div>`;
+        sDoc += `Es 25.${lett[i]}) ${t.replace('...', rf)}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 26. Incolonnamento avanzato tra interi:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_avanzata1[i]);
+        html += `<div>${lett[i]}) ${dati.col_avanzata1[i].replace('/', ' : ')}</div>`;
+        sDoc += `Es 26.${lett[i]}) ${dati.col_avanzata1[i]} = ${r}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 27. Incolonnamento avanzato con divisore a due cifre:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_avanzata2[i]);
+        let rf = formatta(r, 2);
+        html += `<div>${lett[i]}) ${dati.col_avanzata2[i].replace('/', ' : ')}</div>`;
+        sDoc += `Es 27.${lett[i]}) ${dati.col_avanzata2[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    html += `<b>Es 28. Incolonnamento misto complesso:</b><br><div class="griglia-e-riga">`;
+    for(let i=0; i<4; i++) {
+        let r = calcola(dati.col_avanzata3[i]);
+        let rf = formatta(r, 2);
+        html += `<div>${lett[i]}) ${dati.col_avanzata3[i].replace('/', ' : ')}</div>`;
+        sDoc += `Es 28.${lett[i]}) ${dati.col_avanzata3[i]} = ${rf}\n`;
+    }
+    html += `</div>`;
+
+    let rAvProb1 = (dati.prob_avanz1.includes("Nonna")) ? 50 / 3 : ((dati.prob_avanz1.includes("gruppo")) ? 80 / 4 : 90 / 4.5);
+    let rAvProb1F = formatta(rAvProb1, 2);
+    html += `<div style="margin-bottom:12px;"><b>Es 29. Problema reale a due passaggi:</b> ${dati.prob_avanz1}</div>`;
+    sDoc += `Es 29) Risultato = ${rAvProb1F}\n`;
+
+    let rAvProb2 = (dati.prob_avanz2.includes("idraulico")) ? 4.8 / 0.15 : ((dati.prob_avanz2.includes("falegname")) ? 5.4 / 0.18 : 720 / 24);
+    let rAvProb2F = formatta(rAvProb2, 0);
+    html += `<div style="margin-bottom:8px;"><b>Es 30. Problema di geometria e misura:</b> ${dati.prob_avanz2}</div>`;
+    sDoc += `Es 30) Risultato = ${rAvProb2F}\n`;
+
+    return { html, sDoc };
+}
+
+function cambiaVariante(indice) {
+    for(let i=0; i<=4; i++) document.getElementById("btn-v-" + i).classList.remove("attiva");
+    document.getElementById("btn-v-" + indice).classList.add("attiva");
+    
+    let dati = (indice === 4) ? dbBatteria[Math.floor(Math.random()*4)] : dbBatteria[indice];
+    let nomi = ["SEMEL", "BIS", "TER", "QUATER", "MIX"];
+    
+    if (indice === 4) {
+        document.getElementById("badge-variante").innerHTML = `<b>Modalità MIX attiva!</b> Esercizi rimescolati casualmente tra le varianti.`;
+    } else {
+        document.getElementById("badge-variante").innerHTML = `Modalità ${nomi[indice]} attiva: Risolvi i 24 esercizi sul tuo quaderno.`;
+    }
+    
+    let res = generaBatteriaCompleta(dati);
+    document.getElementById("campo-batteria").innerHTML = res.html;
+    document.getElementById("sol-batteria").innerText = res.sDoc;
+    document.getElementById("sol-batteria").style.display = "none";
+
+    let btnRisultati = document.getElementById("btn-risultati");
+    if (indice === 1 || indice === 3) {
+        btnRisultati.style.display = "block";
+    } else {
+        btnRisultati.style.display = "none";
+    }
+}
+
+function toggleVisioneDoc(id) {
+    let el = document.getElementById(id);
+    el.style.display = (el.style.display === "block") ? "none" : "block";
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    cambiaVariante(0);
+});
+</script>
+</body>
+</html>
